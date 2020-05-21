@@ -17,7 +17,7 @@ export default function Game() {
 
             <Launcher /> 
             
-            <Chair z={-5} />
+            <Chair z={0} />
             <Shelf x={-8} />
             <Bowl z={-5} x={-3} />
         </CannonProvider>

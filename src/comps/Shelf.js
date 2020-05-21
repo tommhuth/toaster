@@ -11,7 +11,7 @@ export default function Shelf({
     z = 0,
     y = 0,
     depth = 2,
-    height = 6,
+    height = 7,
     width = 5,
     rotation = [0, 0, 0],
 }) {
