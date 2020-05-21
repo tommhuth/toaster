@@ -5,6 +5,7 @@ import { useFrame } from "react-three-fiber"
 import { v4 } from "uuid"
 import Obj from "./Obj"
 import { useStore } from "../store"
+import BoxMesh from "./BoxMesh"
 
 export default function Chair({
     x = 0,
@@ -66,7 +67,7 @@ export default function Chair({
 
     return (
         <group ref={ref}>
-            <Boxy
+            <BoxMesh
                 width={width - 0.15}
                 height={thick1}
                 depth={depth - 0.1}
@@ -74,7 +75,7 @@ export default function Chair({
                 y={-0.156}
                 color="white"
             />
-            <Boxy
+            <BoxMesh
                 width={width - 0.15}
                 height={height - 0.15}
                 depth={thick1}
@@ -84,7 +85,7 @@ export default function Chair({
                 color="white"
             />
 
-            <Boxy
+            <BoxMesh
                 width={width}
                 height={height - 0.2}
                 depth={thick2}
@@ -93,7 +94,7 @@ export default function Chair({
                 z={-depth / 2 + 0.051}
                 color="white"
             />
-            <Boxy
+            <BoxMesh
                 width={width}
                 height={thick2}
                 depth={depth}
@@ -104,7 +105,7 @@ export default function Chair({
             />
 
 
-            <Boxy
+            <BoxMesh
                 x={1}
                 y={-aboveFloor / 2 + .1}
                 z={-0.5 - 0.25}
@@ -114,7 +115,7 @@ export default function Chair({
                 rotation={[0.5, 0, 0.7, "ZYX"]}
                 color="white"
             />
-            <Boxy
+            <BoxMesh
                 x={1}
                 y={-aboveFloor / 2 + .1}
                 z={0.5 - 0.25}
@@ -124,7 +125,7 @@ export default function Chair({
                 rotation={[-0.5, 0, 0.7, "ZYX"]}
                 color="white"
             />
-            <Boxy
+            <BoxMesh
                 x={-1}
                 y={-aboveFloor / 2 + .1}
                 z={-0.5 - 0.25}
@@ -134,7 +135,7 @@ export default function Chair({
                 rotation={[0.5, 0, -0.7, "ZYX"]}
                 color="white"
             />
-            <Boxy
+            <BoxMesh
                 x={-1}
                 y={-aboveFloor / 2 + .1}
                 z={0.5 - 0.25}
@@ -147,48 +148,4 @@ export default function Chair({
         </group>
     )
 }
-
-function Boxy({
-    x = 0,
-    y = 0,
-    z = 0,
-    width = 1,
-    height = 1,
-    depth = 1,
-    color = "red",
-    rotation = [0, 0, 0],
-    visible = true,
-}) {
-    return (
-        <mesh visible={visible} position={[x, y, z]} rotation={rotation}>
-            <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
-            <meshLambertMaterial color={color} attach="material" />
-        </mesh>
-    )
-}
-
-/*
-
-
-
-
-
-            <mesh visible={false} position={[0, thick1 / 2 + thick2 / 2, 0]} rotation-x={-0.1}>
-                <boxBufferGeometry args={[width + 0.05, thick2, depth + 0.05]} attach="geometry" />
-                <meshLambertMaterial color="red" attach="material" />
-            </mesh>
-            <mesh visible={false} position={[0, height / 2 - thick1, -depth / 2]} rotation-x={-0.1}>
-                <boxBufferGeometry args={[width, height, thick1]} attach="geometry" />
-                <meshLambertMaterial color="#ffffff" attach="material" />
-            </mesh>
-            <mesh
-                visible={false}
-                position={[0, height / 2 - thick1 * 0.0, -depth / 2 + thick1 / 2 + thick2 / 1]}
-                rotation-x={-0.1}
-            >
-                <boxBufferGeometry args={[width, height, thick2]} attach="geometry" />
-                <meshLambertMaterial color="red" attach="material" />
-            </mesh>
-
-
-            */
+ 

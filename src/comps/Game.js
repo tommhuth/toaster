@@ -5,6 +5,7 @@ import Floor from "./Floor"
 import Launcher from "./Launcher"
 import Chair from "./Chair"
 import Shelf from "./Shelf"
+import Shelf2 from "./Shelf2"
 import Bowl from "./Bowl"
     
 
@@ -17,8 +18,9 @@ export default function Game() {
 
             <Launcher /> 
             
-            <Chair z={0} />
+            <Chair z={-7} />
             <Shelf x={-8} />
+            <Shelf2 x={0} />
             <Bowl z={-5} x={-3} />
         </CannonProvider>
     )
