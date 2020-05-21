@@ -19,10 +19,10 @@ export { ConeGeometry, ConeBufferGeometry } from 'three/src/geometries/ConeGeome
 export { CylinderGeometry, CylinderBufferGeometry } from 'three/src/geometries/CylinderGeometry.js'
 export { CircleGeometry, CircleBufferGeometry } from 'three/src/geometries/CircleGeometry.js'
 export { RingGeometry, RingBufferGeometry } from 'three/src/geometries/RingGeometry.js'
-export { EdgesGeometry } from 'three/src/geometries/EdgesGeometry.js'
+export { EdgesGeometry } from 'three/src/geometries/EdgesGeometry.js' 
 export { Material } from 'three/src/materials/Material.js'
-export { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial.js'
-export { MeshPhysicalMaterial } from 'three/src/materials/MeshPhysicalMaterial.js'
+export { MeshPhongMaterial } from 'three/src/materials/MeshPhongMaterial.js' 
+export { MeshLambertMaterial } from 'three/src/materials/MeshLambertMaterial.js' 
 export { MeshBasicMaterial } from 'three/src/materials/MeshBasicMaterial.js'
 export { LineDashedMaterial } from 'three/src/materials/LineDashedMaterial.js'
 export { SpriteMaterial } from 'three/src/materials/SpriteMaterial.js'
@@ -73,4 +73,5 @@ export { InterleavedBufferAttribute } from 'three/src/core/InterleavedBufferAttr
 export { ShaderMaterial } from 'three/src/materials/ShaderMaterial.js'
 export { WireframeGeometry } from 'three/src/geometries/WireframeGeometry.js'
 export {Clock} from "three/src/core/Clock.js"
-export {Layers} from "three/src/core/Layers.js" 
+export {Layers} from "three/src/core/Layers.js"  
+export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"

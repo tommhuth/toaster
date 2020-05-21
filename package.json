@@ -25,6 +25,7 @@
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.1.0",
         "cannon": "^0.6.2",
+        "cannon-es": "^0.9.1",
         "classnames": "^2.2.6",
         "clean-webpack-plugin": "^3.0.0",
         "compression": "^1.7.4",
@@ -43,9 +44,10 @@
         "ngrok": "^3.2.7",
         "node-sass": "^4.13.1",
         "postcss-loader": "^3.0.0",
+        "postprocessing": "^6.13.5",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
-        "react-three-fiber": "^4.1.4",
+        "react-three-fiber": "^4.2.4",
         "sass-loader": "^8.0.2",
         "serve-static": "^1.14.1",
         "three": "^0.116.1",
@@ -60,7 +62,8 @@
         "workbox-routing": "^5.1.2",
         "workbox-strategies": "^5.1.2",
         "workbox-webpack-plugin": "^5.1.2",
-        "workbox-window": "^5.1.2"
+        "workbox-window": "^5.1.2",
+        "zustand": "^2.2.3"
     },
     "author": "",
     "license": "ISC"

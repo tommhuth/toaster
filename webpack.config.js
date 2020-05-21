@@ -27,6 +27,10 @@ const plugins = [
             {
                 from: path.join(__dirname, "assets", "splashscreens"),
                 to: "splashscreens/[name]." + rev + ".[ext]"
+            },
+            {
+                from: path.join(__dirname, "assets", "models"),
+                to: "models/[name].[ext]"
             }
         ]
     ),
@@ -113,6 +117,7 @@ module.exports = {
         alias: {
             // Forward all three imports to our exports file
             three$: path.resolve("./assets/three-exports.js"),
+            cannon$: "cannon-es",
         }, 
     },
     plugins,

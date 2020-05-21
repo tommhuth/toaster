@@ -1,7 +1,7 @@
 /* global CANNON,THREE,Detector */
 
 import {Vec3, Sphere, Box, ConvexPolyhedron,Plane, Shape } from "cannon"
-import {Mesh,Geometry, MeshBasicMaterial,PlaneGeometry,CylinderGeometry,BoxGeometry,SphereGeometry} from "three/src/Three"
+import {Mesh,Geometry, Vector3,Face3, MeshBasicMaterial,PlaneGeometry,CylinderGeometry,BoxGeometry,SphereGeometry} from "three/src/Three"
 
 /**
  * Adds js primitives into the scene where all the Cannon bodies and shapes are.

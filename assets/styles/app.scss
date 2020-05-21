@@ -24,3 +24,16 @@ html {
     overflow: hidden;
     overscroll-behavior: none;
 }
+
+
+button, a {
+    cursor: pointer;
+}
+
+.ui {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    z-index: 1;
+    color: #FFF;
+}
