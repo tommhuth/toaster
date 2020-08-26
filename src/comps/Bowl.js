@@ -27,10 +27,8 @@ export default function Bowl({
     z = 0,
     y = 0,
     height = 2,
-    radius = 0.35,
     untouchable = false,
 }) {
-    let q = Math.PI / 4
     let { ref, body } = useCannon({
         position: [x, y + height / 2, z],
         mass: 16,
@@ -39,6 +37,9 @@ export default function Bowl({
     let geometry  = useGeometry("bowl")
 
     useEffect(() => {
+        let q = Math.PI / 4
+        let radius = 0.35
+
         body.addShape(new Box(new Vec3(0.2, height / 2, 0.075)), new Vec3(0, 0, -radius))
         body.addShape(new Box(new Vec3(0.2, height / 2, 0.075)), new Vec3(0, 0, radius))
 

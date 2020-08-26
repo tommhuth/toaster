@@ -11,12 +11,12 @@ import { useThree, useFrame } from "react-three-fiber"
     
 
 export default function Game() {
-    let{gl} = useThree()
+    let {gl} = useThree()
 
     useFrame(()=> {
-        console.log(gl.info.render.calls)
-        gl.info.autoReset = false 
-        gl.info.reset()
+        //console.log(gl.info.render.calls)
+        //gl.info.autoReset = false 
+        //gl.info.reset()
     })
 
     return (
