@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../utils/cannon"
-import { Box, Vec3, Quaternion, Cylinder } from "cannon"
-import { useFrame } from "react-three-fiber"
-import { v4 } from "uuid"
-import BoxMesh from "./BoxMesh"
-import Obj from "./Obj"
-import { useStore } from "../store"
+import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
+import { v4 } from "uuid" 
+import Obj from "./Obj" 
+import { useGeometry } from "./Chair"
 
 export default function Shelf2({
     x = 0,
@@ -13,8 +11,7 @@ export default function Shelf2({
     y = 0,
     width = 5,
     height = 3,
-    depth = 2.5,
-
+    depth = 2.5, 
     untouchable = false,
 }) {
     let innerSize = 0.125
@@ -24,6 +21,7 @@ export default function Shelf2({
         mass: 30,
         userData: { shelf: true, untouchable },
     })
+    let geo = useGeometry("shelf2")
     let [spaces, setSpaces] = useState([])
     let [objects, setObjects] = useState([])
 
@@ -95,13 +93,15 @@ export default function Shelf2({
             }
         ])
     }, [])
-
+ 
     return (
         <>
             {objects.map((i) => {
                 return <Obj key={i.id} {...i} />
             })}
             {spaces.map((i, index) => {
+                return null 
+
                 return (
                     <mesh receiveShadow castShadow key={index} position={[i.x, i.y, i.z]} visible={false}>
                         <boxBufferGeometry args={[i.width, i.height, i.depth]} attach="geometry" />
@@ -109,45 +109,10 @@ export default function Shelf2({
                     </mesh>
                 )
             })}
-            <group ref={ref}>
-                <BoxMesh
-                    width={width}
-                    height={outerSize}
-                    depth={depth}
-                    y={height / 2}
-                    color="#fff"
-                />
-                <BoxMesh
-                    width={width}
-                    height={outerSize}
-                    depth={depth}
-                    y={-height / 2}
-                    color="#fff"
-                />
-
-                <BoxMesh
-                    width={width}
-                    height={innerSize}
-                    depth={depth - innerSize * 2}
-                    z={-innerSize}
-                    color="#fff"
-                />
-
-                <BoxMesh
-                    width={outerSize}
-                    height={height}
-                    depth={depth}
-                    x={width / 2 - outerSize / 2}
-                    color="#fff"
-                />
-                <BoxMesh
-                    width={outerSize}
-                    height={height}
-                    depth={depth}
-                    x={-width / 2 + outerSize / 2}
-                    color="#fff"
-                />
-            </group>
+            <mesh geometry={geo} castShadow receiveShadow ref={ref}>
+                <meshLambertMaterial color="#CCC" attach="material" /> 
+            </mesh>
         </>
     )
 }
+ 

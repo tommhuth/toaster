@@ -5,6 +5,7 @@ import { useFrame } from "react-three-fiber"
 import { v4 } from "uuid"
 import Obj from "./Obj"
 import { useStore } from "../store"
+import { useGeometry } from "./Chair"
 
 export default function Shelf({
     x = 0,
@@ -26,14 +27,19 @@ export default function Shelf({
         rotation,
         userData: { shelf: true },
     })
+    let geo = useGeometry("shelf1")
 
-    useFrame(()=>{
+    useFrame(() => {
+        if (!geo) {
+            return
+        }
+
         let rotation = Math.max(Math.abs(ref.current.rotation.x), Math.abs(ref.current.rotation.z))
 
-        if (!dead && rotation > Math.PI/2 - .2) {
+        if (!dead && rotation > Math.PI / 2 - .2) {
             setDead(true)
             actions.gameOver()
-        } 
+        }
     })
 
     useEffect(() => {
@@ -130,13 +136,27 @@ export default function Shelf({
         }
 
         setObjects(objects)
-    }, [spaces]) 
+    }, [spaces])
+
+
+
 
     return (
         <>
             {objects.map((i) => {
                 return <Obj key={i.id} {...i} />
             })}
+            <mesh geometry={geo} ref={ref} castShadow receiveShadow>
+                <meshLambertMaterial color={0xffffff} attach="material" />
+
+            </mesh>
+        </>
+    )
+}
+
+
+/*
+
             {spaces.map((i, index) => {
                 return (
                     <mesh key={index} position={[i.x, i.y, i.z]} visible={false}>
@@ -145,93 +165,5 @@ export default function Shelf({
                     </mesh>
                 )
             })}
-            <group ref={ref} >
-                <mesh castShadow receiveShadow position={[-width / 2, 0, depth / 2]}>
-                    <boxBufferGeometry
-                        args={[legRadius * 2, height, legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
-                <mesh castShadow receiveShadow position={[width / 2, 0, depth / 2]}>
-                    <boxBufferGeometry
-                        args={[legRadius * 2, height, legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
-                <mesh castShadow receiveShadow position={[width / 2, 0, -depth / 2]}>
-                    <boxBufferGeometry
-                        args={[legRadius * 2, height, legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
-                <mesh castShadow receiveShadow position={[-width / 2, 0, -depth / 2]}>
-                    <boxBufferGeometry
-                        args={[legRadius * 2, height, legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
 
-                <mesh castShadow receiveShadow position={[0, 0, 0]}>
-                    <boxBufferGeometry
-                        args={[width + legRadius * 2, 0.2, depth + legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
-                <mesh castShadow receiveShadow position={[0, -height / 3, 0]}>
-                    <boxBufferGeometry
-                        args={[width + legRadius * 2, 0.2, depth + legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
-                <mesh castShadow receiveShadow position={[0, height / 3, 0]}>
-                    <boxBufferGeometry
-                        args={[width + legRadius * 2, 0.2, depth + legRadius * 2]}
-                        attach="geometry"
-                    />
-                    <meshLambertMaterial
-                        color="#ffffff"
-                        opacity={1}
-                        transparent
-                        attach="material"
-                    />
-                </mesh>
-            </group>
-        </>
-    )
-}
+            */

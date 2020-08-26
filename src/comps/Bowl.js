@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../utils/cannon"
-import { Box, Vec3, Quaternion, Cylinder } from "cannon"
-import { useModel } from "../utils/hooks"
+import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
+import { useGeometry } from "./Chair"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     let [height] = useState(() => Math.random() * 2 + 3)
@@ -36,7 +36,7 @@ export default function Bowl({
         mass: 16,
         userData: { chair: true, untouchable },
     })
-    let { geometry } = useModel("/models/test.glb")
+    let geometry  = useGeometry("bowl")
 
     useEffect(() => {
         body.addShape(new Box(new Vec3(0.2, height / 2, 0.075)), new Vec3(0, 0, -radius))
@@ -72,6 +72,7 @@ export default function Bowl({
             new Quaternion().setFromAxisAngle(new Vec3(1, 0, 0), Math.PI / 2)
         )
     }, [])
+
 
     return (
         <>

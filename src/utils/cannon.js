@@ -16,7 +16,7 @@ export function CannonProvider({
     let [world] = useState(() => {
         return new World()
     })
-    let debug = useMemo(() => new Debug(scene, world), [])
+    //let debug = useMemo(() => new Debug(scene, world), [])
 
     useEffect(() => {
         world.broadphase = new SAPBroadphase(world)
@@ -62,9 +62,9 @@ export function useCannon(
         collisionFilterGroup,
         collisionFilterMask,
         createContactMaterial,
-        onCollide = () => {},
-        onPreStep = () => {},
-        onPostStep = () => {},
+        onCollide = () => { },
+        onPreStep = () => { },
+        onPostStep = () => { },
         material,
     },
     deps = []
@@ -87,7 +87,7 @@ export function useCannon(
             collisionFilterGroup,
             collisionFilterMask,
             material: material || world.defaultMaterial,
-        }) 
+        })
 
         return body
     }, [])
@@ -123,7 +123,7 @@ export function useCannon(
         }
     }, deps)
 
-    useEffect(() => {
+    useEffect(() => { 
         let axis = new Vec3(...rotation.map((i) => (i === 0 ? 0 : 1)))
         let angle = rotation.find((i) => i) || 0
 
@@ -133,6 +133,7 @@ export function useCannon(
         ref.current.quaternion.copy(body.quaternion)
         ref.current.matrixAutoUpdate = mass > 0
         ref.current.updateMatrix()
+
     }, [])
 
     useEffect(() => {
