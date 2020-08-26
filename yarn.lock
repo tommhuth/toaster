@@ -854,6 +854,13 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.11.2":
+  version "7.11.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
+  integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
   version "7.9.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.2.tgz#d90df0583a3a252f09aaa619665367bae518db06"
@@ -2996,15 +3003,18 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
-drei@^0.0.29:
-  version "0.0.29"
-  resolved "https://registry.yarnpkg.com/drei/-/drei-0.0.29.tgz#4bcd344b8509d4d7349be7e4db3e2228e580be29"
-  integrity sha512-sWzjdlO8VLVmCONM167gf20onraOgrrs5lZLvYvxuGle8r9SY8N5dV9VcL/tF9bdVRqA+Ziq3V8+XHfITAfjDg==
+drei@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/drei/-/drei-1.3.0.tgz#0f0284bb5b56e322c6714fcc6be9ef6a3886606b"
+  integrity sha512-oICYu5fwEcPoZDQ5X470O/qL/XfyhGwb4blD9HhgTVXlO5HrdSy4O3LVY++FN4h7Xi2QrXViJdxJuTRtcVmk9Q==
   dependencies:
-    "@babel/runtime" "^7.9.2"
-    postprocessing "^6.13.3"
+    "@babel/runtime" "^7.11.2"
+    glsl-noise "^0.0.0"
+    lodash.omit "^4.5.0"
+    lodash.pick "^4.4.0"
     react-merge-refs "^1.0.0"
     stats.js "^0.17.0"
+    troika-three-text "^0.31.0"
     utility-types "^3.10.0"
 
 duplexify@^3.4.2, duplexify@^3.6.0:
@@ -3924,6 +3934,11 @@ globule@^1.0.0:
     glob "~7.1.1"
     lodash "~4.17.10"
     minimatch "~3.0.2"
+
+glsl-noise@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/glsl-noise/-/glsl-noise-0.0.0.tgz#367745f3a33382c0eeec4cb54b7e99cfc1d7670b"
+  integrity sha1-NndF86MzgsDu7Ey1S36Zz8HXZws=
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.3, graceful-fs@^4.1.6:
   version "4.2.2"
@@ -4861,6 +4876,16 @@ lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
   integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
+
+lodash.omit@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.omit/-/lodash.omit-4.5.0.tgz#6eb19ae5a1ee1dd9df0b969e66ce0b7fa30b5e60"
+  integrity sha1-brGa5aHuHdnfC5aeZs4Lf6MLXmA=
+
+lodash.pick@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
+  integrity sha1-UvBWEP/53tQiYRRB7R/BI6AwAbM=
 
 lodash.template@^4.5.0:
   version "4.5.0"
@@ -6038,10 +6063,10 @@ postcss@^7.0.23, postcss@^7.0.27:
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postprocessing@^6.13.3, postprocessing@^6.13.5:
-  version "6.13.5"
-  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.13.5.tgz#77f92cd5925b2e5a4951ae81ba5020abb6d331b1"
-  integrity sha512-txeM9PL1p5HgzE6agSLO1cT9TQyhoXn1Ogj9PkEjLNNbqI1Anv2PmUTevPR2CY9o93ET563T1jA8d75Bftw+lw==
+postprocessing@^6.17.1:
+  version "6.17.1"
+  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.17.1.tgz#66f937ce743c98dbc29638bc8fb6c74041e9df2d"
+  integrity sha512-Q8bjFCVgn1ZuG7UoHrjvp6xyKIbOtZOlmJPw3NpIgyLNHva5Bn0iH1OfeHEqKh/o45RLA9rGdxLMAkCrKe7uXQ==
 
 prelude-ls@~1.1.2:
   version "1.1.2"
@@ -6290,10 +6315,10 @@ react-reconciler@0.25.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-three-fiber@^4.2.4:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/react-three-fiber/-/react-three-fiber-4.2.4.tgz#5693e0994c19bd17fe2a92b05b5ace4b85f3a9bc"
-  integrity sha512-6fZM6yGfnmLmtadsSvAL2Lw1I3VMF4Y13bmufLStKVsex+Uzs+b0nTAi3RQwGWJB8MBwaSYY/Oh7a16ME9eMvQ==
+react-three-fiber@^4.2.20:
+  version "4.2.20"
+  resolved "https://registry.yarnpkg.com/react-three-fiber/-/react-three-fiber-4.2.20.tgz#2689c005689f7c706cfb29bcf7f09958ff900b9a"
+  integrity sha512-M5TCdGNKvofe37VMXnhbabgRDiRm9rnfxOmMFuLa+H9FiiLT3wUMMgE9eBmLh3McKgYXURETWKkNDePeQ0J0JQ==
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@juggle/resize-observer" "^3.1.3"
@@ -7467,10 +7492,10 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-three@^0.116.1:
-  version "0.116.1"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.116.1.tgz#a393f7a81fdc3e2fbf57ded5ba47dc5bd3678ce0"
-  integrity sha512-l2JCMiA/lVZAuSrLWRYMalvpR+0j8hbIhCpfs4V6JFnw2+JQEQJ5HltNpfFr+9TDpQts1BhtcISehWf/xBGPvQ==
+three@^0.120.0:
+  version "0.120.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.120.0.tgz#238ab7a9e5d92af6bab3d257ea2b1891c90aef63"
+  integrity sha512-Swffpi3EAHWkmqC1MagKEzR5XgwkDiyeWI3M7vkGbBc0xhq2LcQmJj5DqBruLkrgcZQ+fM/+fSQBU1tDvggO4A==
 
 through2@^2.0.0:
   version "2.0.5"
@@ -7591,6 +7616,24 @@ trim-newlines@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
   integrity sha1-WIeWa7WCpFA6QetST301ARgVphM=
+
+troika-three-text@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/troika-three-text/-/troika-three-text-0.31.0.tgz#0c4dbd55c2d6d4516d60fc5247031464b056cf3f"
+  integrity sha512-JpRO+AC9mLZ49IymBwwwFLcasN0xjjQmSkGO9tlzlpeHpexsK4JB80qs6d6vhtt+vmfdJi27/m+WYhaR6+OzaQ==
+  dependencies:
+    troika-three-utils "^0.31.0"
+    troika-worker-utils "^0.31.0"
+
+troika-three-utils@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/troika-three-utils/-/troika-three-utils-0.31.0.tgz#825d79313d04112fdfc63389ff5531ab8d7ba1a7"
+  integrity sha512-IUy61i+Kv0EjievWhOmIkqjDa1acIO2J98oO2tZ+PpEfA+Q0syRknH4SN+iiYpa/MNJH1gQz0WfZF4Vk1/pumQ==
+
+troika-worker-utils@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/troika-worker-utils/-/troika-worker-utils-0.31.0.tgz#3d6783265f74cda1860e9d8369de433d29c70b92"
+  integrity sha512-WxHhfFmy6dWBMACUnzInBlqlR601Dy3c9hiRp4aAN+ACzSldwsv1SHOqix4X2+6HTz/pBtHtfJVDbwJiO+lbCw==
 
 "true-case-path@^1.0.2":
   version "1.0.3"

@@ -33,7 +33,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
     }, [])
 
     return (
-        <mesh ref={ref} position={defaultPosition}>
+        <mesh castShadow receiveShadow  ref={ref} position={defaultPosition}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
             <meshLambertMaterial color={color} attach="material" />
         </mesh>

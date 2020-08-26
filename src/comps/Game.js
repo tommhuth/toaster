@@ -13,8 +13,8 @@ export default function Game() {
     return (
         <CannonProvider>
             <Camera />
-            <Floor y={-2} width={35} height={4} depth={30} z={5} />
-            <Floor z={-60} y={10} width={35} height={20}   />
+            <Floor y={-2} width={100} height={4} depth={30} z={5} />
+            <Floor z={-60} y={10} width={100} height={20}   />
 
             <Launcher /> 
             

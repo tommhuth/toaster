@@ -18,7 +18,7 @@ export default function Floor({
     })
 
     return (
-        <mesh ref={ref} userData={{ floor: true }}>
+        <mesh castShadow receiveShadow ref={ref} userData={{ floor: true }}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
             <meshLambertMaterial color={color} attach="material" />
         </mesh>

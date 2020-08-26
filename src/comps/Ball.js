@@ -16,7 +16,7 @@ export default function Ball({ radius = 0.25, velocity = [0, 0, 0], position = [
     })
 
     return (
-        <mesh ref={ref} position={defaultPosition}>
+        <mesh ref={ref} position={defaultPosition} castShadow receiveShadow>
             <sphereBufferGeometry args={[radius, 16, 16]} attach="geometry" />
             <meshPhongMaterial color="yellow" attach="material" />
         </mesh>

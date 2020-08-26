@@ -5,7 +5,7 @@ import { useModel } from "../utils/hooks"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     let [height] = useState(() => Math.random() * 2 + 3)
-    let [radius] = useState(() => Math.random() * 0.05 + 0.025)
+    let [radius] = useState(() => Math.random() * 0.05 + 0.05)
     let { ref } = useCannon({
         position: [x, y + height / 2, z],
         mass: 1,
@@ -15,7 +15,7 @@ function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     })
 
     return (
-        <mesh ref={ref}>
+        <mesh ref={ref} castShadow receiveShadow>
             <cylinderBufferGeometry args={[radius, radius, height, 6]} attach="geometry" />
             <meshLambertMaterial color="#CCC" attach="material" />
         </mesh>
@@ -79,7 +79,7 @@ export default function Bowl({
             <Stick x={x - 0.051} y={y} z={z + 0.051} />
             <Stick x={x} y={y + 0.5} z={z} />
 
-            <mesh ref={ref} geometry={geometry}>
+            <mesh ref={ref} geometry={geometry} castShadow receiveShadow>
                 <meshLambertMaterial color="#CCC" attach="material" />
             </mesh>
         </>

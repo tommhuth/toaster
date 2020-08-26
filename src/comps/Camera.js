@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useThree } from "react-three-fiber"
+import {CameraHelper} from "three"
 
 export default function Camera() {
     let { camera } = useThree()

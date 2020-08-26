@@ -145,8 +145,8 @@ export default function Shelf({
                     </mesh>
                 )
             })}
-            <group ref={ref}>
-                <mesh position={[-width / 2, 0, depth / 2]}>
+            <group ref={ref} >
+                <mesh castShadow receiveShadow position={[-width / 2, 0, depth / 2]}>
                     <boxBufferGeometry
                         args={[legRadius * 2, height, legRadius * 2]}
                         attach="geometry"
@@ -158,7 +158,7 @@ export default function Shelf({
                         attach="material"
                     />
                 </mesh>
-                <mesh position={[width / 2, 0, depth / 2]}>
+                <mesh castShadow receiveShadow position={[width / 2, 0, depth / 2]}>
                     <boxBufferGeometry
                         args={[legRadius * 2, height, legRadius * 2]}
                         attach="geometry"
@@ -170,7 +170,7 @@ export default function Shelf({
                         attach="material"
                     />
                 </mesh>
-                <mesh position={[width / 2, 0, -depth / 2]}>
+                <mesh castShadow receiveShadow position={[width / 2, 0, -depth / 2]}>
                     <boxBufferGeometry
                         args={[legRadius * 2, height, legRadius * 2]}
                         attach="geometry"
@@ -182,7 +182,7 @@ export default function Shelf({
                         attach="material"
                     />
                 </mesh>
-                <mesh position={[-width / 2, 0, -depth / 2]}>
+                <mesh castShadow receiveShadow position={[-width / 2, 0, -depth / 2]}>
                     <boxBufferGeometry
                         args={[legRadius * 2, height, legRadius * 2]}
                         attach="geometry"
@@ -195,7 +195,7 @@ export default function Shelf({
                     />
                 </mesh>
 
-                <mesh position={[0, 0, 0]}>
+                <mesh castShadow receiveShadow position={[0, 0, 0]}>
                     <boxBufferGeometry
                         args={[width + legRadius * 2, 0.2, depth + legRadius * 2]}
                         attach="geometry"
@@ -207,7 +207,7 @@ export default function Shelf({
                         attach="material"
                     />
                 </mesh>
-                <mesh position={[0, -height / 3, 0]}>
+                <mesh castShadow receiveShadow position={[0, -height / 3, 0]}>
                     <boxBufferGeometry
                         args={[width + legRadius * 2, 0.2, depth + legRadius * 2]}
                         attach="geometry"
@@ -219,7 +219,7 @@ export default function Shelf({
                         attach="material"
                     />
                 </mesh>
-                <mesh position={[0, height / 3, 0]}>
+                <mesh castShadow receiveShadow position={[0, height / 3, 0]}>
                     <boxBufferGeometry
                         args={[width + legRadius * 2, 0.2, depth + legRadius * 2]}
                         attach="geometry"

@@ -103,7 +103,7 @@ export default function Shelf2({
             })}
             {spaces.map((i, index) => {
                 return (
-                    <mesh key={index} position={[i.x, i.y, i.z]} visible={false}>
+                    <mesh receiveShadow castShadow key={index} position={[i.x, i.y, i.z]} visible={false}>
                         <boxBufferGeometry args={[i.width, i.height, i.depth]} attach="geometry" />
                         <meshLambertMaterial color="black" attach="material" />
                     </mesh>

@@ -116,7 +116,7 @@ module.exports = {
         extensions: [".js"],
         alias: {
             // Forward all three imports to our exports file
-            three$: path.resolve("./assets/three-exports.js"),
+            //three$: path.resolve("./assets/three-exports.js"),
             cannon$: "cannon-es",
         }, 
     },
