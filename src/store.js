@@ -1,11 +1,14 @@
 import { create } from "zustand"
 
-function getActions(get, set, actions) {
+function getActions(get, set) { 
     return {
         complete() { 
             set({
                 state: "complete"
             })
+        },
+        createSpaces(spaces) {
+            set({spaces: [...get().spaces, ...spaces]})
         },
         gameOver() {
             set({
@@ -28,6 +31,7 @@ function getActions(get, set, actions) {
 function getInitState() {
     return {
         objects: 0,
+        spaces: [],
         state: "active"
     }
 }
