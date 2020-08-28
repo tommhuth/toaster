@@ -23,8 +23,8 @@ export default function Obj({ x, y, z, width, height, depth }) {
         shape: new Box(new Vec3(width / 2, height / 2, depth / 2)),
         onCollide(e) {
             if (e.body.userData.floor && !dead.current) {
-                actions.removeObject()
                 dead.current = true
+                actions.removeObject()
             }
         }
     }, [])

@@ -1,4 +1,4 @@
-import { World, Body, Vec3, SAPBroadphase, Cylinder, Quaternion } from "cannon"
+import { World, Body, Vec3 } from "cannon"
 import React, { useRef, useEffect, useState, useContext, useMemo } from "react"
 import { useFrame, useThree } from "react-three-fiber"
 //import Debug from "../Debug"
@@ -7,7 +7,7 @@ const context = React.createContext()
 
 export function CannonProvider({
     children,
-    iterations = 4,
+    iterations = 8,
     defaultRestitution = 0.2,
     defaultFriction = 0.05,
     gravity = [0, -10, 0],
@@ -19,8 +19,8 @@ export function CannonProvider({
     //let debug = useMemo(() => new Debug(scene, world), [])
 
     useEffect(() => {
-        world.broadphase = new SAPBroadphase(world)
-        world.broadphase.axisIndex = 0
+        //world.broadphase = new SAPBroadphase(world)
+        //world.broadphase.axisIndex = 0
         world.allowSleep = true
         world.solver.iterations = iterations
         world.defaultContactMaterial.friction = defaultFriction
@@ -50,7 +50,6 @@ export function useCannon(
     {
         mass = 0,
         shape,
-        active = true,
         userData = {},
         position = [0, 0, 0],
         velocity = [0, 0, 0],
@@ -123,7 +122,7 @@ export function useCannon(
         }
     }, deps)
 
-    useEffect(() => { 
+    useEffect(() => {
         let axis = new Vec3(...rotation.map((i) => (i === 0 ? 0 : 1)))
         let angle = rotation.find((i) => i) || 0
 
@@ -132,25 +131,19 @@ export function useCannon(
         ref.current.position.copy(body.position)
         ref.current.quaternion.copy(body.quaternion)
         ref.current.matrixAutoUpdate = mass > 0
-        ref.current.updateMatrix()
-
+        ref.current.updateMatrix() 
     }, [])
 
     useEffect(() => {
-        if (active) {
-            // Add body to world on mount
-            world.addBody(body)
+        // Add body to world on mount
+        world.addBody(body)
 
-            // Remove body on unmount
-            return () => world.removeBody(body)
-        } else {
-            world.removeBody(body)
-        }
-    }, [active, body])
+        // Remove body on unmount
+        return () => world.removeBody(body)
+    }, [body])
 
     useFrame(() => {
-        if (ref.current && mass > 0) {
-            // Transport cannon physics into the referenced threejs object
+        if (ref.current && mass > 0) { 
             ref.current.position.copy(body.position)
             ref.current.quaternion.copy(body.quaternion)
         }
