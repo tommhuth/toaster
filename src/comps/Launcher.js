@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react"
 import { useThree } from "react-three-fiber"
-import { Vector3, Vector2, Raycaster } from "three"
+import { Vector3, Raycaster } from "three"
 import { v4 } from "uuid"
 import Ball from "./Ball"
 
@@ -39,9 +39,9 @@ export default function Launcher() {
         }
         let onClick = () => {
             let direction = point.clone().sub(new Vector3(0, 0, 10))
-            let length = direction.length() * 0.85
+            let y = Math.max(Math.min(direction.length() * .75, 20), 0)
 
-            launch([direction.x, length, -length])
+            launch([direction.x, y , direction.z])
         }
 
         window.addEventListener("mousemove", onMouseMove)
@@ -55,13 +55,8 @@ export default function Launcher() {
 
     return (
         <>
-            <mesh position={[0, 0, 10]}>
-                <sphereBufferGeometry args={[0.25, 16, 16]} attach="geometry" />
-                <meshBasicMaterial color="yellow" attach="material" />
-            </mesh>
-
             <line>
-                <lineBasicMaterial color="red" attach="material" />
+                <lineBasicMaterial color="orange" attach="material" />
                 <bufferGeometry ref={ref} attach="geometry" />
             </line>
 
