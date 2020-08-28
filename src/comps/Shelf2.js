@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../utils/cannon"
-import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
-import { v4 } from "uuid" 
-import Obj from "./Obj" 
+import { Box, Vec3 } from "cannon"
+import { v4 } from "uuid"
+import Obj from "./Obj"
 import { useGeometry } from "./Chair"
+import random from "@huth/random"
 
 export default function Shelf2({
     x = 0,
@@ -11,7 +12,7 @@ export default function Shelf2({
     y = 0,
     width = 5,
     height = 3,
-    depth = 2.5, 
+    depth = 2.5,
     untouchable = false,
 }) {
     let innerSize = 0.125
@@ -21,7 +22,7 @@ export default function Shelf2({
         mass: 30,
         userData: { shelf: true, untouchable },
     })
-    let geo = useGeometry("shelf2")
+    let geometry = useGeometry("shelf2")
     let [spaces, setSpaces] = useState([])
     let [objects, setObjects] = useState([])
 
@@ -30,12 +31,12 @@ export default function Shelf2({
 
         for (let space of spaces) {
             let x = space.x - space.width / 2
-            let w = Math.random() * 1.5 + 0.5
-            let g = Math.random() * 1
+            let w = random.float(.5, 2)
+            let g = random.float(0, 1)
 
             while (x + w + g < space.x + space.width / 2) {
-                let skip = Math.random() > 0.65
-                let h = Math.random() * (space.height - 1.25) + (space.top ? 2 : 0.25)
+                let skip = random.boolean(.65)
+                let h = random.float(0, space.height - 1.25) + (space.top ? 2 : 0.25)
 
                 if (!skip) {
                     objects.push({
@@ -45,13 +46,13 @@ export default function Shelf2({
                         z: space.z,
                         width: w,
                         height: h,
-                        depth: Math.random() * depth + 0.5,
+                        depth: random.float(.5, depth + .5),
                     })
                 }
 
                 x = Math.min(x + w + g, space.x + space.width / 2)
-                w = Math.random() * 1 + 0.5
-                g = Math.random() * 0.35
+                w = random.float(.5, 1.5)
+                g = random.float(0, .35)
             }
         }
 
@@ -84,35 +85,36 @@ export default function Shelf2({
 
         setSpaces([
             {
-                width : width - 1,
+                width: width - 1,
                 depth,
                 height: 3,
-                y: height + outerSize + 3/2,
+                y: height + outerSize + 3 / 2,
                 z,
                 x
             }
         ])
     }, [])
- 
+
     return (
         <>
             {objects.map((i) => {
                 return <Obj key={i.id} {...i} />
             })}
             {spaces.map((i, index) => {
-                return null 
+                return null
 
+                /*
                 return (
                     <mesh receiveShadow castShadow key={index} position={[i.x, i.y, i.z]} visible={false}>
                         <boxBufferGeometry args={[i.width, i.height, i.depth]} attach="geometry" />
                         <meshLambertMaterial color="black" attach="material" />
                     </mesh>
                 )
+                */
             })}
-            <mesh geometry={geo} castShadow receiveShadow ref={ref}>
-                <meshLambertMaterial color="#CCC" attach="material" /> 
+            <mesh geometry={geometry} castShadow receiveShadow ref={ref}>
+                <meshLambertMaterial color="#CCC" attach="material" />
             </mesh>
         </>
     )
 }
- 

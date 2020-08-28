@@ -19,6 +19,7 @@
         "@babel/plugin-proposal-class-properties": "^7.8.3",
         "@babel/preset-env": "^7.9.0",
         "@babel/preset-react": "^7.9.4",
+        "@huth/random": "^0.1.0",
         "@yushijinhun/three-minifier-webpack": "^0.1.6",
         "animejs": "^3.2.0",
         "autoprefixer": "^9.7.5",

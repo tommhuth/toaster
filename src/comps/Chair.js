@@ -78,10 +78,7 @@ export default function Chair({
         )
 
         body.quaternion.setFromAxisAngle(new Vec3(0, 1, 0), rotation)
-    }, [])
-
-    useEffect(() => {
-    }, [])
+    }, []) 
 
     return (
         <mesh receiveShadow castShadow ref={ref} geometry={geometry}>

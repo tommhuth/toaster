@@ -6,6 +6,7 @@ import { v4 } from "uuid"
 import Obj from "./Obj"
 import { useStore } from "../store"
 import { useGeometry } from "./Chair"
+import random from "@huth/random"
 
 export default function Shelf({
     x = 0,
@@ -30,10 +31,6 @@ export default function Shelf({
     let geo = useGeometry("shelf1")
 
     useFrame(() => {
-        if (!geo) {
-            return
-        }
-
         let rotation = Math.max(Math.abs(ref.current.rotation.x), Math.abs(ref.current.rotation.z))
 
         if (!dead && rotation > Math.PI / 2 - .2) {
@@ -110,14 +107,13 @@ export default function Shelf({
 
         for (let space of spaces) {
             let x = space.x - space.width / 2
-            let w = Math.random() * 1.5 + 0.5
-            let g = Math.random() * 1
+            let w = random.float(.5, 2)
+            let g = random.float(0, 1)
 
             while (x + w + g < space.x + space.width / 2) {
-                let skip = Math.random() > 0.65
-                let h = Math.random() * (space.height - 1.25) + (space.top ? 2 : 0.25)
+                let h = random.float(0, space.height - 1.25) + (space.top ? 2 : 0.25)
 
-                if (!skip) {
+                if (!random.boolean(.65)) {
                     objects.push({
                         id: v4(),
                         x: x + w / 2,
@@ -125,13 +121,13 @@ export default function Shelf({
                         z: space.z,
                         width: w,
                         height: h,
-                        depth: Math.random() * depth + 0.5,
+                        depth: random.float(.5, depth + .5),
                     })
                 }
 
                 x = Math.min(x + w + g, space.x + space.width / 2)
-                w = Math.random() * 1 + 0.5
-                g = Math.random() * 0.35
+                w = random.float(.5, 1.5)
+                g = random.float(0, .35) 
             }
         }
 

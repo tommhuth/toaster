@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react"
 import { useCannon } from "../utils/cannon"
 import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
 import { useGeometry } from "./Chair"
+import random from "@huth/random"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {
-    let [height] = useState(() => Math.random() * 2 + 3)
-    let [radius] = useState(() => Math.random() * 0.05 + 0.05)
+    let [height] = useState(() => random.float(3, 5))
+    let [radius] = useState(() => random.float(.05, .1))
     let { ref } = useCannon({
         position: [x, y + height / 2, z],
         mass: 1,

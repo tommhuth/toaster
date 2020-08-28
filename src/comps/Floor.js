@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from "react"
-import { CannonProvider, useCannon, useWorld } from "../utils/cannon"
-import { Box, Vec3, Sphere, Material, ContactMaterial, Body } from "cannon"
+import React from "react"
+import { useCannon } from "../utils/cannon"
+import { Box, Vec3 } from "cannon"
 
 export default function Floor({
     y = 0,
@@ -14,7 +14,7 @@ export default function Floor({
     let { ref } = useCannon({
         position: [x, y, z],
         shape: new Box(new Vec3(width / 2, height / 2, depth / 2)),
-        userData: { floor: true }, 
+        userData: { floor: true },
     })
 
     return (
