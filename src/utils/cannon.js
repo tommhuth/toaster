@@ -1,13 +1,13 @@
 import { World, Body, Vec3, SAPBroadphase, Cylinder, Quaternion } from "cannon"
 import React, { useRef, useEffect, useState, useContext, useMemo } from "react"
 import { useFrame, useThree } from "react-three-fiber"
-import Debug from "../Debug"
+//import Debug from "../Debug"
 
 const context = React.createContext()
 
 export function CannonProvider({
     children,
-    iterations = 10,
+    iterations = 4,
     defaultRestitution = 0.2,
     defaultFriction = 0.05,
     gravity = [0, -10, 0],
