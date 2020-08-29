@@ -2,17 +2,20 @@ import React, { useState, useEffect, useRef } from "react"
 import { useCannon } from "../utils/cannon"
 import { useDefaultValue } from "../utils/hooks"
 import { Box, Vec3 } from "cannon"
+import { Color } from "three"
 import { useStore } from "../store"
 import random from "@huth/random"
+import animate from "../utils/animate"
 
 export default function Obj({ x, y, z, width, height, depth }) {
     let actions = useStore(i => i.actions)
     let defaultPosition = useDefaultValue([x, y, z])
     let [color] = useState(
-        () => random.pick("blue", "darkgray", "orange", "lightgray")
+        () => random.pick("#00f", "#666", "#fcad03", "#ccc")
     )
     let dead = useRef(false)
     let [offset] = useState(0)
+    let [flash, setFlash] = useState(false)
     let [rotation] = useState(() => {
         return random.boolean() ? random.float(-.2, .2) : 0
     })
@@ -25,6 +28,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
             if (e.body.userData.floor && !dead.current) {
                 dead.current = true
                 actions.removeObject()
+                setFlash(true)
             }
         }
     }, [])
@@ -32,6 +36,21 @@ export default function Obj({ x, y, z, width, height, depth }) {
     useEffect(() => {
         actions.addObject()
     }, [])
+
+    useEffect(() => {
+        if (flash) {
+            let c = new Color()
+
+            return animate({
+                from: { color: "#FFF" },
+                to: { color: new Color(color).getStyle() },
+                duration: 800, 
+                render({ color }) {
+                    ref.current.material.color = c.set(color).convertSRGBToLinear() 
+                }
+            })
+        }
+    }, [flash])
 
     return (
         <mesh castShadow receiveShadow ref={ref} position={defaultPosition}>
