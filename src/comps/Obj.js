@@ -44,7 +44,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
             return animate({
                 from: { color: "#FFF" },
                 to: { color: new Color(color).getStyle() },
-                duration: 800, 
+                duration: 1000, 
                 render({ color }) {
                     ref.current.material.color = c.set(color).convertSRGBToLinear() 
                 }
