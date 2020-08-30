@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../utils/cannon"
 import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
-import { useGeometry } from "./Chair"
+import { useGeometry } from "../utils/hooks"
 import random from "@huth/random"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {
@@ -83,7 +83,7 @@ export default function Bowl({
             <Stick x={x} y={y + 0.5} z={z} />
 
             <mesh ref={ref} geometry={geometry} castShadow receiveShadow>
-                <meshLambertMaterial color="#CCC" attach="material" />
+                <meshLambertMaterial color="#fff" attach="material" />
             </mesh>
         </>
     )

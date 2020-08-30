@@ -1,27 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../utils/cannon"
-import { Box, Vec3, Quaternion, Cylinder } from "cannon"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import { BufferGeometry } from "three"
+import { Box, Vec3, Quaternion } from "cannon"
+import { useGeometry } from "../utils/hooks"
  
-
-export function useGeometry(name) {
-    let [geometry, setGeometry] = useState(() => new BufferGeometry())
-
-    useEffect(() => {
-        let loader = new GLTFLoader()
-
-        loader.load(`/models/${name}.glb`, (res) => {
-            let mesh = res.scene.children.find(i => i.name = name)
-
-            setGeometry(mesh.geometry)  
-        }, undefined, console.error)
-    }, [name])
-
-    return geometry
-}
-
-export default function Chair({
+function Chair({
     x = 0,
     z = 0,
     y = 0,
@@ -86,3 +68,5 @@ export default function Chair({
         </mesh>
     )
 }
+
+export default React.memo(Chair)

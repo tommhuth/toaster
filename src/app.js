@@ -7,16 +7,9 @@ import { useStore } from "./store"
 import { softShadows } from "drei"
 import { Suspense } from "react"
 import Lights from "./comps/Lights"
-import Post from "./comps/Post"
-
+import Post from "./comps/Post" 
 import { CannonProvider } from "./utils/cannon"
-import Camera from "./comps/Camera"
-import Floor from "./comps/Floor"
-import Launcher from "./comps/Launcher"
-import Chair from "./comps/Chair"
-import Shelf from "./comps/Shelf"
-import Shelf2 from "./comps/Shelf2"
-import Bowl from "./comps/Bowl"
+import Camera from "./comps/Camera" 
 import Stage from "./comps/Stage"
 
 softShadows({
@@ -27,6 +20,43 @@ softShadows({
     rings: 11, // Rings (default: 11)
 })
 
+
+const maps = [
+    { 
+        name: "The Ivar",
+        launcher: [0, 1, 10],
+        world: [
+            {
+                height: 10,
+                width: 5,
+                depth: 5,
+                x: -5,
+                y: 5,
+                z: -5
+            }
+        ],
+        elements: [
+            {
+                type: "shelf",
+                x: -8
+            },
+            {
+                type: "chair",
+                z: -7,
+                rotation: 2
+            },
+            {
+                type: "bowl",
+                z: -5,
+                x: -3
+            },
+            {
+                type: "short-shelf",
+                x: 0
+            }
+        ]
+    }
+]
 
 function Ui() {
     let objects = useStore(i => i.data.objects)
@@ -70,14 +100,7 @@ ReactDOM.render(
             <Camera />
 
             <CannonProvider>
-                <Stage>
-                    <Floor y={-2} width={100} height={4} depth={100} z={0} />
-
-                    <Shelf x={-8} />
-                    <Chair z={-7} />
-                    <Bowl z={-5} x={-3} />
-                    <Shelf2 x={0} />
-                </Stage>
+                <Stage data={maps[0]} />
             </CannonProvider>
         </Canvas>
     </>,

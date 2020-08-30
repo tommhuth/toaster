@@ -949,11 +949,12 @@
   dependencies:
     "@hapi/hoek" "8.x.x"
 
-"@huth/random@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@huth/random/-/random-0.1.0.tgz#8dd4c3adbf0f2a4ebdeacf038472e55abc8f062b"
-  integrity sha512-U/43aN1pWTXWQUtM2ZdBt5VH08BLWrODTJyCfmh94E+FU+1qia53bE1Ubr4D5gGaircJEg8l94qqj2uoO8z6/g==
+"@huth/random@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@huth/random/-/random-1.0.0.tgz#87f06063ee30c0d676a1460ef72d737e80ea35a3"
+  integrity sha512-Y0zBMYCUni2XD70ff5eeqIaYqKUupaizYiuYjEN3lgjwNiX47MHo4jvIHdoEl8kst/L+roMaBtwCMOj2K5XZYA==
   dependencies:
+    cuid "^2.1.8"
     simplex-noise "^2.4.0"
 
 "@jimp/bmp@^0.6.8":
@@ -2758,6 +2759,11 @@ cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
+
+cuid@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/cuid/-/cuid-2.1.8.tgz#cbb88f954171e0d5747606c0139fb65c5101eac0"
+  integrity sha512-xiEMER6E7TlTPnDxrM4eRiC6TRgjNX9xzEZ5U/Se2YJKr7Mq4pJn/2XEHjl3STcSh96GmkHPcBXLES8M29wyyg==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -7890,10 +7896,10 @@ uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
 
-uuid@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.0.0.tgz#bc6ccf91b5ff0ac07bbcdbf1c7c4e150db4dbb6c"
-  integrity sha512-jOXGuXZAWdsTH7eZLtyXMqUb9EcWMGZNbL9YcGBJl4MH4nrxHmZJhEHvyLFrkxo+28uLb/NYRcStH48fnD0Vzw==
+uuid@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
+  integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
 
 v8-compile-cache@2.0.3:
   version "2.0.3"

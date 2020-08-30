@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useCannon } from "../utils/cannon"
 import { Box, Vec3 } from "cannon" 
-import { useGeometry } from "./Chair" 
+import { useGeometry } from "../utils/hooks"
 import { useStore } from "../store"
 
 export default function Shelf2({
     x = 0,
     z = 0,
-    y = 0, 
-    untouchable = false,
+    y = 0,  
 }) {
     let innerSize = 0.125
     let outerSize = 0.25
@@ -18,7 +17,7 @@ export default function Shelf2({
     let { ref, body } = useCannon({
         position: [x, y + height / 2 + outerSize / 2, z],
         mass: 30,
-        userData: { shelf: true, untouchable },
+        userData: { shelf: true },
     })
     let geometry = useGeometry("shelf2")
     let actions = useStore(i => i.actions)
@@ -61,7 +60,7 @@ export default function Shelf2({
 
     return (
         <mesh geometry={geometry} castShadow receiveShadow ref={ref}>
-            <meshLambertMaterial color="#CCC" attach="material" />
+            <meshLambertMaterial color="#fff" attach="material" />
         </mesh>
     )
 }

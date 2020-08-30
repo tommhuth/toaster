@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { useStore } from "../store"
+import WorldBlock from "./WorldBlock"
 import Launcher from "./Launcher"
+import Shelf from "./Shelf"
+import Bowl from "./Bowl"
+import Chair from "./Chair"
+import ShortShelf from "./ShortShelf"
 import Obj from "./Obj"
 import random from "@huth/random"
-import { v4 } from "uuid"
 
-export default function Stage({ children }) {
+export default function Stage({ data }) {
     let spaces = useStore(i => i.data.spaces)
     let [objects, setObjects] = useState([])
 
@@ -24,7 +28,7 @@ export default function Stage({ children }) {
 
                     if (random.boolean() || !hasObject) {
                         objects.push({
-                            id: v4(),
+                            id: random.id(),
                             x: x + w / 2,
                             y: (space.y - space.height / 2) + random.float(.25, .5),
                             z: space.z,
@@ -50,12 +54,28 @@ export default function Stage({ children }) {
 
     return (
         <>
-            {children}
+            {data.elements.map(i => {
+                switch (i.type) {
+                    case "shelf":
+                        return <Shelf {...i} key={i.type + i.x + i.y + i.z} />
+                    case "bowl":
+                        return <Bowl {...i} key={i.type + i.x + i.y + i.z} />
+                    case "short-shelf":
+                        return <ShortShelf {...i} key={i.type + i.x + i.y + i.z} />
+                    case "chair":
+                        return <Chair {...i} key={i.type + i.x + i.y + i.z} />
+                }
+            })}
+            {data.world.map((i) => {
+                return <WorldBlock {...i} key={"world-" + i.x + i.z + i.y} />
+            })}
 
             {objects.map((i) => {
                 return <Obj key={i.id} {...i} />
             })}
-            <Launcher />
+
+            <Launcher position={data.launcher} />
+            <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
         </>
     )
 }

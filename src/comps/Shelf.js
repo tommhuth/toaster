@@ -3,7 +3,7 @@ import { useCannon } from "../utils/cannon"
 import { Box, Vec3 } from "cannon"
 import { useFrame } from "react-three-fiber" 
 import { useStore } from "../store"
-import { useGeometry } from "./Chair" 
+import { useGeometry } from "../utils/hooks"
 
 export default function Shelf({
     x = 0,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback, useRef } from "react"
 import { useThree } from "react-three-fiber"
 import { Vector3, Raycaster } from "three"
-import { v4 } from "uuid"
-import Ball from "./Ball"
+import random from "@huth/random"
+import Ball from "./Ball" 
 
-export default function Launcher() {
+export default function Launcher({position}) {
     let { camera, scene, mouse } = useThree()
     let ref = useRef()
     let [balls, setBalls] = useState([])
@@ -12,8 +12,8 @@ export default function Launcher() {
         setBalls((prev) => [
             ...prev,
             {
-                key: v4(),
-                position: [0, 1, 10],
+                key: random.id(),
+                position,
                 velocity,
             },
         ])

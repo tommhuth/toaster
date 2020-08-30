@@ -1,26 +1,27 @@
 import { useEffect, useState, useRef } from "react"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import { Mesh } from "three"
+import { BufferGeometry } from "three"
 
 let loader = new GLTFLoader()
 let cache = {}
 
-export function useModel(url) {
-    let [mesh, setMesh] = useState(() => {
-        return cache[url] || new Mesh()
-    })
+export function useGeometry(name) {
+    let [geometry, setGeometry] = useState(() => cache[name] || new BufferGeometry())
 
     useEffect(() => {
-        loader.load(url, (scene) => {
-            let m = scene.scene.children[0]
+        if (!cache[name]) { 
+            loader.load(`/models/${name}.glb`, (res) => {
+                let mesh = res.scene.children.find(i => i.name = name)
 
-            setMesh(m)
-            cache[url] = m
-        })
-    }, [])
+                setGeometry(mesh.geometry)
+                cache[name] = mesh.geometry
+            }, undefined, console.error)
+        }
+    }, [name])
 
-    return mesh
+    return geometry
 }
+
 
 export function useDefaultValue(value) {
     let first = useRef(true)

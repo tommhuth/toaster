@@ -5,17 +5,16 @@ export default function Light() {
 
     return (
         <>
-            <ambientLight intensity={.3} color={0xffffff} />
+            <ambientLight intensity={.25} color={0xffffff} />
             <directionalLight
                 color={0xffffff}
-                intensity={0.6}
+                intensity={0.375}
                 castShadow
-                position={[-2, 4, 6]}
+                position={[-2, 3, 6]}
                 ref={ref}
                 shadow-mapSize-width={1024}
                 shadow-mapSize-height={1024}
-                shadow-camera-far={20}
-                //shadow-bias={.0003} 
+                shadow-camera-far={20} 
                 shadow-camera-near={-20}
                 shadow-camera-left={-15}
                 shadow-camera-right={30}
