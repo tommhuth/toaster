@@ -9,7 +9,7 @@ export default function Shelf({
     x = 0,
     z = 0,
     y = 0,
-    rotated = true,
+    rotated = false,
     active = [1, 1, 1]
 }) {
     let depth = 2

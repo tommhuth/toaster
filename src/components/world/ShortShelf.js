@@ -8,7 +8,7 @@ export default function Shelf2({
     x = 0,
     z = 0,
     y = 0,
-    rotated = true
+    rotated = false
 }) {
     let innerSize = 0.125
     let outerSize = 0.25
