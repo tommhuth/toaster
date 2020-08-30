@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react"
-import { useCannon } from "../utils/cannon"
-import { useDefaultValue } from "../utils/hooks"
+import { useCannon } from "../../utils/cannon"
+import { useDefaultValue } from "../../utils/hooks"
 import { Box, Vec3 } from "cannon"
 import { Color } from "three"
-import { useStore } from "../store"
+import { useStore } from "../../store"
 import random from "@huth/random"
-import animate from "../utils/animate"
+import animate from "../../utils/animate"
 
 export default function Obj({ x, y, z, width, height, depth }) {
     let actions = useStore(i => i.actions)

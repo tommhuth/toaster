@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { useCannon } from "../utils/cannon"
+import { useCannon } from "../../utils/cannon"
 import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
-import { useGeometry } from "../utils/hooks"
+import { useGeometry } from "../../utils/hooks"
 import random from "@huth/random"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {

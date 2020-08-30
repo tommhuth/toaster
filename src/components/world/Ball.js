@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react"
-import { useCannon } from "../utils/cannon"
+import { useCannon } from "../../utils/cannon"
 import { Sphere } from "cannon"
-import {useDefaultValue} from "../utils/hooks"
+import {useDefaultValue} from "../../utils/hooks"
 
 export default function Ball({ radius = 0.25, velocity = [0, 0, 0], position = [0, 3, 0] }) {
     let defaultPosition = useDefaultValue(position)

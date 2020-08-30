@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { useCannon } from "../utils/cannon"
+import { useCannon } from "../../utils/cannon"
 import { Box, Vec3, Quaternion } from "cannon"
-import { useGeometry } from "../utils/hooks"
+import { useGeometry } from "../../utils/hooks"
  
 function Chair({
     x = 0,

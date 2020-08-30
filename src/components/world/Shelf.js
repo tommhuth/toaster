@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { useCannon } from "../utils/cannon"
+import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon"
 import { useFrame } from "react-three-fiber" 
-import { useStore } from "../store"
-import { useGeometry } from "../utils/hooks"
+import { useStore } from "../../store"
+import { useGeometry } from "../../utils/hooks"
 
 export default function Shelf({
     x = 0,

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react"
 import { useThree } from "react-three-fiber"
 import { Vector3, Raycaster } from "three"
 import random from "@huth/random"
-import Ball from "./Ball" 
+import Ball from "./world/Ball" 
 
 export default function Launcher({position}) {
     let { camera, scene, mouse } = useThree()

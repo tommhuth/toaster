@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
-import { useCannon } from "../utils/cannon"
+import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon" 
-import { useGeometry } from "../utils/hooks"
-import { useStore } from "../store"
+import { useGeometry } from "../../utils/hooks"
+import { useStore } from "../../store"
 
 export default function Shelf2({
     x = 0,

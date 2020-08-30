@@ -6,11 +6,11 @@ import { Canvas } from "react-three-fiber"
 import { useStore } from "./store"
 import { softShadows } from "drei"
 import { Suspense } from "react"
-import Lights from "./comps/Lights"
-import Post from "./comps/Post" 
+import Lights from "./components/Lights"
+import Post from "./components/Post" 
 import { CannonProvider } from "./utils/cannon"
-import Camera from "./comps/Camera" 
-import Stage from "./comps/Stage"
+import Camera from "./components/Camera" 
+import Stage from "./components/Stage"
 
 softShadows({
     frustrum: 3.75, // Frustrum width (default: 3.75)
