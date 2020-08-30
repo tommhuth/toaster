@@ -7,9 +7,9 @@ import { useStore } from "./utils/store"
 import { softShadows } from "drei"
 import { Suspense } from "react"
 import Lights from "./components/Lights"
-import Post from "./components/Post" 
+import Post from "./components/Post"
 import { CannonProvider } from "./utils/cannon"
-import Camera from "./components/Camera" 
+import Camera from "./components/Camera"
 import Stage from "./components/Stage"
 
 softShadows({
@@ -22,7 +22,7 @@ softShadows({
 
 
 const maps = [
-    { 
+    {
         name: "The Ivar",
         launcherPosition: [14, .1, 14],
         world: [
@@ -59,11 +59,42 @@ const maps = [
             }
             */
         ]
+    }, {
+        name: "The Ivar",
+        launcherPosition: [10, .1, 10],
+        world: [
+        ],
+        elements: [
+            {
+                type: "shelf",
+                x: 5,
+                z: 0,
+                rotated: true
+            },
+            {
+                type: "shelf",
+                x: -5,
+                z: 0,
+                rotated: false
+            },
+            {
+                type: "short-shelf",
+                x: 5,
+                z: 10,
+                rotated:true
+            }, 
+            {
+                type: "short-shelf",
+                x: -2,
+                z: -10,
+                rotated:false
+            },  
+        ]
     },
-    { 
+    {
         name: "The 2",
         launcherPosition: [0, .1, 14],
-        world: [ 
+        world: [
             {
                 height: 4,
                 width: 1,
@@ -78,12 +109,12 @@ const maps = [
                 type: "shelf",
                 x: -6,
                 z: 0,
-            },  
+            },
             {
                 type: "shelf",
                 x: 0,
                 z: 0,
-            },  
+            },
             {
                 type: "short-shelf",
                 x: 5.75,

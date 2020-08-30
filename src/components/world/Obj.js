@@ -13,14 +13,13 @@ export default function Obj({ x, y, z, width, height, depth }) {
     let [color] = useState(
         () => random.pick("#fcad03", "#fcad03", "#666", "#fcad03", "#ccc")
     )
-    let dead = useRef(false)
-    let [offset] = useState(0)
+    let dead = useRef(false) 
     let [flash, setFlash] = useState(false)
     let [rotation] = useState(() => {
         return random.boolean() ? random.float(-.2, .2) : 0
     })
     let { ref } = useCannon({
-        position: [x, y + height / 2 + offset, z],
+        position: [x, y + height / 2, z],
         mass: width * height * depth * .5,
         rotation: [0, rotation, 0],
         shape: new Box(new Vec3(width / 2, height / 2, depth / 2)),
@@ -31,11 +30,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
                 setFlash(true)
             }
         }
-    }, [])
-
-    useEffect(() => {
-        //actions.addObject()
-    }, [])
+    }, []) 
 
     useEffect(() => {
         if (flash) {

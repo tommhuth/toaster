@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon"
-import { useFrame } from "react-three-fiber" 
+import { useFrame } from "react-three-fiber"
 import { useStore } from "../../utils/store"
 import { useGeometry } from "../../utils/hooks"
 
 export default function Shelf({
     x = 0,
     z = 0,
-    y = 0, 
-    rotation = [0, 0, 0],
-    r
+    y = 0,
+    rotated = true,
+    active = [1, 1, 1]
 }) {
     let depth = 2
     let height = 7
     let width = 5
     let actions = useStore(state => state.actions)
-    let legRadius = 0.15 
-    let [dead, setDead] = useState(false) 
+    let legRadius = 0.15
+    let [dead, setDead] = useState(false)
     let { ref, body } = useCannon({
         position: [x, height / 2 + y, z],
         mass: 20,
-        rotation,
+        rotation: rotated ? [0, Math.PI / 2, 0] : [0, 0, 0],
         userData: { shelf: true },
     })
     let geo = useGeometry("shelf1")
@@ -66,42 +66,41 @@ export default function Shelf({
             new Vec3(0, height / 3, 0)
         )
 
-        actions.createSpaces([
+
+        let y1 = y + height / 3 - 1
+        let y2 = y + height * 0.66 - 1
+        let y3 = y + height / 3 + height / 2 + 0.2
+        let spaces = [
             {
-                y: y + height / 3,
-                color: "red",
-                x,
-                z,
-                depth: depth,
-                width: width - legRadius * 2,
+                rotated,
+                start: rotated ? [x, y1, z + width / 2 - .5] : [x - width / 2 + .5, y1, z],
+                end: rotated ? [x, y1, z - width / 2 + .5] : [x + width / 2 - .5, y1, z],
                 height: height / 3 - 0.2,
+                size: 2,
             },
             {
-                y: y + height * 0.66 + 0.1,
-                x,
-                z,
-                color: "blue",
-                depth: depth,
-                width: width - legRadius * 2,
+                rotated,
+                start: rotated ? [x, y2, z + width / 2 - .5] : [x - width / 2 + .5, y2, z],
+                end: rotated ? [x, y2, z - width / 2 + .5] : [x + width / 2 - .5, y2, z],
                 height: height / 3 - 0.2,
+                size: 2,
             },
             {
-                y: y + height / 3 + height / 2 + 0.2,
-                x,
-                z,
-                color: "orange",
-                depth: depth,
-                height: 0.1,
-                width: width - legRadius * 2,
-                top: true,
-            },
-        ])
+                rotated,
+                start: rotated ? [x, y3, z + width / 2 - .5] : [x - width / 2 + .5, y3, z],
+                end: rotated ? [x, y3, z - width / 2 + .5] : [x + width / 2 - .5, y3, z],
+                height: height / 2,
+                size: 2,
+            }
+        ]
+
+        actions.createSpaces(spaces.filter((i, index) => active[index] ))
     }, [])
 
 
     return (
         <mesh geometry={geo} ref={ref} castShadow receiveShadow>
-            <meshLambertMaterial color={0xffffff} attach="material" /> 
+            <meshLambertMaterial color={0xffffff} attach="material" />
         </mesh>
     )
 }

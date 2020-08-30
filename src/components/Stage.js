@@ -19,31 +19,38 @@ export default function Stage({ launcherPosition, world, elements }) {
             let objects = []
 
             for (let space of spaces) {
-                let x = space.x - space.width / 2
-                let w = random.float(.5, 2)
-                let g = random.float(0, 1)
-                let hasObject = false
+                let size = random.float(.5, 2)
+                let gap = random.float(0, 1)
+                let skipped = 0
+                let d = space.start[space.rotated ? 2 : 0] + (space.rotated ? -(size / 2) : size / 2)
+                let isInsideSpace = (d, size, gap, space) => {
+                    if (space.rotated) {
+                        return d - size - gap > space.end[2]
+                    } else {
+                        return d + size + gap < space.end[0]
+                    }
+                }
 
-                while (x + w + g < space.x + space.width / 2) {
-                    let h = random.float(0, space.height - 1.25) + (space.top ? 2 : 0.25)
+                while (isInsideSpace(d, size, gap, space)) {
+                    let height = random.float(space.height * .25, space.height * .85)
 
-                    if (random.boolean() || !hasObject) {
+                    if (random.boolean(.75) || skipped > 1) { 
                         objects.push({
                             id: random.id(),
-                            x: x + w / 2,
-                            y: (space.y - space.height / 2) + random.float(.25, .5),
-                            z: space.z,
-                            width: w,
-                            height: h,
-                            depth: random.float(.5, space.depth + .5),
+                            x: space.rotated ? space.start[0] : d,
+                            y: space.start[1],
+                            z: space.rotated ? d : space.start[2],
+                            width: space.rotated ? space.size : size,
+                            height,
+                            depth: space.rotated ? size : random.float(.5, space.size + .5),
                         })
-
-                        hasObject = true
+                    } else {
+                        skipped++
                     }
 
-                    x = Math.min(x + w + g, space.x + space.width / 2)
-                    w = random.float(.5, 1.5)
-                    g = random.float(0, .35)
+                    d = space.rotated ? d - size - gap : d + size + gap
+                    size = random.float(.5, 1.25)
+                    gap = random.float(0, .35)
                 }
             }
 
@@ -68,7 +75,7 @@ export default function Stage({ launcherPosition, world, elements }) {
                         return <Chair {...i} key={i.type + i.x + i.y + i.z} />
                 }
             })}
-            
+
             {world.map((i) => {
                 return <WorldBlock {...i} key={"world-" + i.x + i.z + i.y} />
             })}
@@ -85,6 +92,15 @@ export default function Stage({ launcherPosition, world, elements }) {
 
 /*
 
+
+            {spaces.map((i, index) => {
+                return (
+                    <mesh position={i.end} key={index}>
+                        <sphereBufferGeometry args={[.2]} attach="geometry" />
+                        <meshLambertMaterial color="red" attach="material" />
+                    </mesh>
+                )
+            })}
             {spaces.map((i, index) => {
                 return (
                     <mesh key={index} position={[i.x, i.y, i.z]} visible={false}>
