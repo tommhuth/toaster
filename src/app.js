@@ -24,7 +24,7 @@ softShadows({
 const maps = [
     { 
         name: "The Ivar",
-        launcher: [0, 1, 10],
+        launcherPosition: [10, 1, 10],
         world: [
             {
                 height: 10,
@@ -100,7 +100,7 @@ ReactDOM.render(
             <Camera />
 
             <CannonProvider>
-                <Stage data={maps[0]} />
+                <Stage {...maps[0]} key={maps[0].name} />
             </CannonProvider>
         </Canvas>
     </>,

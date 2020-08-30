@@ -9,7 +9,7 @@ import ShortShelf from "./ShortShelf"
 import Obj from "./Obj"
 import random from "@huth/random"
 
-export default function Stage({ data }) {
+export default function Stage({ launcherPosition, world, elements }) {
     let spaces = useStore(i => i.data.spaces)
     let [objects, setObjects] = useState([])
 
@@ -54,7 +54,7 @@ export default function Stage({ data }) {
 
     return (
         <>
-            {data.elements.map(i => {
+            {elements.map(i => {
                 switch (i.type) {
                     case "shelf":
                         return <Shelf {...i} key={i.type + i.x + i.y + i.z} />
@@ -66,7 +66,7 @@ export default function Stage({ data }) {
                         return <Chair {...i} key={i.type + i.x + i.y + i.z} />
                 }
             })}
-            {data.world.map((i) => {
+            {world.map((i) => {
                 return <WorldBlock {...i} key={"world-" + i.x + i.z + i.y} />
             })}
 
@@ -74,7 +74,7 @@ export default function Stage({ data }) {
                 return <Obj key={i.id} {...i} />
             })}
 
-            <Launcher position={data.launcher} />
+            <Launcher position={launcherPosition} />
             <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
         </>
     )
