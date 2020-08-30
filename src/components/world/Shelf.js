@@ -22,14 +22,12 @@ export default function Shelf({
         position: [x, height / 2 + y, z],
         mass: 20,
         rotation: rotated ? [0, Math.PI / 2, 0] : [0, 0, 0],
-        userData: { shelf: true },
+        userData: { shelf: true }, 
     })
-    let geo = useGeometry("shelf1")
+    let geometry = useGeometry("shelf1") 
 
-    useFrame(() => {
-        let rotation = Math.max(Math.abs(ref.current.rotation.x), Math.abs(ref.current.rotation.z))
-
-        if (!dead && rotation > Math.PI / 2 - .2) {
+    useFrame(() => {   
+        if (!dead && ref.current.position.y < 3) {
             setDead(true)
             actions.gameOver()
         }
@@ -94,12 +92,12 @@ export default function Shelf({
             }
         ]
 
-        actions.createSpaces(spaces.filter((i, index) => active[index] ))
+        actions.createSpaces(spaces.filter((i, index) => active[index]))
     }, [])
 
 
     return (
-        <mesh geometry={geo} ref={ref} castShadow receiveShadow>
+        <mesh geometry={geometry} ref={ref} castShadow receiveShadow>
             <meshLambertMaterial color={0xffffff} attach="material" />
         </mesh>
     )
