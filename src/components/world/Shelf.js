@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon"
 import { useFrame } from "react-three-fiber" 
-import { useStore } from "../../store"
+import { useStore } from "../../utils/store"
 import { useGeometry } from "../../utils/hooks"
 
 export default function Shelf({
@@ -10,6 +10,7 @@ export default function Shelf({
     z = 0,
     y = 0, 
     rotation = [0, 0, 0],
+    r
 }) {
     let depth = 2
     let height = 7

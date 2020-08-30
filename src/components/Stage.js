@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useStore } from "../store"
+import { useStore } from "../utils/store"
 import WorldBlock from "./WorldBlock"
 import Launcher from "./Launcher"
 import Shelf from "./world/Shelf"
@@ -12,6 +12,7 @@ import random from "@huth/random"
 export default function Stage({ launcherPosition, world, elements }) {
     let spaces = useStore(i => i.data.spaces)
     let [objects, setObjects] = useState([])
+    let actions = useStore(i => i.actions)
 
     useEffect(() => {
         let id = setTimeout(() => {
@@ -47,6 +48,7 @@ export default function Stage({ launcherPosition, world, elements }) {
             }
 
             setObjects(objects)
+            actions.setObjectCount(objects.length)
         }, 250)
 
         return () => clearTimeout(id)
@@ -66,6 +68,7 @@ export default function Stage({ launcherPosition, world, elements }) {
                         return <Chair {...i} key={i.type + i.x + i.y + i.z} />
                 }
             })}
+            
             {world.map((i) => {
                 return <WorldBlock {...i} key={"world-" + i.x + i.z + i.y} />
             })}

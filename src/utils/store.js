@@ -1,23 +1,23 @@
 import { create } from "zustand"
 
-function getActions(get, set) { 
+function getActions(get, set) {
     return {
-        complete() { 
+        complete() {
             set({
                 state: "complete"
             })
         },
         createSpaces(spaces) {
-            set({spaces: [...get().spaces, ...spaces]})
+            set({ spaces: [...get().spaces, ...spaces] })
         },
         gameOver() {
             set({
                 state: "gameover"
             })
         },
-        addObject() {
+        setObjectCount(count) {
             set({
-                objects: get().objects + 1
+                objects: count
             })
         },
         removeObject() {

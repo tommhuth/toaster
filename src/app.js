@@ -3,7 +3,7 @@ import "../assets/styles/app.scss"
 import React, { useRef } from "react"
 import ReactDOM from "react-dom"
 import { Canvas } from "react-three-fiber"
-import { useStore } from "./store"
+import { useStore } from "./utils/store"
 import { softShadows } from "drei"
 import { Suspense } from "react"
 import Lights from "./components/Lights"
@@ -24,27 +24,30 @@ softShadows({
 const maps = [
     { 
         name: "The Ivar",
-        launcherPosition: [10, 1, 10],
+        launcherPosition: [14, .1, 14],
         world: [
             {
                 height: 10,
-                width: 5,
-                depth: 5,
-                x: -5,
+                width: 7,
+                depth: 7,
+                x: -0,
                 y: 5,
-                z: -5
+                z: -0
             }
         ],
         elements: [
             {
                 type: "shelf",
-                x: -8
+                x: 0,
+                z: 5,
             },
             {
                 type: "chair",
-                z: -7,
-                rotation: 2
+                z: 0,
+                x: 5.25,
+                rotation: 1.4
             },
+            /*
             {
                 type: "bowl",
                 z: -5,
@@ -54,6 +57,49 @@ const maps = [
                 type: "short-shelf",
                 x: 0
             }
+            */
+        ]
+    },
+    { 
+        name: "The 2",
+        launcherPosition: [0, .1, 14],
+        world: [ 
+            {
+                height: 4,
+                width: 1,
+                depth: 8,
+                x: 4,
+                y: 2,
+                z: 0
+            }
+        ],
+        elements: [
+            {
+                type: "shelf",
+                x: -6,
+                z: 0,
+            },  
+            {
+                type: "shelf",
+                x: 0,
+                z: 0,
+            },  
+            {
+                type: "short-shelf",
+                x: 5.75,
+                z: 0
+            }
+            /*
+            {
+                type: "bowl",
+                z: -5,
+                x: -3
+            },
+            {
+                type: "short-shelf",
+                x: 0
+            }
+            */
         ]
     }
 ]
@@ -69,6 +115,8 @@ function Ui() {
         </div>
     )
 }
+2
+let id = new URLSearchParams(location.search).get("id") || 0
 
 ReactDOM.render(
     <>
@@ -78,7 +126,7 @@ ReactDOM.render(
             colorManagement
             shadowMap={true}
             orthographic
-            pixelRatio={1}
+            pixelRatio={1.25}
             gl={{
                 stencil: false,
                 depth: false,
@@ -88,7 +136,7 @@ ReactDOM.render(
             camera={{
                 zoom: 45,
                 fov: 60,
-                near: -10,
+                near: 0,
                 far: 50,
             }}
         >
@@ -100,7 +148,7 @@ ReactDOM.render(
             <Camera />
 
             <CannonProvider>
-                <Stage {...maps[0]} key={maps[0].name} />
+                <Stage {...maps[id]} key={maps[id].name} />
             </CannonProvider>
         </Canvas>
     </>,

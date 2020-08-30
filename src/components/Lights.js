@@ -14,7 +14,7 @@ export default function Light() {
                 ref={ref}
                 shadow-mapSize-width={1024}
                 shadow-mapSize-height={1024}
-                shadow-camera-far={20} 
+                shadow-camera-far={30} 
                 shadow-camera-near={-20}
                 shadow-camera-left={-15}
                 shadow-camera-right={30}

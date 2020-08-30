@@ -49,7 +49,7 @@ export default function Post1() {
             scale: .75,
             bias: 0.05,
             fade: .1,
-            intensity: 10, // strength of shadow
+            intensity: 11, // strength of shadow
         })
         const bloom = new BloomEffect({
             intensity: 10,

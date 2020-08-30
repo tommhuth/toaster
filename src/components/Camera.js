@@ -6,8 +6,9 @@ export default function Camera() {
     let { camera } = useThree()
 
     useEffect(() => {
-        camera.position.set(5,7,5)
-        camera.lookAt(-5, -1, -5)
+        camera.position.set(10,10,10)
+        camera.lookAt(0, 0, 0)
+ 
     }, [])
 
     return null

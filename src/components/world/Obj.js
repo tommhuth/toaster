@@ -3,7 +3,7 @@ import { useCannon } from "../../utils/cannon"
 import { useDefaultValue } from "../../utils/hooks"
 import { Box, Vec3 } from "cannon"
 import { Color } from "three"
-import { useStore } from "../../store"
+import { useStore } from "../../utils/store"
 import random from "@huth/random"
 import animate from "../../utils/animate"
 
@@ -11,7 +11,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
     let actions = useStore(i => i.actions)
     let defaultPosition = useDefaultValue([x, y, z])
     let [color] = useState(
-        () => random.pick("#00f", "#666", "#fcad03", "#ccc")
+        () => random.pick("#fcad03", "#fcad03", "#666", "#fcad03", "#ccc")
     )
     let dead = useRef(false)
     let [offset] = useState(0)
@@ -34,7 +34,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
     }, [])
 
     useEffect(() => {
-        actions.addObject()
+        //actions.addObject()
     }, [])
 
     useEffect(() => {

@@ -2,12 +2,13 @@ import React, { useEffect } from "react"
 import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon" 
 import { useGeometry } from "../../utils/hooks"
-import { useStore } from "../../store"
+import { useStore } from "../../utils/store"
 
 export default function Shelf2({
     x = 0,
     z = 0,
     y = 0,  
+    rotated = true
 }) {
     let innerSize = 0.125
     let outerSize = 0.25
@@ -18,6 +19,7 @@ export default function Shelf2({
         position: [x, y + height / 2 + outerSize / 2, z],
         mass: 30,
         userData: { shelf: true },
+        rotation: [0, rotated ? Math.PI/2 : 0, 0]
     })
     let geometry = useGeometry("shelf2")
     let actions = useStore(i => i.actions)
@@ -48,8 +50,8 @@ export default function Shelf2({
 
         actions.createSpaces([
             {
-                width: width - 1,
-                depth,
+                width:rotated ? depth -1: width - 1,
+                depth: rotated ? width: depth,
                 height: 3,
                 y: height + outerSize + 3 / 2,
                 z,
