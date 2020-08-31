@@ -18,7 +18,7 @@ function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     return (
         <mesh ref={ref} castShadow receiveShadow>
             <cylinderBufferGeometry args={[radius, radius, height, 6]} attach="geometry" />
-            <meshLambertMaterial color="#CCC" attach="material" />
+            <meshLambertMaterial color="#fff" attach="material" />
         </mesh>
     )
 }

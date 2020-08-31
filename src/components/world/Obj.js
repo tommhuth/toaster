@@ -50,7 +50,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
     return (
         <mesh castShadow receiveShadow ref={ref} position={defaultPosition}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
-            <meshLambertMaterial color={color} attach="material" />
+            <meshPhongMaterial shininess={4} specular={0xaaaaaa} color={color} attach="material" />
         </mesh>
     )
 }

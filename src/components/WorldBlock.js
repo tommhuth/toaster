@@ -20,7 +20,7 @@ export default function WorldBlock({
     return (
         <mesh castShadow receiveShadow ref={ref} userData={{ floor: isFloor }}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
-            <meshPhongMaterial shininess={3} color={0x0000FF} attach="material" />
+            <meshPhongMaterial shininess={12} specular={0xffffff} color={0x0000FF} attach="material" />
         </mesh>
     )
 }
