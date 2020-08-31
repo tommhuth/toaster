@@ -47,7 +47,7 @@ const maps = [
                 z: 0,
                 x: 5.25,
                 rotation: 1.4
-            }, 
+            },
         ]
     }, {
         name: "Everyone",
@@ -116,12 +116,12 @@ const maps = [
                 x: 5.75,
                 z: 0,
                 rotated: true
-            }, 
+            },
             {
                 type: "bowl",
                 z: -5,
                 x: -3
-            }, 
+            },
         ]
     }
 ]
@@ -138,8 +138,11 @@ function Ui() {
             <p>state: {state}</p>
             <p>
                 map:{" "}
-                <select value={maps.findIndex(i=>i.name === map?.name)} onChange={(e) => actions.useMap(maps[e.target.value])}>
-                    <option>Pick map</option>
+                <select
+                    value={maps.findIndex(i => i.name === map?.name) || -1}
+                    onChange={(e) => actions.useMap(maps[e.target.value])}
+                >
+                    <option value="-1" disabled>Pick map</option>
                     {maps.map((i, index) => <option key={i.name} value={index}>{i.name}</option>)}
                 </select>
             </p>
