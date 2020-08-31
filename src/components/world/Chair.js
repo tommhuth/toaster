@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../../utils/cannon"
 import { Box, Vec3, Quaternion } from "cannon"
-import { useGeometry } from "../../utils/hooks"
- 
+import { resource, useAsyncModel } from "../../utils/hooks"
+
+let chair = resource("chair")
+
 function Chair({
     x = 0,
     z = 0,
@@ -14,7 +16,7 @@ function Chair({
     untouchable = false,
 }) {
     let aboveFloor = 1.75
-    let geometry = useGeometry("chair")
+    let geometry = useAsyncModel(chair)
     let { ref, body } = useCannon({
         position: [x, y + aboveFloor, z],
         mass: 16,
@@ -60,7 +62,7 @@ function Chair({
         )
 
         body.quaternion.setFromAxisAngle(new Vec3(0, 1, 0), rotation)
-    }, []) 
+    }, [])
 
     return (
         <mesh receiveShadow castShadow ref={ref} geometry={geometry}>

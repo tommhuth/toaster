@@ -3,9 +3,11 @@ import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon"
 import { useFrame } from "react-three-fiber"
 import { useStore } from "../../utils/store"
-import { useGeometry } from "../../utils/hooks"
+import { resource, useAsyncModel } from "../../utils/hooks"
 
-export default function Shelf({
+let shelf = resource("shelf1")
+
+function Shelf({
     x = 0,
     z = 0,
     y = 0,
@@ -22,14 +24,14 @@ export default function Shelf({
         position: [x, height / 2 + y, z],
         mass: 20,
         rotation: rotated ? [0, Math.PI / 2, 0] : [0, 0, 0],
-        userData: { shelf: true }, 
+        userData: { shelf: true },
     })
-    let geometry = useGeometry("shelf1") 
+    let geometry = useAsyncModel(shelf)
 
-    useFrame(() => {   
+    useFrame(() => {
         if (!dead && ref.current.position.y < 3) {
             setDead(true)
-            actions.gameOver()
+            actions.end()
         }
     })
 
@@ -63,8 +65,9 @@ export default function Shelf({
             new Box(new Vec3(width / 2 + legRadius, 0.1, depth / 2 + legRadius)),
             new Vec3(0, height / 3, 0)
         )
+    }, [])
 
-
+    useEffect(() => {
         let y1 = y + height / 3 - 1
         let y2 = y + height * 0.66 - 1
         let y3 = y + height / 3 + height / 2 + 0.2
@@ -92,9 +95,8 @@ export default function Shelf({
             }
         ]
 
-        actions.createSpaces(spaces.filter((i, index) => active[index]))
+        actions.createSpaces(...spaces.filter((i, index) => active[index]))
     }, [])
-
 
     return (
         <mesh geometry={geometry} ref={ref} castShadow receiveShadow>
@@ -102,3 +104,5 @@ export default function Shelf({
         </mesh>
     )
 }
+
+export default React.memo(Shelf)

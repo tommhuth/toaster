@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Suspense } from "react"
 import { useStore } from "../utils/store"
 import WorldBlock from "./WorldBlock"
 import Launcher from "./Launcher"
@@ -19,7 +19,7 @@ export default function Stage({ launcherPosition, world, elements }) {
             let objects = []
 
             for (let space of spaces) {
-                let size = random.float(.5, 2)
+                let size = random.float(.5, 1.5)
                 let gap = random.float(0, 1)
                 let skipped = 0
                 let d = space.start[space.rotated ? 2 : 0] + (space.rotated ? -(size / 2) : size / 2)
@@ -34,7 +34,7 @@ export default function Stage({ launcherPosition, world, elements }) {
                 while (isInsideSpace(d, size, gap, space)) {
                     let height = random.float(space.height * .25, space.height * .85)
 
-                    if (random.boolean(.75) || skipped > 1) { 
+                    if (random.boolean(.75) || skipped >= 1) {
                         objects.push({
                             id: random.id(),
                             x: space.rotated ? space.start[0] : d,
@@ -49,7 +49,7 @@ export default function Stage({ launcherPosition, world, elements }) {
                     }
 
                     d = space.rotated ? d - size - gap : d + size + gap
-                    size = random.float(.5, 1.25)
+                    size = random.float(.5, 1)
                     gap = random.float(0, .35)
                 }
             }
@@ -61,31 +61,42 @@ export default function Stage({ launcherPosition, world, elements }) {
         return () => clearTimeout(id)
     }, [spaces])
 
+    useEffect(() => {
+        if (spaces.length) {
+            actions.ready()
+        }
+    }, [spaces])
+
     return (
         <>
-            {elements.map(i => {
-                switch (i.type) {
-                    case "shelf":
-                        return <Shelf {...i} key={i.type + i.x + i.y + i.z} />
-                    case "bowl":
-                        return <Bowl {...i} key={i.type + i.x + i.y + i.z} />
-                    case "short-shelf":
-                        return <ShortShelf {...i} key={i.type + i.x + i.y + i.z} />
-                    case "chair":
-                        return <Chair {...i} key={i.type + i.x + i.y + i.z} />
-                }
-            })}
+            <Suspense fallback={null}>
+                {elements.map(i => {
+                    let key = `${i.type}-${i.x || 0}-${i.y || 0}-${i.z || 0}`
 
-            {world.map((i) => {
-                return <WorldBlock {...i} key={"world-" + i.x + i.z + i.y} />
-            })}
+                    switch (i.type) {
+                        case "shelf":
+                            return <Shelf {...i} key={key} />
+                        case "bowl":
+                            return <Bowl {...i} key={key} />
+                        case "short-shelf":
+                            return <ShortShelf {...i} key={key} />
+                        case "chair":
+                            return <Chair {...i} key={key} />
+                        default:
+                            throw new Error(`Unknown element type ${i.type}`)
+                    }
+                })}
 
-            {objects.map((i) => {
-                return <Obj key={i.id} {...i} />
-            })}
+                {world.map((i) => {
+                    return <WorldBlock {...i} key={`world-${i.x || 0}-${i.y || 0}-${i.z || 0}`} />
+                })}
 
-            <Launcher position={launcherPosition} />
-            <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
+                {objects.map((i) => {
+                    return <Obj key={i.id} {...i} />
+                })}
+
+                <Launcher position={launcherPosition} />
+            </Suspense>
         </>
     )
 }

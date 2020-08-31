@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useCannon } from "../../utils/cannon"
-import { Box, Vec3, Quaternion, Cylinder } from "cannon" 
-import { useGeometry } from "../../utils/hooks"
+import { Box, Vec3, Quaternion, Cylinder } from "cannon"
+import { resource, useAsyncModel } from "../../utils/hooks"
 import random from "@huth/random"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {
@@ -23,7 +23,10 @@ function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     )
 }
 
-export default function Bowl({
+
+let bowl = resource("bowl")
+
+function Bowl({
     x = 0,
     z = 0,
     y = 0,
@@ -35,7 +38,7 @@ export default function Bowl({
         mass: 16,
         userData: { chair: true, untouchable },
     })
-    let geometry  = useGeometry("bowl")
+    let geometry = useAsyncModel(bowl)
 
     useEffect(() => {
         let q = Math.PI / 4
@@ -88,3 +91,5 @@ export default function Bowl({
         </>
     )
 }
+
+export default React.memo(Bowl)

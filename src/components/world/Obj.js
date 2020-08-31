@@ -7,7 +7,7 @@ import { useStore } from "../../utils/store"
 import random from "@huth/random"
 import animate from "../../utils/animate"
 
-export default function Obj({ x, y, z, width, height, depth }) {
+function Obj({ x, y, z, width, height, depth }) {
     let actions = useStore(i => i.actions)
     let defaultPosition = useDefaultValue([x, y, z])
     let [color] = useState(
@@ -26,7 +26,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
         onCollide(e) {
             if (e.body.userData.floor && !dead.current) {
                 dead.current = true
-                actions.removeObject()
+                actions.reduceObjectCount()
                 setFlash(true)
             }
         }
@@ -45,7 +45,7 @@ export default function Obj({ x, y, z, width, height, depth }) {
                 }
             })
         }
-    }, [flash])
+    }, [flash]) 
 
     return (
         <mesh castShadow receiveShadow ref={ref} position={defaultPosition}>
@@ -54,3 +54,5 @@ export default function Obj({ x, y, z, width, height, depth }) {
         </mesh>
     )
 }
+
+export default React.memo(Obj)

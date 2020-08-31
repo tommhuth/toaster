@@ -1,6 +1,6 @@
 import "../assets/styles/app.scss"
 
-import React, { useRef } from "react"
+import React from "react"
 import ReactDOM from "react-dom"
 import { Canvas } from "react-three-fiber"
 import { useStore } from "./utils/store"
@@ -11,6 +11,7 @@ import Post from "./components/Post"
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
 import Stage from "./components/Stage"
+import WorldBlock from "./components/WorldBlock"
 
 softShadows({
     frustrum: 3.75, // Frustrum width (default: 3.75)
@@ -23,7 +24,7 @@ softShadows({
 
 const maps = [
     {
-        name: "The Ivar",
+        name: "Up against the wall",
         launcherPosition: [14, .1, 14],
         world: [
             {
@@ -46,21 +47,10 @@ const maps = [
                 z: 0,
                 x: 5.25,
                 rotation: 1.4
-            },
-            /*
-            {
-                type: "bowl",
-                z: -5,
-                x: -3
-            },
-            {
-                type: "short-shelf",
-                x: 0
-            }
-            */
+            }, 
         ]
     }, {
-        name: "The Ivar",
+        name: "Everyone",
         launcherPosition: [10, .1, 10],
         world: [
         ],
@@ -81,18 +71,24 @@ const maps = [
                 type: "short-shelf",
                 x: 5,
                 z: 10,
-                rotated:true
-            }, 
+                rotated: false
+            },
+            {
+                type: "bowl",
+                x: 10,
+                z: 10,
+                rotated: false
+            },
             {
                 type: "short-shelf",
                 x: -2,
                 z: -10,
-                rotated:false
-            },  
+                rotated: false
+            },
         ]
     },
     {
-        name: "The 2",
+        name: "The Arrow",
         launcherPosition: [0, .1, 14],
         world: [
             {
@@ -118,70 +114,81 @@ const maps = [
             {
                 type: "short-shelf",
                 x: 5.75,
-                z: 0
-            }
-            /*
+                z: 0,
+                rotated: true
+            }, 
             {
                 type: "bowl",
                 z: -5,
                 x: -3
-            },
-            {
-                type: "short-shelf",
-                x: 0
-            }
-            */
+            }, 
         ]
     }
 ]
 
 function Ui() {
     let objects = useStore(i => i.data.objects)
+    let map = useStore(i => i.data.map)
     let state = useStore(i => i.data.state)
+    let actions = useStore(i => i.actions)
 
     return (
         <div className="ui">
             <p>objs: {objects}</p>
             <p>state: {state}</p>
+            <p>
+                map:{" "}
+                <select value={maps.findIndex(i=>i.name === map?.name)} onChange={(e) => actions.useMap(maps[e.target.value])}>
+                    <option>Pick map</option>
+                    {maps.map((i, index) => <option key={i.name} value={index}>{i.name}</option>)}
+                </select>
+            </p>
         </div>
     )
 }
-2
-let id = new URLSearchParams(location.search).get("id") || 0
 
-ReactDOM.render(
-    <>
-        <Ui />
-        <Canvas
-            noEvents
-            colorManagement
-            shadowMap={true}
-            orthographic
-            pixelRatio={1.25}
-            gl={{
-                stencil: false,
-                depth: false,
-                alpha: false,
-                antialias: false
-            }}
-            camera={{
-                zoom: 45,
-                fov: 60,
-                near: 0,
-                far: 50,
-            }}
-        >
-            <Suspense fallback={null}>
-                <Post />
-            </Suspense>
 
-            <Lights />
-            <Camera />
 
-            <CannonProvider>
-                <Stage {...maps[id]} key={maps[id].name} />
-            </CannonProvider>
-        </Canvas>
-    </>,
-    document.getElementById("root")
-)
+
+function Game() {
+    let map = useStore(i => i.data.map)
+
+    return (
+        <>
+            <Ui />
+            <Canvas
+                noEvents
+                colorManagement
+                shadowMap={true}
+                orthographic
+                pixelRatio={1.25}
+                gl={{
+                    stencil: false,
+                    depth: false,
+                    alpha: false,
+                    antialias: false
+                }}
+                camera={{
+                    zoom: 45,
+                    fov: 60,
+                    near: 0,
+                    far: 50,
+                }}
+            >
+                <Suspense fallback={null}>
+                    <Post />
+                </Suspense>
+                <Lights />
+                <Camera />
+
+                <CannonProvider>
+                    {map ? <Stage {...map} key={map.name} /> : null}
+
+                    <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
+                </CannonProvider>
+            </Canvas>
+        </>
+    )
+}
+
+ReactDOM.render(<Game />, document.getElementById("root"))

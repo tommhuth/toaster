@@ -1,10 +1,12 @@
 import React, { useEffect } from "react"
 import { useCannon } from "../../utils/cannon"
 import { Box, Vec3 } from "cannon"
-import { useGeometry } from "../../utils/hooks"
 import { useStore } from "../../utils/store"
+import { resource, useAsyncModel } from "../../utils/hooks"
 
-export default function Shelf2({
+let shelf = resource("shelf2")
+
+function ShortShelf({
     x = 0,
     z = 0,
     y = 0,
@@ -21,7 +23,7 @@ export default function Shelf2({
         userData: { shelf: true },
         rotation: [0, rotated ? Math.PI / 2 : 0, 0]
     })
-    let geometry = useGeometry("shelf2")
+    let geometry = useAsyncModel(shelf)
     let actions = useStore(i => i.actions)
 
     useEffect(() => {
@@ -50,15 +52,13 @@ export default function Shelf2({
 
         let y = height + outerSize / 2 + .1
 
-        actions.createSpaces([
-            {
-                rotated,
-                start: rotated ? [x, y, z + width / 2 - .5] : [x - width / 2 + .5, y, z],
-                end: rotated ? [x, y, z - width / 2 + .5] : [x + width / 2 - .5, y, z],
-                height: 3,
-                size: 2,
-            }
-        ])
+        actions.createSpaces({
+            rotated,
+            start: rotated ? [x, y, z + width / 2 - .5] : [x - width / 2 + .5, y, z],
+            end: rotated ? [x, y, z - width / 2 + .5] : [x + width / 2 - .5, y, z],
+            height: 3,
+            size: 2,
+        })
     }, [])
 
     return (
@@ -67,3 +67,5 @@ export default function Shelf2({
         </mesh>
     )
 }
+
+export default React.memo(ShortShelf)

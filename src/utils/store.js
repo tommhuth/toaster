@@ -1,26 +1,34 @@
 import { create } from "zustand"
+import State from "./const/State"
 
 function getActions(get, set) {
     return {
-        complete() {
+        ready() {
             set({
-                state: "complete"
+                state: State.READY
             })
         },
-        createSpaces(spaces) {
+        end() {
+            set({
+                state: State.GAME_OVER
+            })
+        },
+        useMap(map) {
+            set({
+                map,
+                state: State.PREPARING,
+                spaces: []
+            })
+        },
+        createSpaces(...spaces) {
             set({ spaces: [...get().spaces, ...spaces] })
-        },
-        gameOver() {
-            set({
-                state: "gameover"
-            })
         },
         setObjectCount(count) {
             set({
                 objects: count
             })
         },
-        removeObject() {
+        reduceObjectCount() {
             set({
                 objects: Math.max(get().objects - 1, 0)
             })
@@ -32,7 +40,8 @@ function getInitState() {
     return {
         objects: 0,
         spaces: [],
-        state: "active"
+        state: "active",
+        map: null
     }
 }
 

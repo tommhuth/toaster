@@ -1,27 +1,52 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import { BufferGeometry } from "three"
 
-let loader = new GLTFLoader()
-let cache = {}
+const loader = new GLTFLoader()
+const cache = new Map()
 
-export function useGeometry(name) {
-    let [geometry, setGeometry] = useState(() => cache[name] || new BufferGeometry())
-
-    useEffect(() => {
-        if (!cache[name]) { 
-            loader.load(`/models/${name}.glb`, (res) => {
-                let mesh = res.scene.children.find(i => i.name = name)
-
-                setGeometry(mesh.geometry)
-                cache[name] = mesh.geometry
-            }, undefined, console.error)
+function fetchModel(name) {
+    return new Promise((resolve, reject) => {
+        if (cache.has(name)) {
+            return resolve(cache.get(name))
         }
-    }, [name])
 
-    return geometry
+        loader.load(`/models/${name}.glb`, (res) => {
+            let { geometry } = res.scene.children.find(i => i.name = name)
+
+            setTimeout(()=>resolve(geometry), 2000)
+            cache.set(name, geometry)
+        }, undefined, reject)
+    })
 }
 
+export function resource(name) {
+    let data
+    let status = "init"
+    let error
+    let promise = fetchModel(name)
+        .then(model => {
+            data = model
+            status = "done"
+        })
+        .catch(e => {
+            error = e
+            status = "error"
+        })
+
+    return () => {
+        if (status === "init") {
+            throw promise
+        } else if (status === "error") {
+            throw error
+        } else {
+            return data
+        }
+    }
+}
+
+export function useAsyncModel(reader) {
+    return reader()
+}
 
 export function useDefaultValue(value) {
     let first = useRef(true)
