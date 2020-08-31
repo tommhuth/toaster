@@ -13,7 +13,7 @@ function fetchModel(name) {
         loader.load(`/models/${name}.glb`, (res) => {
             let { geometry } = res.scene.children.find(i => i.name = name)
 
-            setTimeout(()=>resolve(geometry), 2000)
+            resolve(geometry)
             cache.set(name, geometry)
         }, undefined, reject)
     })
