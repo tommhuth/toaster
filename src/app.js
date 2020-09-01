@@ -13,6 +13,7 @@ import Camera from "./components/Camera"
 import Stage from "./components/Stage"
 import WorldBlock from "./components/WorldBlock"
 
+/*
 softShadows({
     frustrum: 3.75, // Frustrum width (default: 3.75)
     size: 0.005, // World size (default: 0.005)
@@ -20,7 +21,7 @@ softShadows({
     samples: 17, // Samples (default: 17)
     rings: 11, // Rings (default: 11)
 })
-
+*/
 
 const maps = [
     {
