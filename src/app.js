@@ -151,7 +151,14 @@ function Ui() {
     )
 }
 
-
+function hasWebgl2() { 
+    try {  
+        var canvas = document.createElement( 'canvas' );
+        return !! ( window.WebGL2RenderingContext && canvas.getContext( 'webgl2' ) );
+    } catch ( e ) { 
+        return false; 
+    } 
+}
 
 
 function Game() {
@@ -163,6 +170,7 @@ function Game() {
             <Canvas
                 noEvents
                 colorManagement
+                gl2={hasWebgl2()}
                 shadowMap={true}
                 orthographic
                 pixelRatio={1.25}
@@ -170,7 +178,8 @@ function Game() {
                     stencil: false,
                     depth: false,
                     alpha: false,
-                    antialias: false
+                    antialias: false,
+                    
                 }}
                 camera={{
                     zoom: 45,
