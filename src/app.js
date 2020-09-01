@@ -154,6 +154,7 @@ function Ui() {
 function hasWebgl2() { 
     try {  
         var canvas = document.createElement( 'canvas' );
+        
         return !! ( window.WebGL2RenderingContext && canvas.getContext( 'webgl2' ) );
     } catch ( e ) { 
         return false; 
@@ -169,16 +170,15 @@ function Game() {
             <Ui />
             <Canvas
                 noEvents
-                colorManagement
-                gl2={hasWebgl2()}
+                colorManagement 
                 shadowMap={true}
                 orthographic
                 pixelRatio={1.25}
                 gl={{
                     stencil: false,
-                    depth: false,
+                    depth: true,
                     alpha: false,
-                    antialias: false,
+                    antialias: true,
                     
                 }}
                 camera={{
@@ -188,9 +188,6 @@ function Game() {
                     far: 50,
                 }}
             >
-                <Suspense fallback={null}>
-                    <Post />
-                </Suspense>
                 <Lights />
                 <Camera />
 
@@ -205,3 +202,10 @@ function Game() {
 }
 
 ReactDOM.render(<Game />, document.getElementById("root"))
+
+/*
+
+                <Suspense fallback={null}>
+                    <Post />
+                </Suspense>
+                */
