@@ -235,7 +235,7 @@ function Game() {
                     stencil: false,
                     depth: true,
                     alpha: false,
-                    antialias: true,
+                    antialias: false,
 
                 }}
                 camera={{
@@ -247,6 +247,10 @@ function Game() {
             >
                 <Lights />
                 <Camera />
+
+                <Suspense fallback={null}>
+                    <Post />
+                </Suspense> 
 
                 <CannonProvider>
                     {map ? <Stage {...map} key={attempts} /> : null}

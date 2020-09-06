@@ -6,7 +6,7 @@ export default function Light() {
     return (
         <>
             <hemisphereLight
-                intensity={.5}
+                intensity={.4}
                 groundColor={0xdddddd}
                 color={0xffffff}
             />
