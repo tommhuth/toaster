@@ -220,6 +220,7 @@ function Ui() {
 
 function Game() {
     let map = useStore(i => i.data.map)
+    let attempts = useStore(i => i.data.attempts)
 
     return (
         <>
@@ -248,7 +249,7 @@ function Game() {
                 <Camera />
 
                 <CannonProvider>
-                    {map ? <Stage {...map} key={map.name} /> : null}
+                    {map ? <Stage {...map} key={attempts} /> : null}
 
                     <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
                 </CannonProvider>

@@ -77,17 +77,22 @@ export default function Stage({ launcherPosition, world, elements }) {
             cworld.gravity.set(0, 2, 0)
 
             for (let body of cworld.bodies) {
-                if (body.mass > 0) {  
+                if (body.mass > 0) {
 
-                    if (body.userData.chair || body.userData.shelf || body.userData.deco) { 
+                    if (body.userData.chair || body.userData.shelf || body.userData.deco) {
                         body.angularVelocity.set(random.float(-.5, .5), random.float(-.5, .5), random.float(-.5, .5))
                         body.applyImpulse(new Vec3(0, random.float(25, 30), 0), body.position.clone())
-                    }   
+                    }
                     body.wakeUp()
                 }
             }
 
-            setTimeout(() => cworld.gravity.set(0, -10, 0), 3000)
+            let tid = setTimeout(() => cworld.gravity.set(0, -10, 0), 3000)
+
+            return () => {
+                clearTimeout(tid)
+                cworld.gravity.set(0, -10, 0)
+            }
         }
     }, [state])
 

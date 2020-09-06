@@ -17,7 +17,9 @@ function getActions(get, set) {
             set({
                 map,
                 state: State.PREPARING,
-                spaces: []
+                spaces: [],
+                score: 0,
+                attempts: get().attempts + 1
             })
         },
         createSpaces(...spaces) {
@@ -71,6 +73,7 @@ function getInitState() {
         spaces: [],
         state: "active",
         map: null,
+        attempts:0,
         launcher: {
             active: false,
             start: [0, 0],
