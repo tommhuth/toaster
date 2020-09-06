@@ -28,20 +28,54 @@ function getActions(get, set) {
                 objects: count
             })
         },
-        reduceObjectCount() {
+        score() {
             set({
-                objects: Math.max(get().objects - 1, 0)
+                score: get().score + 1, 
             })
         },
+        startLaunch(position) {
+            set({
+                ...get(),
+                launcher: {
+                    ...get().launcher,
+                    active: true,
+                    start: position
+                }
+            })
+        },
+        moveLaunch(position) {
+            set({
+                ...get(),
+                launcher: {
+                    ...get().launcher,
+                    end: position
+                }
+            })
+        },
+        stopLaunch() { 
+            set({
+                ...get(),
+                launcher: {
+                    ...get().launcher,
+                    active: false,
+                }
+            })
+        }
     }
 }
 
 function getInitState() {
     return {
         objects: 0,
+        score: 0,
         spaces: [],
         state: "active",
-        map: null
+        map: null,
+        launcher: {
+            active: false,
+            start: [0, 0],
+            end: [0, 0]
+        }
     }
 }
 

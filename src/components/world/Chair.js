@@ -20,7 +20,7 @@ function Chair({
     let { ref, body } = useCannon({
         position: [x, y + aboveFloor, z],
         mass: 16,
-        userData: { chair: true, untouchable },
+        userData: { deco: true, untouchable },
     })
 
     useEffect(() => {

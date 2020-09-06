@@ -9,7 +9,7 @@ export function CannonProvider({
     children,
     iterations = 8,
     defaultRestitution = 0.2,
-    defaultFriction = 0.05,
+    defaultFriction = 0.025,
     gravity = [0, -10, 0],
 }) {
     let { scene } = useThree()
@@ -22,13 +22,15 @@ export function CannonProvider({
         //world.broadphase = new SAPBroadphase(world)
         //world.broadphase.axisIndex = 0
         world.allowSleep = true
+        world.quatNormalizeFast = true
+        world.quatNormalizeSkip = 1
         world.solver.iterations = iterations
         world.defaultContactMaterial.friction = defaultFriction
         world.defaultContactMaterial.restitution = defaultRestitution
-        world.gravity.set(...gravity)
-
         world.defaultContactMaterial.contactEquationStiffness = 1e8
         world.defaultContactMaterial.contactEquationRegularizationTime = 6
+        world.gravity.set(...gravity)
+
     }, [world])
 
     // Run world stepper every frame

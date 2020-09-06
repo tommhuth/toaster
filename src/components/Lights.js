@@ -6,13 +6,13 @@ export default function Light() {
     return (
         <>
             <hemisphereLight
-                intensity={.3}
+                intensity={.5}
                 groundColor={0xdddddd}
                 color={0xffffff}
             />
             <directionalLight
                 color={0xffffff}
-                intensity={0.275}
+                intensity={0.4}
                 castShadow
                 position={[-2, 4, 6]}
                 ref={ref}

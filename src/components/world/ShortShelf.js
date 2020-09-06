@@ -19,7 +19,7 @@ function ShortShelf({
     let depth = 2.5
     let { ref, body } = useCannon({
         position: [x, y + height / 2 + outerSize / 2, z],
-        mass: 30,
+        mass: 20,
         userData: { shelf: true },
         rotation: [0, rotated ? Math.PI / 2 : 0, 0]
     })

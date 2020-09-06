@@ -6,9 +6,11 @@ import { Color } from "three"
 import { useStore } from "../../utils/store"
 import random from "@huth/random"
 import animate from "../../utils/animate"
+import State from "../../utils/const/State"
 
 function Obj({ x, y, z, width, height, depth }) {
     let actions = useStore(i => i.actions)
+    let state = useStore(i => i.data.state)
     let defaultPosition = useDefaultValue([x, y, z])
     let [color] = useState(
         () => random.pick("#fcad03", "#fcad03", "#666", "#fcad03", "#ccc")
@@ -21,16 +23,17 @@ function Obj({ x, y, z, width, height, depth }) {
     let { ref } = useCannon({
         position: [x, y + height / 2, z],
         mass: width * height * depth * .5,
+        userData: { obj: true },
         rotation: [0, rotation, 0],
         shape: new Box(new Vec3(width / 2, height / 2, depth / 2)),
         onCollide(e) {
-            if (e.body.userData.floor && !dead.current) {
+            if (e.body.userData.floor && !dead.current && state === State.READY) {
                 dead.current = true
-                actions.reduceObjectCount()
+                actions.score()
                 setFlash(true)
             }
         }
-    }, []) 
+    }, [state]) 
 
     useEffect(() => {
         if (flash) {

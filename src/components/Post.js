@@ -60,9 +60,9 @@ export default function Post1() {
 
         const effectPass = new EffectPass(
             camera,
-            smaaEffect,
-            ssaoEffect,
-            //bloom,
+            //smaaEffect,
+            //ssaoEffect,
+            bloom,
         )
 
         effectPass.renderToScreen = true

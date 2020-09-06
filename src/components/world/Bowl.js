@@ -35,8 +35,8 @@ function Bowl({
 }) {
     let { ref, body } = useCannon({
         position: [x, y + height / 2, z],
-        mass: 16,
-        userData: { chair: true, untouchable },
+        mass: 25,
+        userData: { deco: true, untouchable },
     })
     let geometry = useAsyncModel(bowl)
 

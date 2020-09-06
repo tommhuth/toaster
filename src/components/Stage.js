@@ -8,11 +8,16 @@ import Chair from "./world/Chair"
 import ShortShelf from "./world/ShortShelf"
 import Obj from "./world/Obj"
 import random from "@huth/random"
+import State from "../utils/const/State"
+import { useWorld } from "../utils/cannon"
+import { Vec3 } from "cannon"
 
 export default function Stage({ launcherPosition, world, elements }) {
     let spaces = useStore(i => i.data.spaces)
+    let state = useStore(i => i.data.state)
     let [objects, setObjects] = useState([])
     let actions = useStore(i => i.actions)
+    let cworld = useWorld()
 
     useEffect(() => {
         let id = setTimeout(() => {
@@ -66,6 +71,25 @@ export default function Stage({ launcherPosition, world, elements }) {
             actions.ready()
         }
     }, [spaces])
+
+    useEffect(() => {
+        if (state === State.GAME_OVER) {
+            cworld.gravity.set(0, 2, 0)
+
+            for (let body of cworld.bodies) {
+                if (body.mass > 0) {  
+
+                    if (body.userData.chair || body.userData.shelf || body.userData.deco) { 
+                        body.angularVelocity.set(random.float(-.5, .5), random.float(-.5, .5), random.float(-.5, .5))
+                        body.applyImpulse(new Vec3(0, random.float(25, 30), 0), body.position.clone())
+                    }   
+                    body.wakeUp()
+                }
+            }
+
+            setTimeout(() => cworld.gravity.set(0, -10, 0), 3000)
+        }
+    }, [state])
 
     return (
         <>

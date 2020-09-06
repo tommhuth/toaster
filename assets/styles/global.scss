@@ -13,6 +13,7 @@
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
     appearance: none; 
     user-select: none;
+    cursor: none;
 } 
 
 html {
@@ -40,4 +41,10 @@ body {
     background-color: #000;
     opacity: 1;
     color: #FFF;
+}
+
+
+.pointer {
+    width: 16px;
+    height: 16px;
 }

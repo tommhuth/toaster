@@ -1,6 +1,6 @@
 import "../assets/styles/app.scss"
 
-import React from "react"
+import React, { useRef, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { Canvas } from "react-three-fiber"
 import { useStore } from "./utils/store"
@@ -128,37 +128,93 @@ const maps = [
 ]
 
 function Ui() {
+    let ref = useRef()
     let objects = useStore(i => i.data.objects)
+    let score = useStore(i => i.data.score)
     let map = useStore(i => i.data.map)
     let state = useStore(i => i.data.state)
+    let launcher = useStore(i => i.data.launcher)
     let actions = useStore(i => i.actions)
+    let cursorSize = 16
+
+    useEffect(() => {
+        let onMouseMove = e => {
+            ref.current.style.display = "block"
+            ref.current.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`
+        }
+        let onMouseEnter = () => {
+            ref.current.style.display = "block"
+        }
+        let onMouseLeave = () => {
+            ref.current.style.display = "none"
+        }
+        let activators = ["BUTTON", "A"]
+
+        window.addEventListener("mousemove", onMouseMove)
+        document.body.addEventListener("mouseleave", onMouseLeave)
+        document.body.addEventListener("mouseenter", onMouseEnter)
+
+        document.body.addEventListener("mouseenter", e => {
+            if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
+                ref.current.style.width = cursorSize * 2.5 + "px"
+                ref.current.style.height = cursorSize * 2.5 + "px"
+
+            }
+        }, { capture: true })
+
+        document.body.addEventListener("mouseleave", e => {
+            if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
+                ref.current.style.width = ""
+                ref.current.style.height = ""
+            }
+        }, { capture: true })
+
+        return () => {
+            window.removeEventListener("mousemove", onMouseMove)
+            document.body.removeEventListener("mouseleave", onMouseLeave)
+            document.body.removeEventListener("mouseenter", onMouseEnter)
+        }
+    }, [])
 
     return (
-        <div className="ui">
-            <p>objs: {objects}</p>
-            <p>state: {state}</p>
-            <p>
-                map:{" "}
-                <select
-                    value={maps.findIndex(i => i.name === map?.name) || -1}
-                    onChange={(e) => actions.useMap(maps[e.target.value])}
-                >
-                    <option value="-1" disabled>Pick map</option>
-                    {maps.map((i, index) => <option key={i.name} value={index}>{i.name}</option>)}
-                </select>
-            </p>
-        </div>
+        <>
+            <div
+                ref={ref}
+                className="pointer"
+                style={{
+                    position: "fixed",
+                    display: "none",
+                    transition: "width .3s, height .3s",
+                    zIndex: 10000000,
+                    pointerEvents: "none",
+                    backgroundColor: "yellow",
+                    mixBlendMode: "difference",
+                    top: 0,
+                    left: 0,
+                    borderRadius: "50%"
+                }}
+            />
+            <div className="ui">
+                <p>objs: {objects - score}</p>
+                <p>state: {state}</p>
+                <p>MAP</p>
+                <ul>
+                    {maps.map((i) => <li key={i.name} onClick={()=> actions.useMap(i)}><button>{i.name}</button></li>)}
+                </ul>
+            </div>
+            <svg viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
+                <line
+                    style={{ display: launcher.active ? "block" : "none" }}
+                    x1={launcher.start[0]}
+                    x2={launcher.end[0]}
+                    y1={launcher.start[1]}
+                    y2={launcher.end[1]}
+                    strokeWidth="3"
+                    stroke="white"
+                />
+            </svg>
+        </>
     )
-}
-
-function hasWebgl2() { 
-    try {  
-        var canvas = document.createElement( 'canvas' );
-        
-        return !! ( window.WebGL2RenderingContext && canvas.getContext( 'webgl2' ) );
-    } catch ( e ) { 
-        return false; 
-    } 
 }
 
 
@@ -170,8 +226,8 @@ function Game() {
             <Ui />
             <Canvas
                 noEvents
-                colorManagement 
-                shadowMap={true}
+                colorManagement
+                shadowMap
                 orthographic
                 pixelRatio={1.25}
                 gl={{
@@ -179,12 +235,12 @@ function Game() {
                     depth: true,
                     alpha: false,
                     antialias: true,
-                    
+
                 }}
                 camera={{
                     zoom: 45,
                     fov: 60,
-                    near: 0,
+                    near: -20,
                     far: 50,
                 }}
             >
