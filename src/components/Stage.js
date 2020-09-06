@@ -80,8 +80,8 @@ export default function Stage({ launcherPosition, world, elements }) {
                 if (body.mass > 0) {
 
                     if (body.userData.chair || body.userData.shelf || body.userData.deco) {
-                        body.angularVelocity.set(random.float(-.5, .5), random.float(-.5, .5), random.float(-.5, .5))
-                        body.applyImpulse(new Vec3(0, random.float(25, 30), 0), body.position.clone())
+                        body.angularVelocity.set(random.float(-.15, .15), random.float(-.2, .2), random.float(-.15, .15))
+                        body.applyImpulse(new Vec3(0, random.float(15, 20), 0), body.position.clone())
                     }
                     body.wakeUp()
                 }

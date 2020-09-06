@@ -6,10 +6,10 @@ import random from "@huth/random"
 
 function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     let [height] = useState(() => random.float(3, 5))
-    let [radius] = useState(() => random.float(.05, .1))
+    let [radius] = useState(() => random.float(.1, .1))
     let { ref } = useCannon({
         position: [x, y + height / 2, z],
-        mass: 1,
+        mass: 15,
         shape: new Box(new Vec3(radius, height / 2, radius)),
         rotation: [0, 0, 0],
         userData: { stick: true, untouchable },
@@ -35,7 +35,7 @@ function Bowl({
 }) {
     let { ref, body } = useCannon({
         position: [x, y + height / 2, z],
-        mass: 25,
+        mass: 30,
         userData: { deco: true, untouchable },
     })
     let geometry = useAsyncModel(bowl)
@@ -81,9 +81,7 @@ function Bowl({
 
     return (
         <>
-            <Stick x={x + 0.051} y={y} z={z - 0.051} />
-            <Stick x={x - 0.051} y={y} z={z + 0.051} />
-            <Stick x={x} y={y + 0.5} z={z} />
+            <Stick x={x} y={y-.1} z={z} />  
 
             <mesh ref={ref} geometry={geometry} castShadow receiveShadow>
                 <meshLambertMaterial color="#fff" attach="material" />

@@ -3,7 +3,7 @@ import "../assets/styles/app.scss"
 import React, { useRef, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { Canvas } from "react-three-fiber"
-import { useStore } from "./utils/store"
+import { useStore, api } from "./utils/store"
 import { softShadows } from "drei"
 import { Suspense } from "react"
 import Lights from "./components/Lights"
@@ -12,6 +12,7 @@ import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
 import Stage from "./components/Stage"
 import WorldBlock from "./components/WorldBlock"
+import { Vector2 } from "three"
 
 /*
 softShadows({
@@ -25,7 +26,7 @@ softShadows({
 
 const maps = [
     {
-        name: "Up against the wall",
+        name: "Wall",
         launcherPosition: [14, .1, 14],
         world: [
             {
@@ -47,10 +48,12 @@ const maps = [
                 type: "chair",
                 z: 0,
                 x: 5.25,
-                rotation: 1.4
+                rotation: 1.4,
+                untouchable: true
             },
         ]
-    }, {
+    }, 
+    {
         name: "Everyone",
         launcherPosition: [10, .1, 10],
         world: [
@@ -78,7 +81,8 @@ const maps = [
                 type: "bowl",
                 x: 10,
                 z: 10,
-                rotated: false
+                rotated: false,
+                untouchable: true
             },
             {
                 type: "short-shelf",
@@ -128,58 +132,73 @@ const maps = [
 ]
 
 function Ui() {
-    let ref = useRef()
+    let pointer = useRef()
+    let line = useRef()
     let objects = useStore(i => i.data.objects)
-    let score = useStore(i => i.data.score)
-    let map = useStore(i => i.data.map)
-    let state = useStore(i => i.data.state)
-    let launcher = useStore(i => i.data.launcher)
+    let score = useStore(i => i.data.score) 
+    let state = useStore(i => i.data.state) 
     let actions = useStore(i => i.actions)
     let cursorSize = 16
 
+    useEffect(()=> { 
+        return api.subscribe(launcher => {
+            if (launcher.active) {
+                line.current.style.display = "block"
+                line.current.setAttribute("x1", launcher.start[0])
+                line.current.setAttribute("y1", launcher.start[1])
+                line.current.setAttribute("x2", launcher.end[0])
+                line.current.setAttribute("y2", launcher.end[1])
+            } else {
+                line.current.style.display = "none" 
+            }
+        }, state => state.data.launcher)
+    }, [])
+
     useEffect(() => {
         let onMouseMove = e => {
-            ref.current.style.display = "block"
-            ref.current.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`
+            pointer.current.style.display = "block"
+            pointer.current.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`
         }
         let onMouseEnter = () => {
-            ref.current.style.display = "block"
+            pointer.current.style.display = "block"
         }
         let onMouseLeave = () => {
-            ref.current.style.display = "none"
+            pointer.current.style.display = "none"
+        }
+        let onMouseEnterCapture = e => {
+            if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
+                pointer.current.style.width = cursorSize * 2.5 + "px"
+                pointer.current.style.height = cursorSize * 2.5 + "px"
+
+            }
+        }
+        let onMouseLeaveCapture = e => {
+            if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
+                pointer.current.style.width = ""
+                pointer.current.style.height = ""
+            }
         }
         let activators = ["BUTTON", "A"]
 
         window.addEventListener("mousemove", onMouseMove)
         document.body.addEventListener("mouseleave", onMouseLeave)
-        document.body.addEventListener("mouseenter", onMouseEnter)
-
-        document.body.addEventListener("mouseenter", e => {
-            if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
-                ref.current.style.width = cursorSize * 2.5 + "px"
-                ref.current.style.height = cursorSize * 2.5 + "px"
-
-            }
-        }, { capture: true })
-
-        document.body.addEventListener("mouseleave", e => {
-            if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
-                ref.current.style.width = ""
-                ref.current.style.height = ""
-            }
-        }, { capture: true })
+        document.body.addEventListener("mouseenter", onMouseEnter) 
+        document.body.addEventListener("mouseenter", onMouseEnterCapture, { capture: true })
+        document.body.addEventListener("mouseleave", onMouseLeaveCapture, { capture: true })
 
         return () => {
             window.removeEventListener("mousemove", onMouseMove)
-            document.body.removeEventListener("mouseleave", onMouseLeave)
             document.body.removeEventListener("mouseenter", onMouseEnter)
+            document.body.removeEventListener("mouseleave", onMouseLeave)
+            document.body.removeEventListener("mouseenter", onMouseEnterCapture)
+            document.body.removeEventListener("mouseleave", onMouseLeaveCapture)
         }
-    }, [])
+    }, []) 
 
     return (
         <>
             <div
-                ref={ref}
+                ref={pointer}
                 className="pointer"
                 style={{
                     position: "fixed",
@@ -203,14 +222,10 @@ function Ui() {
                 </ul>
             </div>
             <svg viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
-                <line
-                    style={{ display: launcher.active ? "block" : "none" }}
-                    x1={launcher.start[0]}
-                    x2={launcher.end[0]}
-                    y1={launcher.start[1]}
-                    y2={launcher.end[1]}
+                <line 
                     strokeWidth="3"
                     stroke="white"
+                    ref={line}
                 />
             </svg>
         </>
