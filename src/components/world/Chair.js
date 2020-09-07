@@ -66,7 +66,12 @@ function Chair({
 
     return (
         <mesh receiveShadow castShadow ref={ref} geometry={geometry}>
-            <meshLambertMaterial color={0xffffff} attach="material" />
+            <meshLambertMaterial
+                color={0xffffff}
+                attach="material"
+                emissive={0xffffff}
+                emissiveIntensity={.15}
+            />
         </mesh>
     )
 }

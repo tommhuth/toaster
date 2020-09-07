@@ -22,8 +22,8 @@ export function CannonProvider({
         //world.broadphase = new SAPBroadphase(world)
         //world.broadphase.axisIndex = 0
         world.allowSleep = true
-        world.quatNormalizeFast = true
-        world.quatNormalizeSkip = 1
+        world.quatNormalizeFast = false
+        world.quatNormalizeSkip = 0
         world.solver.iterations = iterations
         world.defaultContactMaterial.friction = defaultFriction
         world.defaultContactMaterial.restitution = defaultRestitution

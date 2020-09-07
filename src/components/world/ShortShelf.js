@@ -63,7 +63,12 @@ function ShortShelf({
 
     return (
         <mesh geometry={geometry} castShadow receiveShadow ref={ref}>
-            <meshLambertMaterial color="#fff" attach="material" />
+            <meshLambertMaterial
+                color="#fff"
+                attach="material"
+                emissive={0xffffff}
+                emissiveIntensity={.15}
+            />
         </mesh>
     )
 }

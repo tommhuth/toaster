@@ -27,7 +27,7 @@ function Obj({ x, y, z, width, height, depth }) {
         rotation: [0, rotation, 0],
         shape: new Box(new Vec3(width / 2, height / 2, depth / 2)),
         onCollide(e) {
-            if (e.body.userData.floor && !dead.current && state === State.READY) {
+            if (e.body.userData.floor && !dead.current && state === State.PLAYING) {
                 dead.current = true
                 actions.score()
                 setFlash(true)

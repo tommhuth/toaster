@@ -11,7 +11,7 @@ function Launcher() {
     let state = useStore(i => i.data.state)
     let actions = useStore(i => i.actions)
     let [balls, setBalls] = useState([])
-    let launch = useCallback((velocity, position) => {
+    let launch = useCallback((velocity, position) => { 
         setBalls((prev) => [
             ...prev,
             {
@@ -23,20 +23,20 @@ function Launcher() {
     }, [])
 
     useEffect(() => {
-        if (state === State.READY) {
+        if (state === State.PLAYING) {
             let raycaster = new Raycaster()
             let end = new Vector3()
             let origin = new Vector3()
-            let doRaycast = () => {
+            let doRaycast = () => { 
                 raycaster.setFromCamera(mouse, camera)
 
                 let intersection = raycaster.intersectObjects(
                     scene.children.filter((i) => i.userData.floor)
-                )[0]
+                )[0]  
 
                 return intersection.point
             }
-            let onMouseMove = (e) => {
+            let onMouseMove = (e) => { 
                 end.copy(doRaycast())
                 actions.moveLaunch([e.clientX, e.clientY])
             }
@@ -50,9 +50,10 @@ function Launcher() {
                 let direction = end.clone().sub(origin)
                 let length = direction.length() * 2
                 let movement = direction.normalize().multiplyScalar(Math.min(length, 20))
-                let y = Math.min(length * .85, 20)
+                let y = Math.min(length * .85, 20) 
 
                 if (movement.length() > 3) {
+                    
                     launch([movement.x, y, movement.z], origin.toArray())
                 }
 

@@ -4,143 +4,31 @@ import React, { useRef, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { Canvas } from "react-three-fiber"
 import { useStore, api } from "./utils/store"
-import { softShadows } from "drei"
 import { Suspense } from "react"
 import Lights from "./components/Lights"
 import Post from "./components/Post"
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
 import Stage from "./components/Stage"
-import WorldBlock from "./components/WorldBlock"
-import { Vector2 } from "three"
+import WorldBlock from "./components/world/WorldBlock"
+import State from "./utils/const/State"
+import maps from "./utils/maps"
 
-/*
-softShadows({
-    frustrum: 3.75, // Frustrum width (default: 3.75)
-    size: 0.005, // World size (default: 0.005)
-    near: 9.5, // Near plane (default: 9.5)
-    samples: 17, // Samples (default: 17)
-    rings: 11, // Rings (default: 11)
-})
-*/
-
-const maps = [
-    {
-        name: "Wall",
-        launcherPosition: [14, .1, 14],
-        world: [
-            {
-                height: 10,
-                width: 7,
-                depth: 7,
-                x: -0,
-                y: 5,
-                z: -0
-            }
-        ],
-        elements: [
-            {
-                type: "shelf",
-                x: 0,
-                z: 5,
-            },
-            {
-                type: "chair",
-                z: 0,
-                x: 5.25,
-                rotation: 1.4,
-                untouchable: true
-            },
-        ]
-    }, 
-    {
-        name: "Everyone",
-        launcherPosition: [10, .1, 10],
-        world: [
-        ],
-        elements: [
-            {
-                type: "shelf",
-                x: 5,
-                z: 0,
-                rotated: true
-            },
-            {
-                type: "shelf",
-                x: -5,
-                z: 0,
-                rotated: false
-            },
-            {
-                type: "short-shelf",
-                x: 5,
-                z: 10,
-                rotated: false
-            },
-            {
-                type: "bowl",
-                x: 10,
-                z: 10,
-                rotated: false,
-                untouchable: true
-            },
-            {
-                type: "short-shelf",
-                x: -2,
-                z: -10,
-                rotated: false
-            },
-        ]
-    },
-    {
-        name: "The Arrow",
-        launcherPosition: [0, .1, 14],
-        world: [
-            {
-                height: 4,
-                width: 1,
-                depth: 8,
-                x: 4,
-                y: 2,
-                z: 0
-            }
-        ],
-        elements: [
-            {
-                type: "shelf",
-                x: -6,
-                z: 0,
-            },
-            {
-                type: "shelf",
-                x: 0,
-                z: 0,
-            },
-            {
-                type: "short-shelf",
-                x: 5.75,
-                z: 0,
-                rotated: true
-            },
-            {
-                type: "bowl",
-                z: -5,
-                x: -3
-            },
-        ]
-    }
-]
+function Only(props) {
+    return props.if ? <>{props.children}</> : null
+}
 
 function Ui() {
     let pointer = useRef()
     let line = useRef()
-    let objects = useStore(i => i.data.objects)
-    let score = useStore(i => i.data.score) 
-    let state = useStore(i => i.data.state) 
+    let tid = useRef()
+    let scroller = useRef()
+    let map = useStore(i => i.data.map)
+    let state = useStore(i => i.data.state)
     let actions = useStore(i => i.actions)
     let cursorSize = 16
 
-    useEffect(()=> { 
+    useEffect(() => {
         return api.subscribe(launcher => {
             if (launcher.active) {
                 line.current.style.display = "block"
@@ -149,7 +37,7 @@ function Ui() {
                 line.current.setAttribute("x2", launcher.end[0])
                 line.current.setAttribute("y2", launcher.end[1])
             } else {
-                line.current.style.display = "none" 
+                line.current.style.display = "none"
             }
         }, state => state.data.launcher)
     }, [])
@@ -182,7 +70,7 @@ function Ui() {
 
         window.addEventListener("mousemove", onMouseMove)
         document.body.addEventListener("mouseleave", onMouseLeave)
-        document.body.addEventListener("mouseenter", onMouseEnter) 
+        document.body.addEventListener("mouseenter", onMouseEnter)
         document.body.addEventListener("mouseenter", onMouseEnterCapture, { capture: true })
         document.body.addEventListener("mouseleave", onMouseLeaveCapture, { capture: true })
 
@@ -193,7 +81,9 @@ function Ui() {
             document.body.removeEventListener("mouseenter", onMouseEnterCapture)
             document.body.removeEventListener("mouseleave", onMouseLeaveCapture)
         }
-    }, []) 
+    }, [])
+
+    console.log(state)
 
     return (
         <>
@@ -213,16 +103,45 @@ function Ui() {
                     borderRadius: "50%"
                 }}
             />
-            <div className="ui">
-                <p>objs: {objects - score}</p>
-                <p>state: {state}</p>
-                <p>MAP</p>
-                <ul>
-                    {maps.map((i) => <li key={i.name} onClick={()=> actions.useMap(i)}><button>{i.name}</button></li>)}
-                </ul>
-            </div>
+            <Only if={[State.INTRO, State.READY, State.PREPARING].includes(state)}>
+                <div
+                    ref={scroller}
+                    className="page"
+                    onScroll={() => {
+                        clearTimeout(tid.current)
+
+                        tid.current = setTimeout(() => {
+                            let index = Math.floor(scroller.current.scrollTop / window.innerHeight) - 1
+
+                            if (index >= 0 && (!map || maps[index].name !== map.name)) {
+                                console.log("use", index)
+                                actions.loadMap(maps[index])
+                            }
+                        }, 50)
+                    }}
+                >
+                    <div className="block">
+                        <h1>Ball versus furniture</h1>
+                    </div>
+                    {maps.map((i, index) => {
+                        return (
+                            <div
+                                key={index}
+                                className="block"
+                                onClick={() => {
+                                    actions.play()
+                                }}
+                            >
+                                <p>Level {index + 1}</p>
+                                <h2>{i.name}</h2>
+                            </div>
+                        )
+                    })}
+                </div>
+            </Only>
+
             <svg viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
-                <line 
+                <line
                     strokeWidth="3"
                     stroke="white"
                     ref={line}
@@ -265,7 +184,7 @@ function Game() {
 
                 <Suspense fallback={null}>
                     <Post />
-                </Suspense> 
+                </Suspense>
 
                 <CannonProvider>
                     {map ? <Stage {...map} key={attempts} /> : null}
@@ -278,10 +197,3 @@ function Game() {
 }
 
 ReactDOM.render(<Game />, document.getElementById("root"))
-
-/*
-
-                <Suspense fallback={null}>
-                    <Post />
-                </Suspense>
-                */

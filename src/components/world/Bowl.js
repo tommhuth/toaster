@@ -18,7 +18,12 @@ function Stick({ x = 0, y = 0, z = 0, untouchable }) {
     return (
         <mesh ref={ref} castShadow receiveShadow>
             <cylinderBufferGeometry args={[radius, radius, height, 6]} attach="geometry" />
-            <meshLambertMaterial color="#fff" attach="material" />
+            <meshLambertMaterial
+                color="#fff"
+                attach="material"
+                emissive={0xffffff}
+                emissiveIntensity={.15}
+            />
         </mesh>
     )
 }
@@ -81,10 +86,15 @@ function Bowl({
 
     return (
         <>
-            <Stick x={x} y={y-.1} z={z} />  
+            <Stick x={x} y={y + 1} z={z} />
 
             <mesh ref={ref} geometry={geometry} castShadow receiveShadow>
-                <meshLambertMaterial color="#fff" attach="material" />
+                <meshLambertMaterial
+                    color="#fff"
+                    attach="material"
+                    emissive={0xffffff}
+                    emissiveIntensity={.15}
+                />
             </mesh>
         </>
     )

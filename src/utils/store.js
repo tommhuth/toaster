@@ -1,8 +1,14 @@
 import { create } from "zustand"
 import State from "./const/State"
+import maps from "./maps"
 
 function getActions(get, set) {
     return {
+        play() {
+            set({
+                state: State.PLAYING
+            })
+        },
         ready() {
             set({
                 state: State.READY
@@ -13,7 +19,7 @@ function getActions(get, set) {
                 state: State.GAME_OVER
             })
         },
-        useMap(map) {
+        loadMap(map) {
             set({
                 map,
                 state: State.PREPARING,
@@ -71,8 +77,8 @@ function getInitState() {
         objects: 0,
         score: 0,
         spaces: [],
-        state: "active",
-        map: null,
+        state: State.INTRO,
+        map: null, //maps[0],
         attempts:0,
         launcher: {
             active: false,
