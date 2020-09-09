@@ -1,5 +1,5 @@
 import { World, Body, Vec3 } from "cannon"
-import React, { useRef, useEffect, useState, useContext, useMemo } from "react"
+import React, { useRef, useEffect, useState, useContext, useMemo, useLayoutEffect } from "react"
 import { useFrame, useThree } from "react-three-fiber"
 //import Debug from "../Debug"
 
@@ -128,7 +128,7 @@ export function useCannon(
         }
     }, deps)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         let axis = new Vec3(...rotation.map((i) => (i === 0 ? 0 : 1)))
         let angle = rotation.find((i) => i) || 0
 
