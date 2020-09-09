@@ -1,6 +1,7 @@
 export default [
     {
         name: "intro",
+        slug: "intro",
         launcherPosition: [14, .1, 14],
         world: [
         ],
@@ -25,7 +26,8 @@ export default [
         ]
     },
     {
-        name: "Wall",
+        name: "Something with a wall",
+        slug: "wall",
         launcherPosition: [14, .1, 14],
         world: [
             {
@@ -54,6 +56,7 @@ export default [
     },
     {
         name: "Everyone",
+        slug: "everyone",
         launcherPosition: [10, .1, 10],
         world: [
         ],
@@ -93,6 +96,7 @@ export default [
     },
     {
         name: "The Arrow",
+        slug: "the-arrow",
         launcherPosition: [0, .1, 14],
         world: [
             {

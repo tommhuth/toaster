@@ -1,6 +1,46 @@
 html {
-    font-family: "Didot LT W01 Roman", Arial, Helvetica, sans-serif;
+    font-family: "Oswald", Arial, Helvetica, sans-serif;
     font-weight: 400;
     font-size: 1.25em;
     line-height: 1.5;
+}
+
+.h1 { 
+    font-size: 30vw;
+    z-index: 11111;
+    line-height: .85;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -.065em;
+    position: fixed;
+    color: #FFF;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+    margin: -.91rem; 
+}
+
+.h2 {
+    font-size: 6vw;
+    line-height: 1;
+    font-weight: 400;
+    text-transform: uppercase; 
+    max-width: 28rem;  
+}
+
+.h2b {
+    font-size: 3vw;
+    line-height: 1.1;
+    font-weight: 400;
+    text-transform: uppercase; 
+    max-width: 28rem;  
+}
+
+.h3 {
+    font-size: 2vw;
+    margin-bottom: .25rem;
+    line-height: 1.1;
+    font-weight: 200;
+    text-transform: uppercase;
 }

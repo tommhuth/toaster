@@ -87,7 +87,7 @@ export default function Stage({ launcherPosition, world, elements }) {
                 }
             }
 
-            let tid = setTimeout(() => cworld.gravity.set(0, -10, 0), 3000)
+            let tid = setTimeout(() => cworld.gravity.set(0, -10, 0), 6000)
 
             return () => {
                 clearTimeout(tid)

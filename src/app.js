@@ -1,32 +1,134 @@
 import "../assets/styles/app.scss"
 
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import ReactDOM from "react-dom"
 import { Canvas } from "react-three-fiber"
 import { useStore, api } from "./utils/store"
+import { useAnimationFrame } from "./utils/hooks"
 import { Suspense } from "react"
 import Lights from "./components/Lights"
 import Post from "./components/Post"
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
 import Stage from "./components/Stage"
+import Only from "./components/Only"
 import WorldBlock from "./components/world/WorldBlock"
 import State from "./utils/const/State"
 import maps from "./utils/maps"
+import { Vector3 } from "three"
 
-function Only(props) {
-    return props.if ? <>{props.children}</> : null
+
+function MapSelect() {
+    let scroller = useRef()
+    let y = useRef(0)
+    let targetY = useRef(0)
+    let [active, setActive] = useState(0)
+    let scrolling = useRef(true) 
+    let actions = useStore(i => i.actions)
+    let map = useStore(i => i.data.map)
+
+    useAnimationFrame(() => {
+        scroller.current.style.transform = `translateY(${y.current}px)`
+        scrolling.current = Math.abs(targetY.current - y.current) > 10
+
+        if (Math.abs(targetY.current - y.current) < 1) {
+            y.current = targetY.current
+        } else {
+            y.current += (targetY.current - y.current) * .04
+        }
+    })
+
+    useEffect(() => {
+        if (active - 1 >= 0 && map !== maps[active - 1]) {
+            actions.loadMap(maps[active - 1])
+        }
+    }, [active])
+
+    useEffect(() => {
+        targetY.current = -active * window.innerHeight
+    }, [active])
+
+    useEffect(() => {
+        let id
+        let started = false
+        let onWheel = e => {
+            e.preventDefault()
+
+            if (!started) {
+                started = true
+
+                setActive(prev => {
+                    let next = prev
+
+                    if (e.deltaY > 0) {
+                        next += next < maps.length ? 1 : 0
+                    } else {
+                        next -= next > 0 ? 1 : 0
+                    }
+
+                    return next
+                })
+            }
+
+            clearTimeout(id)
+            id = setTimeout(() => started = false, 50)
+        }
+
+        window.addEventListener("wheel", onWheel, { passive: false })
+
+        return () => window.removeEventListener("wheel", onWheel)
+    }, [])
+
+    return (
+        <>
+            <div
+                ref={scroller}
+                className="page"
+                id="page"
+            >
+                <div className="block">
+                    <h1 className="h2">Ball <br />versus <br />furniture</h1>
+                </div>
+                {maps.map((i, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className="block"
+                            onClick={() => actions.play()}
+                        >
+                            <p className="h3">Level {index + 1}</p>
+                            <h2 className="h2">{i.name}</h2>
+                        </div>
+                    )
+                })}
+            </div>
+            <ul className={"dots " + (active >= 1 ? "a" : "")}>
+                {new Array(maps.length).fill().map((i, index) => (
+                    <li
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setActive(index + 1)
+                        }}
+                        className={index === active - 1 ? "a" : ""}
+                        key={index}
+                    >
+                        {index}
+                    </li>
+                ))}
+            </ul>
+        </>
+    )
 }
 
-function Ui() {
+function Cursor() { 
     let pointer = useRef()
     let line = useRef()
-    let tid = useRef()
-    let scroller = useRef()
-    let map = useStore(i => i.data.map)
-    let state = useStore(i => i.data.state)
     let actions = useStore(i => i.actions)
     let cursorSize = 16
+
+    useEffect(() => {
+        setTimeout(() => actions.loadMap(maps[1]), 500)
+    }, [])
 
     useEffect(() => {
         return api.subscribe(launcher => {
@@ -83,8 +185,6 @@ function Ui() {
         }
     }, [])
 
-    console.log(state)
-
     return (
         <>
             <div
@@ -103,43 +203,6 @@ function Ui() {
                     borderRadius: "50%"
                 }}
             />
-            <Only if={[State.INTRO, State.READY, State.PREPARING].includes(state)}>
-                <div
-                    ref={scroller}
-                    className="page"
-                    onScroll={() => {
-                        clearTimeout(tid.current)
-
-                        tid.current = setTimeout(() => {
-                            let index = Math.floor(scroller.current.scrollTop / window.innerHeight) - 1
-
-                            if (index >= 0 && (!map || maps[index].name !== map.name)) {
-                                console.log("use", index)
-                                actions.loadMap(maps[index])
-                            }
-                        }, 50)
-                    }}
-                >
-                    <div className="block">
-                        <h1>Ball versus furniture</h1>
-                    </div>
-                    {maps.map((i, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className="block"
-                                onClick={() => {
-                                    actions.play()
-                                }}
-                            >
-                                <p>Level {index + 1}</p>
-                                <h2>{i.name}</h2>
-                            </div>
-                        )
-                    })}
-                </div>
-            </Only>
-
             <svg viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
                 <line
                     strokeWidth="3"
@@ -147,6 +210,28 @@ function Ui() {
                     ref={line}
                 />
             </svg>
+        </>
+    )
+}
+
+function Ui() { 
+    let state = useStore(i => i.data.state) 
+    let attempts = useStore(i => i.data.attempts) 
+
+    console.log(attempts, state)
+
+    return (
+        <>
+            <Only if={[State.INTRO, State.READY, State.PREPARING].includes(state)}>
+                <MapSelect />
+            </Only> 
+            <Only if={state === State.GAME_OVER}>
+                <h1 className="h1">
+                    Game over
+                </h1>
+            </Only>
+
+            <Cursor />
         </>
     )
 }
@@ -173,6 +258,7 @@ function Game() {
 
                 }}
                 camera={{
+                    position: new Vector3(10,10,10),
                     zoom: 45,
                     fov: 60,
                     near: -20,

@@ -48,21 +48,59 @@ svg {
     position: fixed;
     top:0;
     left:0;
-    text-align: right;
-    scroll-snap-type: y mandatory;
+    text-align: right; 
+    scroll-behavior: smooth;
     right:0;
-    z-index: 1000;
-    bottom:0; 
+    z-index: 1000;  
     color:#FFF;
-    overflow-y: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
 }
 
+.dots {
+    position: fixed;
+    right: 15vw;
+    top: 50%;
+    z-index: 111111;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all .4s;
+
+    &.a {
+        opacity: 1;
+    }
+
+    li {
+        width: .45em;
+        height: .45em; 
+        margin: -.1em;
+        background-clip: content-box;
+        border-radius: 50%;   
+        background-color: #FFF;
+        opacity: .2;
+        border: .5em solid transparent;
+        overflow: hidden;
+        color: transparent; 
+        transition: all .4s;
+
+        &:hover {
+            opacity: 1;
+            transform: scale(2);
+        }
+
+        &.a {
+            opacity: 1;
+        }
+    }
+}
+
 .block {
-    height: 100%;
-    display: flex;
-    padding-right: 10vw;
+    height: 100vh;
+    display: flex; 
+    padding-right: 20vw;
     flex-direction: column;
-    scroll-snap-align: start;
+    //scroll-snap-align: center;
     justify-content: center;
+    align-items: flex-end;
+    //scroll-snap-stop: always;
 }
