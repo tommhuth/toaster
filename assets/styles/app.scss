@@ -117,6 +117,20 @@ svg {
     //scroll-snap-stop: always;
 }
 
+.f  {
+    display: block;
+    animation: fin .65s both .5s;
+
+    &:nth-child(2) {
+        animation-delay: .75s;
+    }
+
+    &:nth-child(3) {
+        animation-delay: 1s;
+    }
+}
+
+
 
 @keyframes dotin {
     from {
@@ -125,6 +139,17 @@ svg {
     }
     to {
         opacity: .2;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fin {
+    from {
+        opacity: 0;
+        transform: translateX(4rem);
+    }
+    to {
+        opacity: 1;
         transform: translateX(0);
     }
 }

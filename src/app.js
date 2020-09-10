@@ -133,7 +133,11 @@ function MapSelect() {
                 id="page"
             >
                 <div className="block">
-                    <h1 className="h2">Ball <br />versus <br />furniture</h1>
+                    <h1 className="h2">
+                        <span className="f">Ball</span> 
+                        <span className="f">versus</span> 
+                        <span className="f">furniture</span> 
+                    </h1>
                 </div>
                 {maps.map((i, index) => {
                     return (
