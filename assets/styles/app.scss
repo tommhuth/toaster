@@ -62,34 +62,46 @@ svg {
     right: 15vw;
     top: 50%;
     z-index: 111111;
-    transform: translateY(-50%);
-    opacity: 0;
+    transform: translateY(-50%); 
     transition: all .4s;
 
-    &.a {
-        opacity: 1;
+    &.a li {
+        animation:  dotin both .3s var(--dotdelay);
     }
 
     li {
+        --dotdelay: .2s;
         width: .45em;
-        height: .45em; 
-        margin: -.1em;
+        height: .45em;  
         background-clip: content-box;
-        border-radius: 50%;   
-        background-color: #FFF;
         opacity: .2;
-        border: .5em solid transparent;
-        overflow: hidden;
+        border: .25em solid transparent; 
+        border-left-width: 1em;
+        border-right-width: 1em;
+        box-sizing: content-box;
         color: transparent; 
         transition: all .4s;
+        position: relative;  
+        opacity: 0;
+
+        &::after{
+            content: "";
+            display: block;
+            width: 100%;
+            border-radius: 50%;   
+            background-color: #FFF;
+            display: block;
+            height: 100%;
+        }
 
         &:hover {
-            opacity: 1;
+            opacity: 1 !important;
+            z-index: 1;
             transform: scale(2);
         }
 
         &.a {
-            opacity: 1;
+            opacity: 1 !important;
         }
     }
 }
@@ -103,4 +115,16 @@ svg {
     justify-content: center;
     align-items: flex-end;
     //scroll-snap-stop: always;
+}
+
+
+@keyframes dotin {
+    from {
+        opacity: 0;
+        transform: translateX(1.5em);
+    }
+    to {
+        opacity: .2;
+        transform: translateX(0);
+    }
 }
