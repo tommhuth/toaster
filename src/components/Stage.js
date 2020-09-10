@@ -12,7 +12,7 @@ import State from "../utils/const/State"
 import { useWorld } from "../utils/cannon"
 import { Vec3 } from "cannon"
 
-export default function Stage({ launcherPosition, world, elements }) {
+export default function Stage({ launcherPosition, world, elements, objects: incomingObjects }) {
     let spaces = useStore(i => i.data.spaces)
     let state = useStore(i => i.data.state)
     let [objects, setObjects] = useState([])
@@ -57,6 +57,10 @@ export default function Stage({ launcherPosition, world, elements }) {
                     size = random.float(.5, 1)
                     gap = random.float(0, .35)
                 }
+            }
+
+            for (let object of incomingObjects) {
+                objects.push({ ...object, id: random.id() })
             }
 
             setObjects(objects)

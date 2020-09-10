@@ -8,7 +8,7 @@ import random from "@huth/random"
 import animate from "../../utils/animate"
 import State from "../../utils/const/State"
 
-function Obj({ x, y, z, width, height, depth }) {
+function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     let actions = useStore(i => i.actions)
     let state = useStore(i => i.data.state)
     let defaultPosition = useDefaultValue([x, y, z])
@@ -18,7 +18,11 @@ function Obj({ x, y, z, width, height, depth }) {
     let dead = useRef(false) 
     let [flash, setFlash] = useState(false)
     let [rotation] = useState(() => {
-        return random.boolean() ? random.float(-.2, .2) : 0
+        if (typeof incomingRotation === "number") {
+            return incomingRotation
+        }
+
+        return  random.boolean() ? random.float(-.2, .2) : 0
     })
     let { ref } = useCannon({
         position: [x, y + height / 2, z],

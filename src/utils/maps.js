@@ -5,6 +5,17 @@ export default [
         launcherPosition: [14, .1, 14],
         world: [
         ],
+        objects: [
+            { 
+                width: 5,
+                height: 2,
+                depth: 2,
+                x: 0,
+                z: 1,
+                y: 1,
+                rotation: 2
+            }
+        ],
         elements: [
             {
                 type: "shelf",
