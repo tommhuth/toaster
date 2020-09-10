@@ -12,7 +12,7 @@ import State from "../utils/const/State"
 import { useWorld } from "../utils/cannon"
 import { Vec3 } from "cannon"
 
-export default function Stage({ launcherPosition, world, elements, objects: incomingObjects }) {
+export default function Stage({ launcherPosition, world, elements, objects: incomingObjects = [] }) {
     let spaces = useStore(i => i.data.spaces)
     let state = useStore(i => i.data.state)
     let [objects, setObjects] = useState([])
