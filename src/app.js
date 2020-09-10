@@ -17,6 +17,44 @@ import State from "./utils/const/State"
 import maps from "./utils/maps"
 import { Vector3 } from "three"
 
+const initmap = { 
+    name: "heyo",
+    slug: "hey",
+    zoom: 35,
+    launcherPosition: [14, .1, 14],
+    world: [
+        {
+            x: 1,
+            y: 1,
+            z:1,
+            width: 12,
+            height: 2,
+            depth: 12,
+        }
+    ],
+    elements: [
+        {
+            type: "shelf",
+            x: 0,
+            z: 1,
+            y: 2,
+            rotated: true
+        }, 
+        {
+            type: "chair",
+            z: 1,
+            y: 3,
+            x: 4,
+            rotation: .86, 
+        },
+        {
+            type: "bowl",
+            z: 4,
+            y: 2,
+            x: -0,  
+        },
+    ]
+}
 
 function MapSelect() {
     let scroller = useRef()
@@ -26,6 +64,12 @@ function MapSelect() {
     let scrolling = useRef(true) 
     let actions = useStore(i => i.actions)
     let map = useStore(i => i.data.map)
+ 
+    useEffect(() => {
+        let id = setTimeout(() => actions.loadMap(initmap), 500)
+
+        return () => clearTimeout(id)
+    }, [])
 
     useAnimationFrame(() => {
         scroller.current.style.transform = `translateY(${y.current}px)`
@@ -51,8 +95,10 @@ function MapSelect() {
     useEffect(() => {
         let id
         let started = false
-        let onWheel = e => {
-            e.preventDefault()
+        let onWheel = e => { 
+            if (scrolling.current) {
+                return
+            }
 
             if (!started) {
                 started = true
@@ -109,11 +155,12 @@ function MapSelect() {
                             e.stopPropagation()
                             setActive(index + 1)
                         }}
+                        style={{
+                            "--dotdelay": (index * .2 + 1.5) + "s"
+                        }}
                         className={index === active - 1 ? "a" : ""}
                         key={index}
-                    >
-                        {index}
-                    </li>
+                    />
                 ))}
             </ul>
         </>
@@ -122,13 +169,8 @@ function MapSelect() {
 
 function Cursor() { 
     let pointer = useRef()
-    let line = useRef()
-    let actions = useStore(i => i.actions)
+    let line = useRef() 
     let cursorSize = 16
-
-    useEffect(() => {
-        setTimeout(() => actions.loadMap(maps[1]), 500)
-    }, [])
 
     useEffect(() => {
         return api.subscribe(launcher => {
@@ -196,7 +238,7 @@ function Cursor() {
                     transition: "width .3s, height .3s",
                     zIndex: 10000000,
                     pointerEvents: "none",
-                    backgroundColor: "yellow",
+                    backgroundColor: "rgb(13,1,206)",
                     mixBlendMode: "difference",
                     top: 0,
                     left: 0,
