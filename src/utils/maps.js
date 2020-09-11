@@ -2,7 +2,11 @@ export default [
     {
         name: "intro",
         slug: "intro",
-        launcherPosition: [14, .1, 14],
+        launcherPosition: [14, .1, 14], 
+        camera: {
+            preplaying: [15, 10, 5],
+            playing: [10, 10, 10]
+        },
         world: [
         ],
         objects: [
@@ -38,8 +42,11 @@ export default [
     },
     {
         name: "Something with a wall",
-        slug: "wall",
-        launcherPosition: [14, .1, 14],
+        slug: "wall", 
+        camera: {
+            preplaying: [15, 10, 5], 
+            playing: [10, 10, 10]
+        },
         world: [
             {
                 height: 10,
@@ -67,8 +74,11 @@ export default [
     },
     {
         name: "Everyone",
-        slug: "everyone",
-        launcherPosition: [10, .1, 10],
+        slug: "everyone", 
+        camera: {
+            preplaying: [15, 10, 5],
+            playing: [10, 10, 10]
+        },
         world: [
         ],
         elements: [
@@ -107,8 +117,11 @@ export default [
     },
     {
         name: "The Arrow",
-        slug: "the-arrow",
-        launcherPosition: [0, .1, 14],
+        slug: "the-arrow",  
+        camera: {
+            preplaying: [20, 10, 5],
+            playing: [10, 10, 5]
+        },
         world: [
             {
                 height: 4,
@@ -144,3 +157,43 @@ export default [
         ]
     }
 ]
+
+
+const initialMap = { 
+    name: "heyo",
+    slug: "hey",
+    zoom: 45, 
+    camera: {
+        preplaying: [0, 10, -5],
+        playing: [15, 10, 5]
+    },
+    world: [ 
+    ],
+    /*
+    elements: [
+        {
+            type: "shelf",
+            x: 0,
+            z: 1,
+            y: 0,
+            rotated: true
+        }, 
+        {
+            type: "chair",
+            z: 1,
+            y: 2,
+            x: 4,
+            rotation: .86, 
+        },
+        {
+            type: "bowl",
+            z: 4,
+            y: 1,
+            x: -0,  
+        },
+    ],
+    */
+    elements: []
+}
+
+export {initialMap}

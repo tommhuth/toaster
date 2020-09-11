@@ -37,10 +37,16 @@ html {
 svg {
     position: fixed;
     top:0;
+    display: block;
     z-index: 100000;
     left:0;
-    pointer-events: none;
-    mix-blend-mode: difference;
+    pointer-events: none; 
+}
+
+
+.pointer {
+    width: 14px;
+    height: 14px;
 }
 
 
@@ -55,6 +61,15 @@ svg {
     color:#FFF;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+}
+
+#spinner {
+    width:1em;
+    height:1em;
+    background-color: white;
+    position: fixed;
+    top:50%;
+    left:50%;
 }
 
 .dots {

@@ -7,35 +7,39 @@ export default function Camera() {
     let { camera } = useThree()
     let state = useStore(i => i.data.state)
     let map = useStore(i => i.data.map)
-    let target = useRef([15, 10, 5])
-
-    useFrame(() => {
-        camera.position.x += (target.current[0] - camera.position.x) * .01
-        camera.position.y += (target.current[1] - camera.position.y) * .01
-        camera.position.z += (target.current[2] - camera.position.z) * .01
-
-        camera.zoom += ((map?.zoom || 45) - camera.zoom) * .025
-        camera.updateProjectionMatrix()
-    })
+    let target = useRef([10, 10, 10])
 
     useLayoutEffect(() => {
         camera.position.set(...target.current)
+        camera.lookAt(0,0,0)
     }, [])
+
+    useFrame(()=> {
+        if (map) {
+            if ([State.PLAYING, State.GAME_OVER].includes(state)) {
+                target.current = map.camera.playing
+            } else {
+                target.current = map.camera.preplaying
+            }
+        }
+    }, [map, state])
+
+    useFrame(() => {
+        camera.position.x += (target.current[0] - camera.position.x) * .075
+        camera.position.y += (target.current[1] - camera.position.y) * .075
+        camera.position.z += (target.current[2] - camera.position.z) * .075
+
+        camera.zoom += ((map?.zoom || 45) - camera.zoom) * .025
+        camera.updateProjectionMatrix()
+    })
 
     useEffect(() => {
         switch (state) {
             case State.INTRO:
                 target.current = [15, 10, 5]
                 break
-            case State.PLAYING:
-                target.current = [10, 10, 10]
-                break
         }
-    }, [state])
-
-    useEffect(() => {
-
-    }, [])
+    }, [state]) 
 
     return null
 }

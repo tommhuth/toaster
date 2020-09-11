@@ -14,62 +14,18 @@ import Stage from "./components/Stage"
 import Only from "./components/Only"
 import WorldBlock from "./components/world/WorldBlock"
 import State from "./utils/const/State"
-import maps from "./utils/maps"
-import { Vector3 } from "three"
+import maps, { initialMap } from "./utils/maps"
+import FontLoader from "./components/FontLoader"
 
-const initmap = { 
-    name: "heyo",
-    slug: "hey",
-    zoom: 35,
-    launcherPosition: [14, .1, 14],
-    world: [
-        {
-            x: 1,
-            y: 1,
-            z:1,
-            width: 12,
-            height: 2,
-            depth: 12,
-        }
-    ],
-    elements: [
-        {
-            type: "shelf",
-            x: 0,
-            z: 1,
-            y: 2,
-            rotated: true
-        }, 
-        {
-            type: "chair",
-            z: 1,
-            y: 3,
-            x: 4,
-            rotation: .86, 
-        },
-        {
-            type: "bowl",
-            z: 4,
-            y: 2,
-            x: -0,  
-        },
-    ]
-}
 
 function MapSelect() {
     let scroller = useRef()
     let y = useRef(0)
     let targetY = useRef(0)
     let [active, setActive] = useState(0)
-    let scrolling = useRef(true) 
+    let scrolling = useRef(true)
     let actions = useStore(i => i.actions)
     let map = useStore(i => i.data.map)
- 
-    useEffect(() => {
-        let id = setTimeout(() => actions.loadMap(initmap), 500)
-
-        return () => clearTimeout(id)
-    }, [])
 
     useAnimationFrame(() => {
         scroller.current.style.transform = `translateY(${y.current}px)`
@@ -85,6 +41,8 @@ function MapSelect() {
     useEffect(() => {
         if (active - 1 >= 0 && map !== maps[active - 1]) {
             actions.loadMap(maps[active - 1])
+        } else {
+            actions.loadMap(initialMap)
         }
     }, [active])
 
@@ -95,7 +53,7 @@ function MapSelect() {
     useEffect(() => {
         let id
         let started = false
-        let onWheel = e => { 
+        let onWheel = e => {
             if (scrolling.current) {
                 return
             }
@@ -133,10 +91,10 @@ function MapSelect() {
                 id="page"
             >
                 <div className="block">
-                    <h1 className="h2">
-                        <span className="f">Ball</span> 
-                        <span className="f">versus</span> 
-                        <span className="f">furniture</span> 
+                    <h1 className="h2b">
+                        <span className="f">Ball</span>
+                        <span className="f">versus</span>
+                        <span className="f">furniture</span>
                     </h1>
                 </div>
                 {maps.map((i, index) => {
@@ -171,10 +129,11 @@ function MapSelect() {
     )
 }
 
-function Cursor() { 
+function Cursor() {
     let pointer = useRef()
-    let line = useRef() 
-    let cursorSize = 16
+    let line = useRef()
+    let cursorSize = 14
+    let state = useStore(i => i.data.state)
 
     useEffect(() => {
         return api.subscribe(launcher => {
@@ -191,6 +150,26 @@ function Cursor() {
     }, [])
 
     useEffect(() => {
+        if (state === State.PLAYING) {
+
+            let onMouseDown = () => {
+                pointer.current.style.backgroundColor = "#FFF"
+            }
+            let onMouseUp = () => {
+                pointer.current.style.backgroundColor = ""
+            }
+
+            window.addEventListener("mousedown", onMouseDown)
+            window.addEventListener("mouseup", onMouseUp)
+
+            return () => {
+                window.removeEventListener("mousedown", onMouseDown)
+                window.removeEventListener("mouseup", onMouseUp)
+            }
+        }
+    }, [state])
+
+    useEffect(() => {
         let onMouseMove = e => {
             pointer.current.style.display = "block"
             pointer.current.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`
@@ -205,6 +184,7 @@ function Cursor() {
             if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
                 pointer.current.style.width = cursorSize * 2.5 + "px"
                 pointer.current.style.height = cursorSize * 2.5 + "px"
+                pointer.current.style.backgroundColor = "white"
 
             }
         }
@@ -212,6 +192,7 @@ function Cursor() {
             if (activators.includes(e.target.tagName) || e.target.classList.contains(".actionable")) {
                 pointer.current.style.width = ""
                 pointer.current.style.height = ""
+                pointer.current.style.backgroundColor = ""
             }
         }
         let activators = ["BUTTON", "A"]
@@ -242,8 +223,9 @@ function Cursor() {
                     transition: "width .3s, height .3s",
                     zIndex: 10000000,
                     pointerEvents: "none",
-                    backgroundColor: "rgb(13,1,206)",
-                    mixBlendMode: "difference",
+                    backgroundColor: "transparent",
+                    border: "2px solid #FFF",
+                    ///mixBlendMode: "difference",
                     top: 0,
                     left: 0,
                     borderRadius: "50%"
@@ -253,6 +235,7 @@ function Cursor() {
                 <line
                     strokeWidth="3"
                     stroke="white"
+                    strokeDasharray="4 4"
                     ref={line}
                 />
             </svg>
@@ -260,17 +243,14 @@ function Cursor() {
     )
 }
 
-function Ui() { 
-    let state = useStore(i => i.data.state) 
-    let attempts = useStore(i => i.data.attempts) 
-
-    console.log(attempts, state)
+function Ui() {
+    let state = useStore(i => i.data.state)
 
     return (
         <>
             <Only if={[State.INTRO, State.READY, State.PREPARING].includes(state)}>
                 <MapSelect />
-            </Only> 
+            </Only>
             <Only if={state === State.GAME_OVER}>
                 <h1 className="h1">
                     Game over
@@ -288,7 +268,7 @@ function Game() {
     let attempts = useStore(i => i.data.attempts)
 
     return (
-        <>
+        <FontLoader>
             <Ui />
             <Canvas
                 noEvents
@@ -298,13 +278,12 @@ function Game() {
                 pixelRatio={1.25}
                 gl={{
                     stencil: false,
-                    depth: true,
-                    alpha: false,
+                    depth: false,
+                    alpha: true,
                     antialias: false,
 
                 }}
-                camera={{
-                    position: new Vector3(10,10,10),
+                camera={{ 
                     zoom: 45,
                     fov: 60,
                     near: -20,
@@ -324,7 +303,7 @@ function Game() {
                     <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
                 </CannonProvider>
             </Canvas>
-        </>
+        </FontLoader>
     )
 }
 
