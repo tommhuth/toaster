@@ -29,18 +29,16 @@ export function CannonProvider({
         world.defaultContactMaterial.restitution = defaultRestitution
         world.defaultContactMaterial.contactEquationStiffness = 1e8
         world.defaultContactMaterial.contactEquationRegularizationTime = 6
-        world.gravity.set(...gravity)
-
+        world.gravity.set(...gravity) 
     }, [world])
 
     // Run world stepper every frame
     useFrame((state, delta) => {
         try {
-            world.step(delta)
+            world.step(delta >= 1 / 30 ? 1 / 30 : 1 / 60)
         } catch (e) {
             console.log(e)
-        }
-        //debug.update()
+        } 
     })
 
     // Distribute world via context
