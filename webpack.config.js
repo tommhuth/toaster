@@ -12,7 +12,8 @@ const rev = uuid.v4()
 const plugins = [
     //new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
-        "process.env.REGISTER_SERVICEWORKER": JSON.stringify(process.env.REGISTER_SERVICEWORKER)
+        "process.env.REGISTER_SERVICEWORKER": JSON.stringify(process.env.REGISTER_SERVICEWORKER),
+        "process.env.LAST_BUILD_AT": JSON.stringify(new Date().toISOString())
     }),
     new MiniCssExtractPlugin({
         filename: "css/[name].[hash:6].css"

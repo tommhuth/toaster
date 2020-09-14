@@ -145,7 +145,50 @@ svg {
     }
 }
 
+.uir {
+    position: fixed;
+    left: 7vw;
+    pointer-events: none;
+    bottom: 8.5vh;
+    color: #FFF;
+    z-index: 1111;
 
+    &__text { 
+        overflow: hidden;
+        padding-bottom: .5em;
+    }
+
+    p  {
+        font-size: 3.5em;
+        line-height: .95;
+        font-family: "Cormorant Garamond";
+        font-weight: 300;
+        animation: tin .75s .25s both;
+        font-style: italic;
+    }
+    h1 {
+        animation: tin .35s both;
+    }
+}
+
+@keyframes tin {
+    from {
+        transform: translateY(150%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+@keyframes hin {
+    from {
+        transform: translateY(1em);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
 
 @keyframes dotin {
     from {

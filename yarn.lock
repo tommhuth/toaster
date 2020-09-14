@@ -5526,6 +5526,11 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
+number-words@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/number-words/-/number-words-1.1.1.tgz#cf845e04314218f6f8388f873ca7c39ad9d7afbb"
+  integrity sha512-YJVhzx5X16eo+3bveaIgkIKtbW79vQxHWugfEJH5sWGNMk5QiME01UCnbnii9MBR/1VHVujKjAi5bRw8+4HN2w==
+
 oauth-sign@~0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"

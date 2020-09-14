@@ -36,7 +36,7 @@ export default [
                 z: 4,
                 x: 5.25,
                 rotation: .7,
-                untouchable: true
+                untouchable: false
             },
         ]
     },
@@ -169,6 +169,7 @@ const initialMap = {
     },
     world: [ 
     ],
+    elements: [],
     /*
     elements: [
         {
@@ -192,8 +193,7 @@ const initialMap = {
             x: -0,  
         },
     ],
-    */
-    elements: []
+    */ 
 }
 
 export {initialMap}

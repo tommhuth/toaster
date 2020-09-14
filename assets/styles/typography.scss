@@ -6,7 +6,7 @@ html {
 }
 
 .h1 { 
-    font-size: 50vmin;
+    font-size: 40vmin;
     z-index: 11111;
     line-height: .85;
     font-weight: 700;
@@ -30,12 +30,23 @@ html {
 }
 
 .h2b {
-    font-size: 2em;
-    line-height: 1.3;
-    font-weight: 500;
-    letter-spacing: .25em;
-    text-transform: uppercase; 
-    max-width: 28rem;  
+    font-size: 15vmin;
+    line-height: .95;
+    font-weight: 700;
+    letter-spacing: 0; //.25em;
+    text-transform: uppercase;  
+}
+.h2c {
+    font-size: 1.25em;
+    line-height: .95;
+    font-weight: 400;
+    letter-spacing: .125em;
+    text-transform: uppercase;
+    margin: 1.5em 0 0 0; 
+
+    span {
+        opacity: .3;
+    }
 }
  
 

@@ -3,6 +3,7 @@ import { useCannon } from "../../utils/cannon"
 import { Sphere } from "cannon"
 import { useDefaultValue } from "../../utils/hooks"
 import { useStore } from "../../utils/store"
+import { useFrame } from "react-three-fiber"
 
 function Ball({ radius = 0.25, velocity = [0, 0, 0], position = [0, 3, 0] }) {
     let defaultPosition = useDefaultValue(position)
@@ -22,8 +23,8 @@ function Ball({ radius = 0.25, velocity = [0, 0, 0], position = [0, 3, 0] }) {
                 actions.end()
             }
         }
-    })
-
+    }) 
+    
     return (
         <mesh ref={ref} position={defaultPosition} castShadow receiveShadow>
             <sphereBufferGeometry args={[radius, 16, 16]} attach="geometry" />

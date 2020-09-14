@@ -16,7 +16,7 @@ import WorldBlock from "./components/world/WorldBlock"
 import State from "./utils/const/State"
 import maps, { initialMap } from "./utils/maps"
 import FontLoader from "./components/FontLoader"
-
+import { convert } from "number-words"
 
 function MapSelect() {
     let scroller = useRef()
@@ -243,6 +243,43 @@ function Cursor() {
     )
 }
 
+function PlayStats() {
+    let map = useStore(i => i.data.map)
+    let objects = useStore(i => i.data.objects)
+    let [visible, setVisible] = useState(true)
+
+    useEffect(()=>{
+        setTimeout(()=> setVisible(false), 3500)
+    }, [])
+
+    if (!visible) {
+        return null
+    }
+
+    return (
+        <div className="uir">
+            <div className="uir__text">
+                <p > 
+                    {generateMapText(map, objects)}
+                </p>
+            </div>
+            <h1 className="h2c">{map?.name} <span>Level 1</span></h1>
+        </div>
+    )
+}
+
+function generateMapText(map, objects) {
+    let text = `Knock down all ${convert(objects)} objects`
+    let illegals = map?.elements.filter(i => i.untouchable).map(i => i.type)
+    let itext = `and avoid the illegal ${illegals?.join(", ")}.`
+
+    return (
+        <>
+            {text}{illegals?.length ? <>,<br />{itext}</> : "."}
+        </>
+    )
+}
+
 function Ui() {
     let state = useStore(i => i.data.state)
 
@@ -256,12 +293,14 @@ function Ui() {
                     Game over
                 </h1>
             </Only>
+            <Only if={state === State.PLAYING}>
+                <PlayStats />
+            </Only>
 
             <Cursor />
         </>
     )
 }
-
 
 function Game() {
     let map = useStore(i => i.data.map)
@@ -283,7 +322,7 @@ function Game() {
                     antialias: false,
 
                 }}
-                camera={{ 
+                camera={{
                     zoom: 45,
                     fov: 60,
                     near: -20,
