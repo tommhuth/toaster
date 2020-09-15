@@ -13,16 +13,16 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     let state = useStore(i => i.data.state)
     let defaultPosition = useDefaultValue([x, y, z])
     let [color] = useState(
-        () => random.pick("#fcad03", "#fcad03", "#666", "#fcad03", "#ccc")
+        () => random.pick("#fcad03", "#fcad03", "#666666", "#fcad03", "#cccccc")
     )
-    let dead = useRef(false) 
+    let dead = useRef(false)
     let [flash, setFlash] = useState(false)
     let [rotation] = useState(() => {
         if (typeof incomingRotation === "number") {
             return incomingRotation
         }
 
-        return  random.boolean() ? random.float(-.2, .2) : 0
+        return random.boolean() ? random.float(-.2, .2) : 0
     })
     let { ref } = useCannon({
         position: [x, y + height / 2, z],
@@ -37,22 +37,22 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
                 setFlash(true)
             }
         }
-    }, [state]) 
+    }, [state])
 
     useEffect(() => {
         if (flash) {
             let c = new Color()
 
             return animate({
-                from: { color: "#FFF" },
-                to: { color: new Color(color).getStyle() },
-                duration: 1000, 
-                render({ color }) {
-                    ref.current.material.color = c.set(color).convertSRGBToLinear() 
+                from: "#FFFFFF",
+                to: color,
+                duration: 1000,
+                render(color) {
+                    ref.current.material.color = c.set(color).convertSRGBToLinear()
                 }
             })
         }
-    }, [flash]) 
+    }, [flash])
 
     return (
         <mesh castShadow receiveShadow ref={ref} position={defaultPosition}>

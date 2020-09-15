@@ -21,7 +21,6 @@
         "@babel/preset-react": "^7.9.4",
         "@huth/random": "1.0.0",
         "@yushijinhun/three-minifier-webpack": "^0.1.6",
-        "animejs": "^3.2.0",
         "autoprefixer": "^9.7.5",
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.1.0",
