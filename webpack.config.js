@@ -89,7 +89,7 @@ module.exports = {
             { test: /\.json$/, loader: "json" },
             {
                 test: /\.js$/,
-                exclude: /node_modules\/(?!(@huth\/utils)\/).*/,
+                exclude: /node_modules\/(?!(@huth)\/).*/,
                 loader: "babel-loader"
             },
             {

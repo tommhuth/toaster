@@ -134,7 +134,7 @@ export function useCannon(
 
         ref.current.position.copy(body.position)
         ref.current.quaternion.copy(body.quaternion)
-        ref.current.matrixAutoUpdate = mass > 0
+        //ref.current.matrixAutoUpdate = mass > 0
         ref.current.updateMatrix()
     }, [])
 
@@ -147,7 +147,7 @@ export function useCannon(
     }, [body])
 
     useFrame(() => {
-        if (ref.current && mass > 0) {
+        if (ref.current) {
             ref.current.position.copy(body.position)
             ref.current.quaternion.copy(body.quaternion)
         }

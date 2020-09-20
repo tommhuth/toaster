@@ -2,7 +2,7 @@ import "../assets/styles/app.scss"
 
 import React, { useRef, useEffect, useState } from "react"
 import ReactDOM from "react-dom"
-import { Canvas } from "react-three-fiber"
+import { Canvas, useThree } from "react-three-fiber"
 import { useStore, api } from "./utils/store"
 import { useAnimationFrame } from "./utils/hooks"
 import { Suspense } from "react"
@@ -18,6 +18,14 @@ import maps, { initialMap } from "./utils/maps"
 import FontLoader from "./components/FontLoader"
 import { convert } from "number-words"
 
+function ArrowLeft() {
+    return (
+        <svg viewBox="0 0 24 22">
+            <path d="M19 11H7.39l4-3.95a1 1 0 00-1.46-1.41l-5.66 5.65a1 1 0 000 1.42l5.66 5.65A1 1 0 1011.34 17l-3.95-4H19a1 1 0 000-2z"></path>
+        </svg>
+    )
+}
+
 function MapSelect() {
     let scroller = useRef()
     let y = useRef(0)
@@ -26,6 +34,7 @@ function MapSelect() {
     let scrolling = useRef(true)
     let actions = useStore(i => i.actions)
     let map = useStore(i => i.data.map)
+    let { camera } = useThree()
 
     useAnimationFrame(() => {
         scroller.current.style.transform = `translateY(${y.current}px)`
@@ -40,11 +49,12 @@ function MapSelect() {
 
     useEffect(() => {
         if (active - 1 >= 0 && map !== maps[active - 1]) {
+            //camera.position.set(20,10,5)
             actions.loadMap(maps[active - 1])
         } else {
             actions.loadMap(initialMap)
         }
-    }, [active])
+    }, [active, camera])
 
     useEffect(() => {
         targetY.current = -active * window.innerHeight
@@ -151,7 +161,6 @@ function Cursor() {
 
     useEffect(() => {
         if (state === State.PLAYING) {
-
             let onMouseDown = () => {
                 pointer.current.style.backgroundColor = "#FFF"
             }
@@ -195,9 +204,15 @@ function Cursor() {
                 pointer.current.style.backgroundColor = ""
             }
         }
+        let onClick = () => {
+            pointer.current.style.width = ""
+            pointer.current.style.height = ""
+            pointer.current.style.backgroundColor = ""
+        }
         let activators = ["BUTTON", "A"]
 
         window.addEventListener("mousemove", onMouseMove)
+        window.addEventListener("click", onClick) 
         document.body.addEventListener("mouseleave", onMouseLeave)
         document.body.addEventListener("mouseenter", onMouseEnter)
         document.body.addEventListener("mouseenter", onMouseEnterCapture, { capture: true })
@@ -205,6 +220,7 @@ function Cursor() {
 
         return () => {
             window.removeEventListener("mousemove", onMouseMove)
+            window.removeEventListener("click", onClick) 
             document.body.removeEventListener("mouseenter", onMouseEnter)
             document.body.removeEventListener("mouseleave", onMouseLeave)
             document.body.removeEventListener("mouseenter", onMouseEnterCapture)
@@ -224,14 +240,13 @@ function Cursor() {
                     zIndex: 10000000,
                     pointerEvents: "none",
                     backgroundColor: "transparent",
-                    border: "2px solid #FFF",
-                    ///mixBlendMode: "difference",
+                    border: "2px solid #FFF", 
                     top: 0,
                     left: 0,
                     borderRadius: "50%"
                 }}
             />
-            <svg viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
+            <svg className="cursor-overlay" viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
                 <line
                     strokeWidth="3"
                     stroke="white"
@@ -245,25 +260,26 @@ function Cursor() {
 
 function PlayStats() {
     let map = useStore(i => i.data.map)
+    let score = useStore(i => i.data.score)
     let objects = useStore(i => i.data.objects)
-    let [visible, setVisible] = useState(true)
-
-    useEffect(()=>{
-        setTimeout(()=> setVisible(false), 3500)
-    }, [])
-
-    if (!visible) {
-        return null
-    }
+    let balls = useStore(i => i.data.balls)
+    let reset = useStore(i => i.actions.reset)
 
     return (
         <div className="uir">
+            <button onClick={reset} className="uir__back">
+                <ArrowLeft />
+            </button>
             <div className="uir__text">
-                <p > 
+                <p className="uir__text__inner">
                     {generateMapText(map, objects)}
                 </p>
             </div>
-            <h1 className="h2c">{map?.name} <span>Level 1</span></h1>
+            <p className="h2c">{map?.name} <strong>Level 1</strong></p>
+            <div className="uir__stats">
+                <p className="h2c"><strong>{balls} balls</strong></p>
+                <p className="h2c"><strong>{objects - score} remaining</strong></p>
+            </div>
         </div>
     )
 }
@@ -339,7 +355,7 @@ function Game() {
                 <CannonProvider>
                     {map ? <Stage {...map} key={attempts} /> : null}
 
-                    <WorldBlock isFloor y={-2} width={100} height={4} depth={100} z={0} />
+                    <WorldBlock isFloor y={-2} width={200} height={4} depth={200} z={0} />
                 </CannonProvider>
             </Canvas>
         </FontLoader>

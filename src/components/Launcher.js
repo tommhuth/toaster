@@ -86,6 +86,10 @@ function Launcher() {
         }
     }, [state])
 
+    useEffect(() => {
+        actions.setBallsCount(balls.length)
+    }, [balls.length])
+
     return (
         <>
             {balls.map((i) => (
@@ -93,10 +97,10 @@ function Launcher() {
             ))}
             <group ref={marker} position={markerPosition}>
                 <mesh rotation-x={-Math.PI / 2} >
-                    <meshBasicMaterial opacity={.5} color="#1100ff" transparent attach="material" />
+                    <meshBasicMaterial opacity={.025} color="#ffffff" transparent attach="material" />
                     <circleBufferGeometry attach="geometry" args={[1, 64,]} />
                 </mesh>
-            </group> 
+            </group>
         </>
     )
 }

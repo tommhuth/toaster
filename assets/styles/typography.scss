@@ -36,6 +36,7 @@ html {
     letter-spacing: 0; //.25em;
     text-transform: uppercase;  
 }
+
 .h2c {
     font-size: 1.25em;
     line-height: .95;
@@ -44,11 +45,11 @@ html {
     text-transform: uppercase;
     margin: 1.5em 0 0 0; 
 
-    span {
+    strong {
         opacity: .3;
+        font-weight: 300;
     }
-}
- 
+} 
 
 .h3 {
     font-size: 2vw;

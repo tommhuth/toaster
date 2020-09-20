@@ -1,6 +1,5 @@
 import { create } from "zustand"
-import State from "./const/State"
-import maps from "./maps"
+import State from "./const/State" 
 
 function getActions(get, set) {
     return {
@@ -12,6 +11,11 @@ function getActions(get, set) {
         ready() {
             set({
                 state: State.READY
+            })
+        },
+        reset() {
+            set({
+                ...getInitState()
             })
         },
         end() {
@@ -34,6 +38,11 @@ function getActions(get, set) {
         setObjectCount(count) {
             set({
                 objects: count
+            })
+        },
+        setBallsCount(count) {
+            set({
+                balls: count
             })
         },
         score() {
@@ -75,6 +84,7 @@ function getActions(get, set) {
 function getInitState() {
     return {
         objects: 0,
+        balls: 0,
         score: 0,
         spaces: [],
         state: State.INTRO,

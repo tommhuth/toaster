@@ -17,6 +17,7 @@ export default function Camera() {
     useFrame(()=> {
         if (map) {
             if ([State.PLAYING, State.GAME_OVER].includes(state)) {
+
                 target.current = map.camera.playing
             } else {
                 target.current = map.camera.preplaying
@@ -40,6 +41,9 @@ export default function Camera() {
                 break
         }
     }, [state]) 
+    useEffect(() => {
+        camera.position.set(25,10,-25)
+    }, [map]) 
 
     return null
 }

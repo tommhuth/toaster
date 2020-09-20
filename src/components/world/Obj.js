@@ -5,7 +5,7 @@ import { Box, Vec3 } from "cannon"
 import { Color } from "three"
 import { useStore } from "../../utils/store"
 import random from "@huth/random"
-import animate from "../../utils/animate"
+import animate from "@huth/animate"
 import State from "../../utils/const/State"
 
 function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
@@ -17,6 +17,7 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     )
     let dead = useRef(false)
     let [flash, setFlash] = useState(false)
+    let [visible, setVisible] = useState(false)
     let [rotation] = useState(() => {
         if (typeof incomingRotation === "number") {
             return incomingRotation
@@ -40,6 +41,10 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     }, [state])
 
     useEffect(() => {
+        setTimeout(() => setVisible(true), Math.random() * 350)
+    }, [])
+
+    useEffect(() => {
         if (flash) {
             let c = new Color()
 
@@ -47,6 +52,7 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
                 from: "#FFFFFF",
                 to: color,
                 duration: 1000,
+                easing: "easeOutQuart",
                 render(color) {
                     ref.current.material.color = c.set(color).convertSRGBToLinear()
                 }
@@ -55,7 +61,7 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     }, [flash])
 
     return (
-        <mesh castShadow receiveShadow ref={ref} position={defaultPosition}>
+        <mesh castShadow receiveShadow ref={ref} position={defaultPosition} visible={visible}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
             <meshPhongMaterial shininess={4} specular={0xaaaaaa} color={color} attach="material" />
         </mesh>

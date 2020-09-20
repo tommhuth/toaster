@@ -949,6 +949,16 @@
   dependencies:
     "@hapi/hoek" "8.x.x"
 
+"@huth/animate@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@huth/animate/-/animate-1.0.0.tgz#13604626b5a54090f29124d1ec860b39a6e339eb"
+  integrity sha512-+x6VwCiccbIzZbSzaCOqsT99imJPs/zrH2N3LKj9nX0Ts0vts9u/Oz878FVhDv01CT1RLKbryLWMJk0/4NMCbA==
+  dependencies:
+    babel-eslint "^10.1.0"
+    core-js "^3.6.5"
+    eslint "^6.8.0"
+    eslint-plugin-babel "^5.3.0"
+
 "@huth/random@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@huth/random/-/random-1.0.0.tgz#87f06063ee30c0d676a1460ef72d737e80ea35a3"
@@ -2624,6 +2634,11 @@ core-js@^2.5.7:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
   integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
+
+core-js@^3.6.5:
+  version "3.6.5"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
+  integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"

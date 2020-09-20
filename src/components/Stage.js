@@ -18,6 +18,8 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
     let [objects, setObjects] = useState([])
     let actions = useStore(i => i.actions)
     let cworld = useWorld()
+    let floors = world.filter(i => i.isFloor)
+    let worldBlocks = world.filter(i => !i.isFloor)
 
     useEffect(() => {
         let id = setTimeout(() => {
@@ -120,8 +122,11 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
                     }
                 })}
 
-                {world.map((i) => {
-                    return <WorldBlock {...i} key={`world-${i.x || 0}-${i.y || 0}-${i.z || 0}`} />
+                {floors.map((i, index) => {
+                    return <WorldBlock {...i} index={index} key={`world-${i.x || 0}-${i.y || 0}-${i.z || 0}`} />
+                })}
+                {worldBlocks.map((i, index) => {
+                    return <WorldBlock {...i} index={index} key={`world-${i.x || 0}-${i.y || 0}-${i.z || 0}`} />
                 })}
 
                 {objects.map((i) => {
@@ -134,24 +139,23 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
     )
 }
 
-/*
+/* 
 
+    {spaces.map((i, index) => {
+        return (
+            <mesh position={i.end} key={index}>
+                <sphereBufferGeometry args={[.2]} attach="geometry" />
+                <meshLambertMaterial color="red" attach="material" />
+            </mesh>
+        )
+    })}
+    {spaces.map((i, index) => {
+        return (
+            <mesh key={index} position={[i.x, i.y, i.z]} visible={false}>
+                <boxBufferGeometry args={[i.width, i.height, i.depth]} attach="geometry" />
+                <meshLambertMaterial color="black" attach="material" />
+            </mesh>
+        )
+    })}
 
-            {spaces.map((i, index) => {
-                return (
-                    <mesh position={i.end} key={index}>
-                        <sphereBufferGeometry args={[.2]} attach="geometry" />
-                        <meshLambertMaterial color="red" attach="material" />
-                    </mesh>
-                )
-            })}
-            {spaces.map((i, index) => {
-                return (
-                    <mesh key={index} position={[i.x, i.y, i.z]} visible={false}>
-                        <boxBufferGeometry args={[i.width, i.height, i.depth]} attach="geometry" />
-                        <meshLambertMaterial color="black" attach="material" />
-                    </mesh>
-                )
-            })}
-
-            */
+*/

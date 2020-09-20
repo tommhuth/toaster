@@ -34,7 +34,7 @@ html {
 }
 
 
-svg {
+.cursor-overlay {
     position: fixed;
     top:0;
     display: block;
@@ -148,37 +148,72 @@ svg {
 .uir {
     position: fixed;
     left: 7vw;
+    right: 7vw;
     pointer-events: none;
     bottom: 8.5vh;
     color: #FFF;
     z-index: 1111;
 
-    &__text { 
-        overflow: hidden;
-        padding-bottom: .5em;
+    &__back {
+        position: absolute;
+        pointer-events: all;
+        bottom: -.1em;
+        right: 100%;
+        margin-right: .5em;
+        width: 1.5em;
+
+        svg {
+            fill:currentColor;
+            width: 100%;
+            display: block;
+        }
     }
 
-    p  {
-        font-size: 3.5em;
-        line-height: .95;
-        font-family: "Cormorant Garamond";
-        font-weight: 300;
-        animation: tin .75s .25s both;
-        font-style: italic;
+    &__text { 
+        overflow: hidden; 
+        padding-bottom: .5em;
+
+        &__inner  {
+            font-size: 3.5em;
+            line-height: .95;
+            font-family: "Cormorant Garamond";
+            font-weight: 300;
+            animation: tin 5s .25s both;
+            font-style: italic;
+        }
     }
+
+    &__stats {
+        position: absolute;
+        right:0;
+        bottom:0;
+        text-align:right;
+
+        .h2c {
+            margin: .4em 0 0 0;
+        }
+    }
+
     h1 {
-        animation: tin .35s both;
+        //animation: tin .35s both;
     }
 }
 
 @keyframes tin {
-    from {
+    0% {
         transform: translateY(150%);
     }
-    to {
+    20% {
         transform: translateY(0%);
     }
+    80% {
+        transform: translateY(0%);
+    }
+    100% {
+        transform: translateY(150%);
+    }
 }
+
 @keyframes hin {
     from {
         transform: translateY(1em);
