@@ -23,12 +23,17 @@ function Ball({ radius = 0.25, velocity = [0, 0, 0], position = [0, 3, 0] }) {
                 actions.end()
             }
         }
-    }) 
-    
+    })
+
     return (
         <mesh ref={ref} position={defaultPosition} castShadow receiveShadow>
             <sphereBufferGeometry args={[radius, 16, 16]} attach="geometry" />
-            <meshPhongMaterial color="orange" attach="material" />
+            <meshPhongMaterial
+                emissive="#fcad03"
+                color="#fcad03"
+                emissiveIntensity={.25}
+                attach="material" 
+            />
         </mesh>
     )
 }

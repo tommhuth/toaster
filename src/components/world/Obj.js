@@ -13,7 +13,7 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     let state = useStore(i => i.data.state)
     let defaultPosition = useDefaultValue([x, y, z])
     let [color] = useState(
-        () => random.pick("#fcad03", "#fcad03", "#666666", "#fcad03", "#cccccc")
+        () => random.pick("#fcad03", "#fcad03", "#fcad03")
     )
     let dead = useRef(false)
     let [flash, setFlash] = useState(false)
@@ -63,7 +63,14 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     return (
         <mesh castShadow receiveShadow ref={ref} position={defaultPosition} visible={visible}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
-            <meshPhongMaterial shininess={4} specular={0xaaaaaa} color={color} attach="material" />
+            <meshPhongMaterial
+                shininess={4}
+                specular={0xaaaaaa}
+                color={color}
+                emissive={color}
+                emissiveIntensity={.25}
+                attach="material"
+            />
         </mesh>
     )
 }

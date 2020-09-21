@@ -66,8 +66,8 @@ function ShortShelf({
             <meshLambertMaterial
                 color="#fff"
                 attach="material"
-                emissive={0xffffff}
-                emissiveIntensity={.15}
+                emissive={0xaaaaff}
+                emissiveIntensity={.6}
             />
         </mesh>
     )

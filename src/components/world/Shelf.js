@@ -102,8 +102,8 @@ function Shelf({
         <mesh geometry={geometry} ref={ref} castShadow receiveShadow>
             <meshLambertMaterial
                 color={0xffffff}
-                emissive={0xffffff}
-                emissiveIntensity={.15}
+                emissive={0xaaaaff}
+                emissiveIntensity={.6}
                 attach="material"
             />
         </mesh>

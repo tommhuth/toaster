@@ -9,7 +9,7 @@ export default function WorldBlock({
     x = 0,
     width = 35,
     height = 2,
-    depth = 100, 
+    depth = 100,
     isFloor = false,
     index = 0
 }) {
@@ -19,14 +19,14 @@ export default function WorldBlock({
         userData: { floor: isFloor },
     })
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!isFloor) {
             return animate({
-                from: y-20,
+                from: y - 20,
                 to: y,
                 duration: 1500,
                 delay: index * 150,
-                render:(y) => body.position.y = y,
+                render: (y) => body.position.y = y,
                 easing: "easeOutQuart"
             })
         }
@@ -35,7 +35,15 @@ export default function WorldBlock({
     return (
         <mesh castShadow receiveShadow ref={ref} userData={{ floor: isFloor }}>
             <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
-            <meshPhongMaterial   shininess={2} specular={0x888888} color={0x0000FF} attach="material" />
+            <meshPhongMaterial
+                dithering={true}
+                shininess={4}
+                specular={0x0048ff}
+                emissive={0x0000FF}
+                emissiveIntensity={isFloor ? 0 : .125}
+                color={0x0000FF}
+                attach="material"
+            />
         </mesh>
     )
 }

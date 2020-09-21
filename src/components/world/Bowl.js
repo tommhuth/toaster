@@ -21,8 +21,8 @@ function Stick({ x = 0, y = 0, z = 0, untouchable }) {
             <meshLambertMaterial
                 color="#fff"
                 attach="material"
-                emissive={0xffffff}
-                emissiveIntensity={.15}
+                emissive={0xaaaaff}
+                emissiveIntensity={.6}
             />
         </mesh>
     )
@@ -92,8 +92,8 @@ function Bowl({
                 <meshLambertMaterial
                     color="#fff"
                     attach="material"
-                    emissive={0xffffff}
-                    emissiveIntensity={.15}
+                    emissive={0xaaaaff}
+                    emissiveIntensity={.6}
                 />
             </mesh>
         </>
