@@ -44,7 +44,7 @@ export default function Post1() {
         const effectPass = new EffectPass(
             camera,
             smaaEffect,
-            bloom, 
+            //bloom, 
         )
 
         effectPass.renderToScreen = true 
