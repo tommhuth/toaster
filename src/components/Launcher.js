@@ -97,7 +97,7 @@ function Launcher() {
             ))}
             <group ref={marker} position={markerPosition}>
                 <mesh rotation-x={-Math.PI / 2} >
-                    <meshBasicMaterial opacity={.025} color="#ffffff" transparent attach="material" />
+                    <meshBasicMaterial opacity={.015} color="#ffffff" transparent attach="material" />
                     <circleBufferGeometry attach="geometry" args={[1, 64,]} />
                 </mesh>
             </group>
