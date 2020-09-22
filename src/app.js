@@ -330,7 +330,7 @@ function Game() {
                 colorManagement
                 shadowMap
                 orthographic
-                pixelRatio={1.25}
+                pixelRatio={1.5}
                 gl={{
                     stencil: false,
                     depth: false,
