@@ -27,10 +27,10 @@ export default function Light() {
                 color={0xffffff}
             />
             <pointLight
-                position={[0, 15, 0]}
+                position={[0, 35, 0]}
                 intensity={1}
                 decay={1}
-                distance={25}
+                distance={45}
                 color={0xffffff}
             />
             <directionalLight
