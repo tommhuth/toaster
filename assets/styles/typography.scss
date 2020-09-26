@@ -6,7 +6,7 @@ html {
 }
 
 .h1 { 
-    font-size: 40vmin;
+    font-size: 38vmin;
     z-index: 11111;
     line-height: .85;
     font-weight: 700;
@@ -19,6 +19,11 @@ html {
     transform: translate(-50%, -50%);
     text-transform: uppercase;
     margin: -.91rem; 
+
+    span {
+        font-size: 1.075em;
+        display: block;
+    }
 }
 
 .h2 {
@@ -35,6 +40,13 @@ html {
     font-weight: 700;
     letter-spacing: 0; //.25em;
     text-transform: uppercase;  
+ 
+}
+
+.start {
+    .h2b {
+        text-align: center;
+    }
 }
 
 .h2c {

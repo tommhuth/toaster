@@ -90,7 +90,7 @@ html {
         height: .45em;  
         background-clip: content-box;
         opacity: .2;
-        border: .25em solid transparent; 
+        border: .5em solid transparent; 
         border-left-width: 1em;
         border-right-width: 1em;
         box-sizing: content-box;
@@ -130,6 +130,27 @@ html {
     justify-content: center;
     align-items: flex-end;
     //scroll-snap-stop: always;
+
+    .f {
+        &:nth-child(1) {
+            font-size: 38vmin;
+            letter-spacing: -.035em;
+            line-height: .875;
+            position: relative;
+            left: -.03em;
+        }
+
+        &:nth-child(2) {
+            font-size: 23vmin;
+            letter-spacing: -.0251em;
+        }
+    }
+
+    &.start {
+        align-items: center;
+        padding-right: 0;
+
+    }
 }
 
 .f  {

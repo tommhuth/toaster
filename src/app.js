@@ -100,7 +100,7 @@ function MapSelect() {
                 className="page"
                 id="page"
             >
-                <div className="block">
+                <div className="block start">
                     <h1 className="h2b">
                         <span className="f">Ball</span>
                         <span className="f">versus</span>
@@ -306,7 +306,8 @@ function Ui() {
             </Only>
             <Only if={state === State.GAME_OVER}>
                 <h1 className="h1">
-                    Game over
+                    Game 
+                    <span>over</span>
                 </h1>
             </Only>
             <Only if={state === State.PLAYING}>
