@@ -282,12 +282,7 @@ function PlayStats() {
         <div className="uir">
             <button onClick={reset} className="uir__back">
                 <ArrowLeft />
-            </button>
-            <div className="uir__text">
-                <p className="uir__text__inner">
-                    {generateMapText(map, objects)}
-                </p>
-            </div>
+            </button> 
             <p className="h2c">{map?.name} <strong>Level 1</strong></p>
             <div className="uir__stats">
                 <p className="h2c"><strong>{balls} balls</strong></p>
@@ -296,19 +291,7 @@ function PlayStats() {
         </div>
     )
 }
-
-function generateMapText(map, objects) {
-    let text = `Knock down all ${convert(objects)} objects`
-    let illegals = map?.elements.filter(i => i.untouchable).map(i => i.type)
-    let itext = `and avoid the illegal ${illegals?.join(", ")}.`
-
-    return (
-        <>
-            {text}{illegals?.length ? <>,<br />{itext}</> : "."}
-        </>
-    )
-}
-
+ 
 function Ui() {
     let state = useStore(i => i.data.state)
 
