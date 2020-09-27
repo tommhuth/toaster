@@ -11,17 +11,23 @@ function Launcher() {
     let state = useStore(i => i.data.state)
     let actions = useStore(i => i.actions)
     let marker = useRef()
+    let ballCount = useRef(0)
     let [balls, setBalls] = useState([])
     let [markerPosition, setMarkerPosition] = useState([0, -1, 0])
     let launch = useCallback((velocity, position) => {
+        ballCount.current++
+        actions.setBallsCount(ballCount.current)
         setBalls((prev) => [
             ...prev,
             {
-                key: random.id(),
+                id: random.id(),
                 position,
                 velocity,
             },
         ])
+    }, [])
+    let removeBall = useCallback((id)=> {
+        setBalls(prev => prev.filter(i=>i.id !== id))
     }, [])
 
     useEffect(() => {
@@ -85,15 +91,11 @@ function Launcher() {
             }
         }
     }, [state])
-
-    useEffect(() => {
-        actions.setBallsCount(balls.length)
-    }, [balls.length])
-
+ 
     return (
         <>
             {balls.map((i) => (
-                <Ball key={i.id} {...i} />
+                <Ball key={i.id} {...i} removeBall={removeBall} />
             ))}
             <group ref={marker} position={markerPosition}>
                 <mesh rotation-x={-Math.PI / 2} >
