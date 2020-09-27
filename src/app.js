@@ -144,6 +144,7 @@ function Cursor() {
     let line = useRef()
     let cursorSize = 14
     let state = useStore(i => i.data.state)
+    let [[width, height], setSize] = useState([window.innerWidth, window.innerHeight])
 
     useEffect(() => {
         return api.subscribe(launcher => {
@@ -157,6 +158,18 @@ function Cursor() {
                 line.current.style.display = "none"
             }
         }, state => state.data.launcher)
+    }, [])
+
+    useEffect(()=>{
+        let onResize = ()=>{
+            setSize([window.innerWidth, window.innerHeight])
+        }
+
+        window.addEventListener("resize", onResize)
+
+        return ()=>{
+            window.removeEventListener("resize", onResize)
+        }
     }, [])
 
     useEffect(() => {
@@ -246,12 +259,12 @@ function Cursor() {
                     borderRadius: "50%"
                 }}
             />
-            <svg className="cursor-overlay" viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}>
+            <svg  className="cursor-overlay" viewBox={`0 0 ${width} ${height}`}>
                 <line
                     strokeWidth="3"
                     stroke="white"
                     strokeDasharray="4 4"
-                    ref={line}
+                    ref={line} 
                 />
             </svg>
         </>
