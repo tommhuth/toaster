@@ -25,15 +25,16 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
 
         return random.boolean() ? random.float(-.2, .2) : 0
     })
-    let { ref } = useCannon({
+    let { ref, body } = useCannon({
         position: [x, y + height / 2, z],
         mass: width * height * depth * .5,
         userData: { obj: true },
         rotation: [0, rotation, 0],
         shape: new Box(new Vec3(width / 2, height / 2, depth / 2)),
         onCollide(e) {
-            if (e.body.userData.floor && !dead.current && state === State.PLAYING) {
+            if ((e.body.userData.floor || e.body.userData.dead) && !dead.current && state === State.PLAYING) {
                 dead.current = true
+                body.userData.dead = true
                 actions.score()
                 setFlash(true)
             }
