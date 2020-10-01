@@ -2,11 +2,20 @@ import React, { useState, useEffect, useRef } from "react"
 import { useCannon } from "../../utils/cannon"
 import { useDefaultValue } from "../../utils/hooks"
 import { Box, Vec3 } from "cannon"
-import { Color } from "three"
+import { Color, MeshPhongMaterial } from "three"
 import { useStore } from "../../utils/store"
 import random from "@huth/random"
 import animate from "@huth/animate"
 import State from "../../utils/const/State"
+
+let yellow = new Color("#fcad03").convertSRGBToLinear()
+let mat = new MeshPhongMaterial({
+    shininess: .4,
+    specular: 0xaaaaaa,
+    color: yellow,
+    emissive: yellow,
+    emissiveIntensity: .25,
+})
 
 function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     let actions = useStore(i => i.actions)
@@ -42,7 +51,7 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
     }, [state])
 
     useEffect(() => {
-        setTimeout(() => setVisible(true), Math.random() * 350)
+        setTimeout(() => setVisible(true), Math.random() * 350 + 400)
     }, [])
 
     useEffect(() => {
@@ -55,23 +64,15 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
                 duration: 1000,
                 easing: "easeOutQuart",
                 render(color) {
-                    ref.current.material.color = c.set(color).convertSRGBToLinear()
+                    //ref.current.material.color = c.set(color).convertSRGBToLinear()
                 }
             })
         }
     }, [flash])
 
     return (
-        <mesh castShadow receiveShadow ref={ref} position={defaultPosition} visible={visible}>
-            <boxBufferGeometry args={[width, height, depth]} attach="geometry" />
-            <meshPhongMaterial
-                shininess={4}
-                specular={0xaaaaaa}
-                color={color}
-                emissive={color}
-                emissiveIntensity={.25}
-                attach="material"
-            />
+        <mesh material={mat} castShadow receiveShadow ref={ref} position={defaultPosition} visible={visible}>
+            <boxBufferGeometry args={[width, height, depth]} attach="geometry" /> 
         </mesh>
     )
 }

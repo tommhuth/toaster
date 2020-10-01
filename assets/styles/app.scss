@@ -44,9 +44,11 @@ html {
 }
 
 
-.pointer {
-    width: 14px;
-    height: 14px;
+.pointer {  
+    svg {
+        width: 3em;
+        fill:currentColor;
+    }
 }
 
 
@@ -124,7 +126,7 @@ html {
 .block {
     height: 100vh;
     display: flex; 
-    padding-right: 20vw;
+    padding-right: 15vw;
     flex-direction: column;
     //scroll-snap-align: center;
     justify-content: center;

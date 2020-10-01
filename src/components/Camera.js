@@ -30,8 +30,8 @@ export default function Camera() {
         camera.position.y += (target.current[1] - camera.position.y) * .075
         camera.position.z += (target.current[2] - camera.position.z) * .075
 
-        camera.zoom += ((map?.zoom || 45) - camera.zoom) * .025
-        camera.updateProjectionMatrix()
+        //camera.zoom += ((map?.zoom || 45) - camera.zoom) * .025
+        //camera.updateProjectionMatrix()
     })
 
     useEffect(() => {
