@@ -1,7 +1,7 @@
 import { create } from "zustand"
-import State from "./const/State" 
+import State from "./const/State"
 
-function getActions(get, set) {
+function getActions(get, set, actions) {
     return {
         play() {
             set({
@@ -23,10 +23,19 @@ function getActions(get, set) {
                 state: State.GAME_OVER
             })
         },
-        loadMap(map) {
+        loadMap(map) { 
             set({
                 map,
                 state: State.PREPARING,
+                spaces: [],
+                score: 0,
+                balls: 0,
+                attempts: get().attempts + 1
+            })
+        },
+        reloadMap() {  
+            set({ 
+                state: State.PLAYING,
                 spaces: [],
                 score: 0,
                 attempts: get().attempts + 1
@@ -47,7 +56,7 @@ function getActions(get, set) {
         },
         score() {
             set({
-                score: get().score + 1, 
+                score: get().score + 1,
             })
         },
         startLaunch(position) {
@@ -69,7 +78,7 @@ function getActions(get, set) {
                 }
             })
         },
-        stopLaunch() { 
+        stopLaunch() {
             set({
                 ...get(),
                 launcher: {
@@ -88,8 +97,8 @@ function getInitState() {
         score: 0,
         spaces: [],
         state: State.INTRO,
-        map: null, //maps[0],
-        attempts:0,
+        map: null,
+        attempts: 0,
         launcher: {
             active: false,
             start: [0, 0],

@@ -5,7 +5,7 @@ import Launcher from "./Launcher"
 import Shelf from "./world/Shelf"
 import Bowl from "./world/Bowl"
 import Chair from "./world/Chair"
-import ShortShelf from "./world/ShortShelf"  
+import ShortShelf from "./world/ShortShelf"
 import Obj from "./world/Obj"
 import random from "@huth/random"
 import State from "../utils/const/State"
@@ -73,7 +73,7 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
     }, [spaces])
 
     useEffect(() => {
-        if (spaces.length) {
+        if (spaces.length && state === State.PREPARING) {
             actions.ready()
         }
     }, [spaces])
@@ -83,8 +83,7 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
             cworld.gravity.set(0, 2, 0)
 
             for (let body of cworld.bodies) {
-                if (body.mass > 0) {
-
+                if (body.mass > 0) { 
                     if (body.userData.chair || body.userData.shelf || body.userData.deco) {
                         body.angularVelocity.set(random.float(-.15, .15), random.float(-.2, .2), random.float(-.15, .15))
                         body.applyImpulse(new Vec3(0, random.float(15, 20), 0), body.position.clone())
@@ -99,6 +98,18 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
                 clearTimeout(tid)
                 cworld.gravity.set(0, -10, 0)
             }
+        }
+    }, [state])
+
+    useEffect(() => {
+        if (state === State.GAME_OVER) {
+            let onClick = () => {
+                actions.reloadMap()
+            }
+
+            window.addEventListener("click", onClick)
+
+            return () => window.removeEventListener("click", onClick)
         }
     }, [state])
 
@@ -139,7 +150,7 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
     )
 }
 
-/* 
+/*
 
     {spaces.map((i, index) => {
         return (

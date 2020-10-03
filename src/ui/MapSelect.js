@@ -1,20 +1,22 @@
- 
 
-import React, { useRef, useEffect, useState } from "react" 
+
+import React, { useRef, useEffect, useState } from "react"
 import { Canvas, useThree } from "react-three-fiber"
 import { useStore, api } from "../utils/store"
-import { useAnimationFrame } from "../utils/hooks" 
-import maps, { initialMap } from "../utils/maps" 
-  
+import { useAnimationFrame } from "../utils/hooks"
+import maps, { initialMap } from "../utils/maps"
+import State from "../utils/const/State"
 
-export  default function MapSelect() {
+
+export default function MapSelect() {
     let scroller = useRef()
     let y = useRef(0)
     let targetY = useRef(0)
     let [active, setActive] = useState(0)
-    let scrolling = useRef(true)
+    let scrolling = useRef(true) 
     let actions = useStore(i => i.actions)
     let map = useStore(i => i.data.map)
+    let state = useStore(i => i.data.state)
     let { camera } = useThree()
 
     useAnimationFrame(() => {
@@ -26,14 +28,15 @@ export  default function MapSelect() {
         } else {
             y.current += (targetY.current - y.current) * .04
         }
-    })
+    }) 
 
     useEffect(() => {
-        if (active - 1 >= 0 && map !== maps[active - 1]) {
-            //camera.position.set(20,10,5)
-            actions.loadMap(maps[active - 1])
-        } else {
-            actions.loadMap(initialMap)
+        if ([State.INTRO, State.READY, State.PREPARING].includes(state)) { 
+            if (active - 1 >= 0 && map !== maps[active - 1]) { 
+                actions.loadMap(maps[active - 1])
+            } else {
+                actions.loadMap(initialMap)
+            }
         }
     }, [active, camera])
 
@@ -79,6 +82,7 @@ export  default function MapSelect() {
             <div
                 ref={scroller}
                 className="page"
+                style={{ backgroundColor: "" }}
                 id="page"
             >
                 <div className="block start">
@@ -120,4 +124,3 @@ export  default function MapSelect() {
         </>
     )
 }
- 
