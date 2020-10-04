@@ -101,7 +101,7 @@ export default function MapSelect() {
                             data-cursor-icon="arrow-left"
                             onClick={() => actions.play()}
                         >
-                            <p className="h3">Level {index + 1} {LocalStorage.get(i.id) ? <>(DONE)</> : null}</p>
+                            <p className="h3">Level {index + 1}</p>
                             <h2 className="h2">{i.name}</h2>
                         </div>
                     )
