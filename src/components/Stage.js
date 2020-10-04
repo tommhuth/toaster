@@ -15,11 +15,18 @@ import { Vec3 } from "cannon"
 export default function Stage({ launcherPosition, world, elements, objects: incomingObjects = [] }) {
     let spaces = useStore(i => i.data.spaces)
     let state = useStore(i => i.data.state)
+    let score = useStore(i => i.data.score)
     let [objects, setObjects] = useState([])
     let actions = useStore(i => i.actions)
     let cworld = useWorld()
     let floors = world.filter(i => i.isFloor)
     let worldBlocks = world.filter(i => !i.isFloor)
+
+    useEffect(() => { 
+        if (state === State.PLAYING && objects.length > 0 && score === objects.length) {
+            actions.success()
+        }
+    }, [state, score, objects])
 
     useEffect(() => {
         let id = setTimeout(() => {
@@ -83,7 +90,7 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
             cworld.gravity.set(0, 2, 0)
 
             for (let body of cworld.bodies) {
-                if (body.mass > 0) { 
+                if (body.mass > 0) {
                     if (body.userData.chair || body.userData.shelf || body.userData.deco) {
                         body.angularVelocity.set(random.float(-.15, .15), random.float(-.2, .2), random.float(-.15, .15))
                         body.applyImpulse(new Vec3(0, random.float(15, 20), 0), body.position.clone())
@@ -102,15 +109,20 @@ export default function Stage({ launcherPosition, world, elements, objects: inco
     }, [state])
 
     useEffect(() => {
-        if (state === State.GAME_OVER) {
-            let onClick = () => {
-                actions.reloadMap()
+        let onClick = () => {
+            switch (state) {
+                case State.GAME_OVER:
+                    actions.reloadMap()
+                    break
+                case State.SUCCESS:
+                    actions.progress()
+                    break
             }
-
-            window.addEventListener("click", onClick)
-
-            return () => window.removeEventListener("click", onClick)
         }
+
+        window.addEventListener("click", onClick)
+
+        return () => window.removeEventListener("click", onClick)
     }, [state])
 
     return (

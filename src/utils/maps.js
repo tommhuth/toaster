@@ -1,13 +1,21 @@
 export default [
     {
         name: "intro",
-        slug: "intro",
+        id: "intro",
         launcherPosition: [14, .1, 14], 
         camera: {
             preplaying: [15, 10, 5],
             playing: [10, 10, 10]
         },
         world: [
+            {
+                width: 5,
+                height: 2,
+                depth: 5,
+                x: 0,
+                z: 0,
+                y: 1,
+            }
         ],
         objects: [
             { 
@@ -16,16 +24,11 @@ export default [
                 depth: 2,
                 x: 0,
                 z: 1,
-                y: 1,
+                y: 3,
                 rotation: 2
             }
         ],
         elements: [
-            {
-                type: "shelf",
-                x: 0,
-                z: 5,
-            },
             {
                 type: "bowl",
                 x: 4.5,
@@ -42,7 +45,7 @@ export default [
     },
     {
         name: "Something with a wall",
-        slug: "wall", 
+        id: "wall", 
         camera: {
             preplaying: [15, 10, 5], 
             playing: [10, 10, 10]
@@ -74,7 +77,7 @@ export default [
     },
     {
         name: "Everyone",
-        slug: "everyone", 
+        id: "everyone", 
         camera: {
             preplaying: [15, 10, 5],
             playing: [10, 10, 10]
@@ -117,7 +120,7 @@ export default [
     },
     {
         name: "The Arrow",
-        slug: "the-arrow",  
+        id: "the-arrow",  
         camera: {
             preplaying: [20, 10, 5],
             playing: [10, 10, 5]
@@ -161,7 +164,7 @@ export default [
 
 const initialMap = { 
     name: "heyo",
-    slug: "hey",
+    id: "hey",
     zoom: 45, 
     camera: {
         preplaying: [0, 10, -5],

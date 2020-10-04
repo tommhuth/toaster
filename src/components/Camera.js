@@ -11,13 +11,12 @@ export default function Camera() {
 
     useLayoutEffect(() => {
         camera.position.set(...target.current)
-        camera.lookAt(0,0,0)
+        camera.lookAt(0, 0, 0)
     }, [])
 
-    useFrame(()=> {
+    useFrame(() => {
         if (map) {
-            if ([State.PLAYING, State.GAME_OVER].includes(state)) {
-
+            if ([State.PLAYING, State.GAME_OVER, State.SUCCESS].includes(state)) {
                 target.current = map.camera.playing
             } else {
                 target.current = map.camera.preplaying
@@ -29,9 +28,6 @@ export default function Camera() {
         camera.position.x += (target.current[0] - camera.position.x) * .075
         camera.position.y += (target.current[1] - camera.position.y) * .075
         camera.position.z += (target.current[2] - camera.position.z) * .075
-
-        //camera.zoom += ((map?.zoom || 45) - camera.zoom) * .025
-        //camera.updateProjectionMatrix()
     })
 
     useEffect(() => {
@@ -40,10 +36,11 @@ export default function Camera() {
                 target.current = [15, 10, 5]
                 break
         }
-    }, [state]) 
-    useEffect(() => {
-        camera.position.set(25,10,-25)
-    }, [map]) 
+    }, [state])
+
+    useEffect(() => {  
+        camera.position.set(20, 10, -20)
+    }, [ map])
 
     return null
 }

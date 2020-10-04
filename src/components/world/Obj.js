@@ -45,13 +45,13 @@ function Obj({ x, y, z, width, height, depth, rotation: incomingRotation }) {
                 dead.current = true
                 body.userData.dead = true
                 actions.score()
-                setFlash(true)
+                setFlash(true) 
             }
         }
     }, [state])
 
     useEffect(() => {
-        setTimeout(() => setVisible(true), Math.random() * 350 + 400)
+        setTimeout(() => setVisible(true), Math.random() * 350 + 250)
     }, [])
 
     useEffect(() => {

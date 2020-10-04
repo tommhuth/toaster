@@ -2,22 +2,39 @@
 import React, { useRef, useEffect, useState } from "react"
 import { useStore, api } from "../utils/store"
 import State from "../utils/const/State"
-import { ArrowLeft } from "./PlayStats"
 
-function Icon() {
+function IconArrowLeft() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 95 36"
         >
-            <g  >
-                <path
-                    fillRule="nonzero"
-                    d="M21.23 4.02L17.66 0.45 0.12 18 17.66 35.55 21.23 31.98 9.77 20.52 94.32 20.52 94.32 15.48 9.77 15.48z"
-                ></path>
-            </g>
+            <path
+                fillRule="nonzero"
+                d="M21.23 4.02L17.66 0.45 0.12 18 17.66 35.55 21.23 31.98 9.77 20.52 94.32 20.52 94.32 15.48 9.77 15.48z"
+            />
         </svg>
     )
+}
+
+function IconArrowRight() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 95 36"
+        >
+            <path
+                fillRule="nonzero"
+                d="M21.23 4.02L17.66 0.45 0.12 18 17.66 35.55 21.23 31.98 9.77 20.52 94.32 20.52 94.32 15.48 9.77 15.48z"
+                transform="matrix(-1 0 0 1 94.44 0)"
+            />
+        </svg>
+    )
+}
+
+const icons = {
+    "arrow-left": IconArrowLeft,
+    "arrow-right": IconArrowRight,
 }
 
 export default function Cursor() {
@@ -28,6 +45,7 @@ export default function Cursor() {
     let [[width, height], setSize] = useState([window.innerWidth, window.innerHeight])
     let [icon, setIcon] = useState()
     let [hover, setHover] = useState(false)
+    let Icon = icons[icon]
 
     useEffect(() => {
         return api.subscribe(launcher => {
@@ -98,7 +116,7 @@ export default function Cursor() {
         }
         let onMouseLeaveCapture = e => {
             if (activators.includes(e.target.tagName) || e.target.classList.contains("actionable")) {
-                setHover(false) 
+                setHover(false)
                 setIcon("")
             }
         }

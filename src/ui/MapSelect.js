@@ -6,6 +6,7 @@ import { useStore, api } from "../utils/store"
 import { useAnimationFrame } from "../utils/hooks"
 import maps, { initialMap } from "../utils/maps"
 import State from "../utils/const/State"
+import { LocalStorage } from "@huth/utils"
 
 
 export default function MapSelect() {
@@ -97,10 +98,10 @@ export default function MapSelect() {
                         <div
                             key={index}
                             className="block actionable"
-                            data-cursor-icon="arrow"
+                            data-cursor-icon="arrow-left"
                             onClick={() => actions.play()}
                         >
-                            <p className="h3">Level {index + 1}</p>
+                            <p className="h3">Level {index + 1} {LocalStorage.get(i.id) ? <>(DONE)</> : null}</p>
                             <h2 className="h2">{i.name}</h2>
                         </div>
                     )

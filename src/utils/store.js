@@ -1,9 +1,10 @@
 import { create } from "zustand"
 import State from "./const/State"
+import maps from "./maps"
 
 function getActions(get, set, actions) {
     return {
-        play() {
+        play() { 
             set({
                 state: State.PLAYING
             })
@@ -23,23 +24,43 @@ function getActions(get, set, actions) {
                 state: State.GAME_OVER
             })
         },
-        loadMap(map) { 
+        success() {
+            LocalStorage.set(get().map.id, true)
+
+            set({
+                state: State.SUCCESS
+            })
+        },
+        loadMap(map, state = State.PREPARING) {
             set({
                 map,
-                state: State.PREPARING,
+                state,
                 spaces: [],
                 score: 0,
                 balls: 0,
                 attempts: get().attempts + 1
             })
         },
-        reloadMap() {  
-            set({ 
+        reloadMap() {
+            console.log("reload map")
+            set({
                 state: State.PLAYING,
                 spaces: [],
                 score: 0,
                 attempts: get().attempts + 1
             })
+        },
+        progress() {
+            let { map } = get()
+            let next = maps.findIndex(i => i.id === map.id) + 1
+            let { loadMap, reset } = actions()
+
+            if (next < maps.length) {
+                loadMap(maps[next], State.PLAYING)
+            } else {
+                reset()
+            }
+
         },
         createSpaces(...spaces) {
             set({ spaces: [...get().spaces, ...spaces] })

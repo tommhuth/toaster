@@ -967,6 +967,11 @@
     cuid "^2.1.8"
     simplex-noise "^2.4.0"
 
+"@huth/utils@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@huth/utils/-/utils-3.0.2.tgz#fc6324689d630349ed335eff44dbd836ccfa8e8e"
+  integrity sha512-dal9Qbs1uEHbl4XC2ZDHRxlht5JilE4EkW1Tiybo3rsPIggzx61vpj4kx1CEz2O8KyU1Arxm5u+TQS4wpTg84g==
+
 "@jimp/bmp@^0.6.8":
   version "0.6.8"
   resolved "https://registry.yarnpkg.com/@jimp/bmp/-/bmp-0.6.8.tgz#8abbfd9e26ba17a47fab311059ea9f7dd82005b6"
