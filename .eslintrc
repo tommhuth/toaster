@@ -3,7 +3,6 @@
         "browser": true,
         "es6": true,
         "node": true,
-        "mocha": true,
         "serviceworker": true
     },
     "settings": {
@@ -14,31 +13,90 @@
     "globals": {
         "workbox": true
     },
-    "parser": "babel-eslint",
-    "extends": ["plugin:react/recommended", "eslint:recommended"],
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended", 
+        "plugin:compat/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "parserOptions": {
         "ecmaVersion": 9,
         "sourceType": "module"
-    },
+    },  
     "rules": {
+        "react-hooks/exhaustive-deps": "off",
         "padding-line-between-statements": [
             "error",
-            { "blankLine": "always", "prev": "*", "next": "return" },
-            { "blankLine": "always", "prev": ["const", "let", "var", "import"], "next": "*"},
-            { "blankLine": "always", "prev": "*", "next": ["for", "switch", "if", "try"]},
-            { "blankLine": "always", "prev": "*", "next": "export"},
-            { "blankLine": "always", "prev": "*", "next": "function"},
-            { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
-            { "blankLine": "any", "prev": ["import"], "next": ["import"]},
-            { "blankLine": "any", "prev": ["export"], "next": ["export"]}
-        ],
-        "no-unused-vars": [
-            "error",
             {
-                "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^_"
+                "blankLine": "always",
+                "prev": "*",
+                "next": "return"
+            },
+            {
+                "blankLine": "always",
+                "prev": [
+                    "const",
+                    "let",
+                    "var",
+                    "import"
+                ],
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": [
+                    "for",
+                    "switch",
+                    "if",
+                    "try"
+                ]
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "export"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "function"
+            },
+            {
+                "blankLine": "any",
+                "prev": [
+                    "const",
+                    "let",
+                    "var"
+                ],
+                "next": [
+                    "const",
+                    "let",
+                    "var"
+                ]
+            },
+            {
+                "blankLine": "any",
+                "prev": [
+                    "import"
+                ],
+                "next": [
+                    "import"
+                ]
+            },
+            {
+                "blankLine": "any",
+                "prev": [
+                    "export"
+                ],
+                "next": [
+                    "export"
+                ]
             }
         ],
+        "no-unused-vars": "off",  
         "indent": [
             "error",
             4,
@@ -57,13 +115,17 @@
         "semi": [
             "error",
             "never"
-        ], 
+        ],
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/display-name": "off",
+        "prefer-const": "off",
+        "@typescript-eslint/no-explicit-any" :"off"
     },
     "plugins": [
-        "babel",
+        "@typescript-eslint", 
         "react",
         "react-hooks"
     ]

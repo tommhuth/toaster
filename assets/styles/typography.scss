@@ -1,72 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=Roboto:wght@300;900&display=swap');
+
 html {
-    font-family: "Oswald", Arial, Helvetica, sans-serif;
-    font-weight: 500;
-    font-size: 1.25em;
-    line-height: 1.5;
-}
-
-.h1 { 
-    font-size: 38vmin;
-    z-index: 11111;
-    line-height: .85;
-    font-weight: 700;
-    text-align: center;
-    letter-spacing: -.065em;
-    position: fixed;
-    color: #FFF;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-transform: uppercase;
-    margin: -.91rem; 
-
-    span {
-        font-size: 1.075em;
-        display: block;
-    }
-}
-
-.h2 {
-    font-size: 6vw;
-    line-height: 1;
-    font-weight: 500;
-    text-transform: uppercase; 
-    max-width: 34rem;  
-}
-
-.h2b {
-    font-size: 15vmin;
-    line-height: .95;
-    font-weight: 700;
-    letter-spacing: 0; //.25em;
-    text-transform: uppercase;  
- 
-}
-
-.start {
-    .h2b {
-        text-align: center;
-    }
-}
-
-.h2c {
-    font-size: 1.25em;
-    line-height: .95;
+    font-family: var(--font-serif);
     font-weight: 400;
-    letter-spacing: .125em;
-    text-transform: uppercase;
-    margin: 1.5em 0 0 0; 
-
-    strong {
-        opacity: .3;
-        font-weight: 300;
-    }
-} 
-
-.h3 {
-    font-size: 2vw;
-    margin-bottom: .25rem;
-    line-height: 1.1;
-    font-weight: 200;
-    text-transform: uppercase;
+    font-size: 1em;
+    color: var(--text-color);
 }

@@ -1,2 +1,4 @@
 node_modules/
 public/
+*.blend1
+.error
