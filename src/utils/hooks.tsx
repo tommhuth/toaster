@@ -85,12 +85,13 @@ let _vec3 = new Vector3()
 export function useOrientationObserver(body: Body): boolean {
     let dead = useRef(false)
     let [rdead, setrdead] = useState(false)
+    let stage = useStore(i => i.stage)
 
     useFrame(() => {
         if (body && !dead.current) {
             _vec3.set(0, 1, 0).applyQuaternion(body.quaternion as unknown as Quaternion) 
 
-            if (_directionUp.dot(_vec3) < .35) {
+            if (_directionUp.dot(_vec3) < .35 || (stage.settings.exitY && body.position.y < stage.settings.exitY)) {
                 dead.current = true
                 setrdead(true) 
                 addPenalty()

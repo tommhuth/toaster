@@ -5,32 +5,9 @@ import Plants from "./stage/Plants"
 import Shelves from "./stage/Shelves"
 import TableChairs from "./stage/TableChairs"
 import Tables from "./stage/Tables"
-import Ground from "./stage/Ground"
-import { useEffect } from "react"
-import { reduceTime, State, store, useStore } from "../data/store"
+import Ground from "./stage/Ground" 
 
-export default function Stage() {
-    let {stage, state} =  useStore()
-
-    useEffect(() => {    
-        if (stage.settings.timelimit && state === State.PLAYING) {
-            let iid
-            let tick = () => { 
-                if (store.getState().player.time > 0) {
-                    reduceTime()
-                } else {
-                    clearInterval(iid)
-                }
-            }
-
-            iid = setInterval(tick, 1000)
-
-            return () => {
-                clearInterval(iid)
-            }
-        }
-    }, [stage, state])
-
+export default function Stage() { 
     return (
         <>
             <Boxes />

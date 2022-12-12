@@ -21,7 +21,7 @@ export default function InstancedMesh({ children, count, name, userData = {} }) 
         <instancedMesh
             args={[undefined, undefined, count]}
             castShadow
-            userData={userData}
+            userData={{...userData, type: name }}
             receiveShadow
             ref={(mesh) => {
                 if (mesh && mesh !== store.getState().instances[name]?.mesh) {

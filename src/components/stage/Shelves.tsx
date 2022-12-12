@@ -1,16 +1,13 @@
-import { useLoader } from "@react-three/fiber"
 import { Vec3, Box as BoxShape } from "cannon-es"
 import { useLayoutEffect, useMemo } from "react"
-import { Euler, Line3, Matrix4, Mesh, Quaternion, Vector3 } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader" 
+import { Euler, Line3, Matrix4, Quaternion, Vector3 } from "three"
 import { Tuple3 } from "../../types"
 import { ShapeDefinition, useInstancedBody } from "../../utils/cannon"
 import { Only, setColorAt } from "../../utils/utils"
-import InstancedMesh, { useInstance } from "../InstancedMesh"
+import { useInstance } from "../InstancedMesh"
 import { usePopulateLocations } from "./Boxes"
 import Config from "../../Config"
 import {  useStageObjects } from "../../utils/hooks"
-import { white } from "../../utils/materials"
 import RidgidStageObject from "../RidgidStageObject"
 import { ObjectType, Shelf } from "../../data/stages"
 
@@ -100,7 +97,7 @@ function Shelf({ position = [0, 0, 0], rotation = [0, 0, 0] }: ShelfProps) {
                     return (
                         <mesh rotation-y={rotation[1]} position={position} key={index}>
                             <boxGeometry args={[path.distance(), height, depth, 1, 1, 1]} />
-                            <meshLambertMaterial opacity={1} transparent color="red" />
+                            <meshLambertMaterial opacity={.5} transparent color="red" />
                         </mesh>
                     )
                 })}
@@ -111,22 +108,11 @@ function Shelf({ position = [0, 0, 0], rotation = [0, 0, 0] }: ShelfProps) {
     )
 }
 
-export default function Shelves() {
-    let glb = useLoader(GLTFLoader, "/models/shelf1.glb")
-    let mesh = glb?.scene.children[0] as Mesh 
+export default function Shelves() { 
     let shelves = useStageObjects<Shelf>(ObjectType.SHELF)
 
     return (
-        <>
-            <InstancedMesh
-                count={10}
-                name={ObjectType.SHELF}
-            >
-                <primitive object={mesh.geometry} attach="geometry" />
-                
-                <primitive object={white} attach="material"  />
-            </InstancedMesh>
-
+        <> 
             {shelves.map(i => {
                 return <Shelf {...i} key={i.id} />
             })}

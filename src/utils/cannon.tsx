@@ -80,15 +80,13 @@ function useCannonBody({
     }, [body, rotationX, rotationY, rotationZ])
 
     useEffect(() => {
-        if (!ready) {
-            return
-        }
+        if (ready) {
+            world.addBody(body)
 
-        world.addBody(body)
-
-        return () => {
-            world.removeBody(body)
-        }
+            return () => {
+                world.removeBody(body)
+            }
+        }  
     }, [body, world, ready])
 
     return [body, world] as const

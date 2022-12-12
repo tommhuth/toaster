@@ -1,15 +1,12 @@
-import { useLoader } from "@react-three/fiber"
 import { Vec3, Box as BoxShape } from "cannon-es"
 import { useLayoutEffect, useMemo } from "react"
-import { Euler, Line3, Matrix4, Mesh, Quaternion, Vector3 } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader" 
+import { Euler, Line3, Matrix4, Quaternion, Vector3 } from "three"
 import { Tuple3 } from "../../types"
 import { ShapeDefinition, useInstancedBody } from "../../utils/cannon"
 import { useStageObjects } from "../../utils/hooks"
 import { setColorAt } from "../../utils/utils"
 import { usePopulateLocations } from "./Boxes"
-import InstancedMesh, { useInstance } from "../InstancedMesh"
-import { white } from "../../utils/materials"
+import { useInstance } from "../InstancedMesh"
 import RidgidStageObject from "../RidgidStageObject"
 import { ObjectType, TableChair } from "../../data/stages"
 
@@ -70,7 +67,7 @@ function TableChair({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) 
         return [
             {
                 path: new Line3(
-                    new Vector3(width / 2 , 0, 0),
+                    new Vector3(width / 2, 0, 0),
                     new Vector3(-width / 2, 0, 0)
                 ).applyMatrix4(matrix),
                 height: 3,
@@ -86,7 +83,7 @@ function TableChair({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) 
         rotation,
         index,
         instance,
-    }) 
+    })
 
     usePopulateLocations(locations, rotation, [.5, .65])
 
@@ -103,16 +100,10 @@ function TableChair({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) 
 }
 
 export default function TableChairs() {
-    let glb = useLoader(GLTFLoader, "/models/tablechair.glb")
-    let mesh = glb?.scene.children[0] as Mesh 
     let tableChairs = useStageObjects<TableChair>(ObjectType.TABLE_CHAIR)
 
     return (
         <>
-            <InstancedMesh count={10} name={ObjectType.TABLE_CHAIR}>
-                <primitive attach="geometry" object={mesh?.geometry} />
-                <primitive object={white} attach="material"  />
-            </InstancedMesh>
             {tableChairs.map(i => {
                 return (
                     <TableChair {...i} key={i.id} />

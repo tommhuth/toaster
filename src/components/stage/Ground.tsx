@@ -1,12 +1,10 @@
 import { Box, Vec3 } from "cannon-es"
-import { useLayoutEffect, useMemo } from "react"
+import { useMemo } from "react"
 import { ObjectType } from "../../data/stages"
 import { useStore } from "../../data/store"
 import { Tuple3 } from "../../types"
 import { useInstancedBody } from "../../utils/cannon"
-import { groundMaterial } from "../../utils/materials"
-import { setColorAt } from "../../utils/utils"
-import InstancedMesh, { useInstance } from "../InstancedMesh"
+import { useInstance } from "../InstancedMesh"
 
 interface GroundProps {
     size?: Tuple3;
@@ -37,10 +35,6 @@ export default function Ground() {
 
     return (
         <>
-            <InstancedMesh name={ObjectType.GROUND} count={100} userData={{ type: ObjectType.GROUND }}>
-                <boxGeometry />
-                <primitive object={groundMaterial} attach="material"  />
-            </InstancedMesh>
             {ground.map((i, index) => {
                 return <GroundElement key={i.id} {...i} index={index} />
             })}

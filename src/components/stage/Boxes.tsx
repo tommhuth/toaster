@@ -1,11 +1,11 @@
-import { Vec3, Box as BoxShape } from "cannon-es"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { Vec3, Box as BoxShape, Quaternion } from "cannon-es"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Group, Line3, Vector3 } from "three"
 import { addBox, score, useStore } from "../../data/store"
 import { Tuple2, Tuple3 } from "../../types"
 import { Body, CollisionEvent, useInstancedBody } from "../../utils/cannon"
-import { easeOutElastic, Only, setColorAt, setMatrixAt } from "../../utils/utils"
-import InstancedMesh, { useInstance } from "../InstancedMesh"
+import { Only, setMatrixAt } from "../../utils/utils"
+import { useInstance } from "../InstancedMesh"
 import random from "@huth/random"
 import animate from "@huth/animate"
 import { Html } from "@react-three/drei"
@@ -72,14 +72,35 @@ interface BoxProps {
     rotation: Tuple3
     position: Tuple3
     index: number
-    dead: boolean 
+    dead: boolean
     id: string
 }
 
+function easeOutElastic(x: number): number {
+    const c4 = (2 * Math.PI) / 3
 
-function Box({ size = [1, 1, 1], dead, id, index: boxIndex, rotation = [0, 0, 0], position = [0, 0, 0] }: BoxProps) {
+    return x === 0
+        ? 0
+        : x === 1
+            ? 1
+            : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1
+}
+
+function easeOutQuart(x: number): number {
+    return 1 - Math.pow(1 - x, 4)
+}
+
+
+function Box({
+    size = [1, 1, 1],
+    dead,
+    id,
+    index: boxIndex,
+    rotation = [0, 0, 0],
+    position = [0, 0, 0]
+}: BoxProps) {
     let [index, instance] = useInstance(ObjectType.BOX)
-    let [ready, setReady] = useState(false) 
+    let [ready, setReady] = useState(false)
     let definition = useMemo(() => {
         return new BoxShape(new Vec3(size[0] / 2, size[1] / 2, size[2] / 2))
     }, [])
@@ -92,18 +113,19 @@ function Box({ size = [1, 1, 1], dead, id, index: boxIndex, rotation = [0, 0, 0]
         instance,
         scale: size,
         index,
-        ready,
+        ready: ready && !dead,
         userData: { type: ObjectType.BOX, isDead: false }
     })
     let ref = useRef<Group>(null)
+    let stage = useStore(i => i.stage)
 
     useEffect(() => {
         if (!dead) {
-            let onCollide = (e: CollisionEvent) => { 
+            let onCollide = (e: CollisionEvent) => {
                 let target = [e.target, e.body].find(i => i.userData.type === ObjectType.GROUND)
 
                 if (target) {
-                    body.userData.isDead = true 
+                    body.userData.isDead = true
                     score(id)
                 }
             }
@@ -116,15 +138,37 @@ function Box({ size = [1, 1, 1], dead, id, index: boxIndex, rotation = [0, 0, 0]
         }
     }, [dead])
 
-    useLayoutEffect(() => {
-        if (index && instance) {
-            setColorAt(instance, index, "yellow")
+    useEffect(() => {
+        if (dead && typeof index === "number") {
+            const targetY = random.integer(4, 6)
+            const rot = new Quaternion().setFromEuler(0, 0, 0)
+
+            return animate({
+                from: { y: 0, scale: 1, rx: body.quaternion.x, ry: body.quaternion.y, rz: body.quaternion.z, rw: body.quaternion.w },
+                to: { y: targetY, scale: 0, rx: rot.x, ry: rot.y, rz: rot.z, rw: rot.w },
+                duration: 900,
+                render({ y, scale, rx, ry, rz, rw }) {
+                    setMatrixAt({
+                        instance,
+                        index: index as number,
+                        position: [body.position.x, body.position.y + easeOutQuart(y / targetY) * targetY, body.position.z],
+                        scale: size.map(i => i * easeOutElastic(scale / 1)) as Tuple3,
+                        rotation: [rx, ry, rz, rw]
+                    })
+                },
+            })
         }
-    }, [index, instance]) 
+    }, [dead])
 
     useFrame(() => {
         if (ref.current && !dead) {
             ref.current.position.copy(body.position as unknown as Vector3)
+        }
+    })
+
+    useFrame(() => {
+        if (stage.settings.exitY && body.position.y < stage.settings.exitY && !dead) {
+            score(id)
         }
     })
 
@@ -152,30 +196,26 @@ function Box({ size = [1, 1, 1], dead, id, index: boxIndex, rotation = [0, 0, 0]
         }
     }, [index, instance])
 
-    return ( 
+    return (
         <group ref={ref}>
-            <Html as="div" center >
-                <h1
-                    style={{
-                        fontSize: "1.5em",
-                        fontFamily: "Arial",
-                        padding: ".75em 1.5em",
-                        opacity: dead ? 0 : 1,
-                        transform: `translateY(${dead ? -4 : 0}em)`,
-                        transition: "all .5s ease-out",
-                        transitionDelay: dead ? "0s" : "5s",
-                        visibility: !dead ? "hidden" : undefined,
-                        borderRadius: "5em",
-                        backgroundColor: "white",
-                        color: "blue",
-                        boxShadow: "0 0 1em rgba(0,0,0,.3)"
-                    }}
-                >
-                    <Only if={dead}>
-                        +1
-                    </Only>
-                </h1>
-            </Html>
+            <Only if={dead}>
+                <Html as="div" center >
+                    <div
+                        style={{
+                            fontSize: "1.85em",
+                            fontFamily: "var(--font-sans)",
+                            fontWeight: 900,
+                            padding: ".25em .5em",
+                            border: ".15em solid white",
+                            animation: dead ? "msg 2s both" : undefined,
+                            display: !dead ? "none" : undefined,
+                            color: "white",
+                        }}
+                    >
+                        +100
+                    </div>
+                </Html>
+            </Only> 
         </group>
     )
 }
@@ -185,10 +225,6 @@ export default function Boxes() {
 
     return (
         <>
-            <InstancedMesh name={ObjectType.BOX} count={100}>
-                <boxGeometry />
-                <meshLambertMaterial emissive={"red"} color="yellow" emissiveIntensity={.35} />
-            </InstancedMesh>
             {boxes.map((i, index) => {
                 return <Box key={i.id} {...i} index={index} />
             })}

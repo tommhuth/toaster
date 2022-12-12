@@ -1,16 +1,13 @@
-import { useLoader } from "@react-three/fiber"
 import { Vec3, Box as BoxShape } from "cannon-es"
 import { useLayoutEffect, useMemo } from "react"
-import { Euler, Line3, Matrix4, Mesh, Vector3, Quaternion as ThreeQuaternion } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { Euler, Line3, Matrix4, Vector3, Quaternion as ThreeQuaternion } from "three"
 import Config from "../../Config" 
 import { Tuple3 } from "../../types"
 import { ShapeDefinition, useInstancedBody } from "../../utils/cannon"
 import { useOrientationObserver, useStageObjects } from "../../utils/hooks"
 import { Only, setColorAt } from "../../utils/utils"
 import { usePopulateLocations } from "./Boxes"
-import InstancedMesh, { useInstance } from "..//InstancedMesh"
-import { white } from "../../utils/materials"
+import { useInstance } from "..//InstancedMesh"
 import RidgidStageObject from "../RidgidStageObject"
 import { ObjectType, Table } from "../../data/stages"
 
@@ -97,7 +94,7 @@ function Table({ position = [0, 0, 0], rotation = [0, 0, 0] }: TableProps) {
                     return (
                         <mesh rotation-y={rotation[1]} position={position} key={index}>
                             <boxGeometry args={[path.distance(), height, depth, 1, 1, 1]} />
-                            <meshLambertMaterial opacity={1} transparent color="red" />
+                            <meshLambertMaterial opacity={.5} transparent color="red" />
                         </mesh>
                     )
                 })}
@@ -108,17 +105,11 @@ function Table({ position = [0, 0, 0], rotation = [0, 0, 0] }: TableProps) {
     )
 }
 
-export default function Tables() {
-    let glb = useLoader(GLTFLoader, "/models/table.glb")
-    let mesh = glb?.scene.children[0] as Mesh 
+export default function Tables() { 
     let tables = useStageObjects<Table>(ObjectType.TABLE)
 
     return (
-        <>
-            <InstancedMesh count={10} name={ObjectType.TABLE}>
-                <primitive attach="geometry" object={mesh?.geometry} /> 
-                <primitive object={white} attach="material"  />
-            </InstancedMesh>
+        <> 
             {tables.map(i => {
                 return (
                     <Table {...i} key={i.id} />

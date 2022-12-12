@@ -1,16 +1,13 @@
-import { invalidate, useFrame, useLoader } from "@react-three/fiber"
+import { invalidate, useFrame } from "@react-three/fiber"
 import { Vec3, Cylinder } from "cannon-es"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
-import { Mesh, DoubleSide, BufferAttribute, CircleGeometry, MeshBasicMaterial, Vector3 } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader" 
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
+import { Mesh, BufferAttribute, CircleGeometry, MeshBasicMaterial, Vector3 } from "three"
 import { Tuple3 } from "../../types"
 import { Body, CollisionEvent, ShapeDefinition, useCannonWorld, useInstancedBody } from "../../utils/cannon"
-import { clamp, glsl, setColorAt } from "../../utils/utils"
-import InstancedMesh, { useInstance } from "../InstancedMesh"
-import noise from "../../shaders/noise.glsl"
-import { useShader, useStageObjects } from "../../utils/hooks"
+import { clamp, setColorAt } from "../../utils/utils"
+import { useInstance } from "../InstancedMesh"
+import { useStageObjects } from "../../utils/hooks"
 import RidgidStageObject from "../RidgidStageObject"
-import { white } from "../../utils/materials"
 import { ObjectType, Plant } from "../../data/stages"
 
 interface ChairProps {
@@ -31,42 +28,21 @@ function Plant({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
         definition,
         position: [position[0], position[1] + 1.15, position[2]],
         mass: 0,
-        rotation,
+        rotation, 
         instance,
         index,
     })
     let world = useCannonWorld()
     let explosionDistance = 15
-    let explosionEffect = 25
-    let [exploding, setExploding] = useState(false)
-    let ref = useRef<Mesh<CircleGeometry, MeshBasicMaterial>>(null)
-    let { onBeforeCompile } = useShader({
-        vertex: {
-            head: glsl`
-                varying vec4 globalPosition;
-            `,
-            main: glsl`
-                globalPosition =  vec4(position, 1.) * modelMatrix;
-            `
-        },
-        fragment: {
-            head: glsl`
-                varying vec4 globalPosition;
-            `,
-            main: glsl`
-                float eff = clamp(length(globalPosition.xyz - vec3(0,0,0)) / 10., 0., 1.) * opacity;
-
-                gl_FragColor = vec4(1., 1., 1., eff * eff * eff);
-            `
-        }
-    })
+    let explosionEffect = 25 
+    let ref = useRef<Mesh<CircleGeometry, MeshBasicMaterial>>(null) 
 
     useEffect(() => {
         let onCollide = (e: CollisionEvent) => {
             let target = [e.target, e.body].find(i => i.userData.type === "ball")
 
             if (target) {
-                let bodies = world.bodies.filter(i => i !== target)
+                let bodies = world.bodies.filter(i => i !== target && (i as Body).userData.type === ObjectType.BOX)
                 let direction = new Vec3()
 
                 for (let b of bodies) {
@@ -77,9 +53,7 @@ function Plant({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
                     direction.normalize()
                     b.wakeUp()
                     b.applyImpulse(direction.scale(effect))
-                }
-
-                setExploding(true)
+                } 
 
                 if (ref.current) {
                     ref.current.material.opacity = 1
@@ -100,7 +74,7 @@ function Plant({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
             let attribute = instance.geometry.attributes.aEffect as BufferAttribute
             let currentValue = attribute.array[index]
 
-            attribute.set([currentValue * .8], index)
+            attribute.set([currentValue * .98], index)  
 
             if (attribute.array[index] > .001) {
                 attribute.needsUpdate = true
@@ -161,71 +135,18 @@ function Plant({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
 
     return (
         <>
-            <RidgidStageObject body={body} />
-            <mesh ref={ref} rotation-x={Math.PI / 2}>
-                <circleGeometry args={[explosionDistance * .65, 32]} />
-                <meshBasicMaterial onBeforeCompile={onBeforeCompile} transparent side={DoubleSide} />
-            </mesh>
+            <RidgidStageObject body={body} /> 
         </>
 
     )
 }
 
-const material = white.clone()
 
 export default function Plants() {
-    let glb = useLoader(GLTFLoader, "/models/plant.glb")
-    let mesh = glb?.scene.children[0] as Mesh
     let plants = useStageObjects<Plant>(ObjectType.PLANT)
-    let count = 10
-    let attributes = useMemo(() => {
-        return new Float32Array(new Array(count).fill(0))
-    }, [])
-    let { onBeforeCompile, uniforms } = useShader({
-        uniforms: {
-            uTime: { value: 0 },
-        },
-        vertex: {
-            head: glsl`
-                uniform float uTime;
-                attribute float aEffect;
-                ${noise}
-            `,
-            main: glsl`
-                vec4 globalPosition = instanceMatrix *  vec4(position, 1.);
-                float heightEffect = clamp((position.y - .9) / 4., 0., 1.); 
-                vec2 npos = globalPosition.xz * .2 + uTime;
-                
-                globalPosition = modelMatrix * globalPosition; 
-
-                transformed.x += noise(npos) * aEffect * heightEffect;
-                transformed.y -= noise(npos) * aEffect * heightEffect; 
-            `
-        }
-    })
-
-    useFrame(() => {
-        uniforms.uTime.value += .01
-        uniforms.uTime.needsUpdate = true
-    })
 
     return (
         <>
-            <InstancedMesh count={count} name={ObjectType.PLANT}>
-                <primitive attach="geometry" object={mesh?.geometry} >
-                    <instancedBufferAttribute
-                        needsUpdate={true}
-                        attach="attributes-aEffect"
-                        args={[attributes, 1, false, 1]}
-                    />
-                </primitive>
-                <primitive
-                    object={material}
-                    onBeforeCompile={onBeforeCompile} 
-                    attach="material"
-                    side={DoubleSide}
-                />
-            </InstancedMesh>
             {plants.map(i => {
                 return (
                     <Plant {...i} key={i.id} />

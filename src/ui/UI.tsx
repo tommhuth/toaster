@@ -1,13 +1,37 @@
 import { stages } from "../data/stages"
-import { setStage, setState, State, useStore } from "../data/store"
+import { reset, setStage, setState, State, useStore } from "../data/store"
 
-function Arrow({ direction = "right" }) {
+function Arrow({ direction = "right", strokeWidth = 6 }) {
     return (
-        <svg viewBox="0 0 100 50" style={{ overflow: "visible", width: ".75em", display: "block" }}>
-            <line x1={0} x2={100} y1={25} y2={25} stroke="currentColor" strokeWidth={5} strokeLinecap="round" />
+        <svg viewBox="0 0 100 50" style={{ overflow: "visible", width: ".85em", display: "block" }}>
+            <line
+                x1={0}
+                x2={100}
+                y1={25}
+                y2={25}
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+            />
 
-            <line x1={direction == "right" ? 75 : 25} x2={direction == "right" ? 100 : 0} y1={50 * .1} y2={25} stroke="currentColor" strokeWidth={5} strokeLinecap="round" />
-            <line x1={direction == "right" ? 75 : 25} x2={direction == "right" ? 100 : 0} y1={50 * .9} y2={25} stroke="currentColor" strokeWidth={5} strokeLinecap="round" />
+            <line
+                x1={direction == "right" ? 75 : 25}
+                x2={direction == "right" ? 100 : 0}
+                y1={50 * .1}
+                y2={25}
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+            />
+            <line
+                x1={direction == "right" ? 75 : 25}
+                x2={direction == "right" ? 100 : 0}
+                y1={50 * .9}
+                y2={25}
+                stroke="currentColor"
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+            />
         </svg>
     )
 }
@@ -17,8 +41,12 @@ export default function UI() {
     let player = useStore(i => i.player)
     let boxes = useStore(i => i.boxes)
     let stage = useStore(i => i.stage)
-    let statNames = ["Attempts", "Boxes", "Penalties", "Score"]
-    let stats = [player.ballCount, <>{boxes.filter(i => i.dead).length} of {boxes.length}</>, player.penalties, boxes.filter(i => i.dead).length - player.penalties * 10]
+    let statNames = ["Attempts", "Boxes", "Score"]
+    let stats = [
+        player.ballCount,
+        <>{boxes.filter(i => i.dead).length} of {boxes.length}</>,
+        (boxes.filter(i => i.dead).length * 150 - player.penalties * 500).toLocaleString()
+    ]
 
     return (
         <>
@@ -31,9 +59,9 @@ export default function UI() {
                     pointerEvents: "none",
                     bottom: 0,
                     zIndex: 998,
-                    backgroundImage: "linear-gradient(to top left, black, white )",
-                    //mixBlendMode: "overlay",
-                    opacity: .2
+                    backgroundImage: "linear-gradient(to top left, black 30%, white)",
+                    opacity: .3,
+                    mixBlendMode: "screen"
                 }}
             />
             <div
@@ -41,22 +69,27 @@ export default function UI() {
                     position: "fixed",
                     left: "3em",
                     bottom: "2.25em",
+                    fontSize: "2em",
                     overflow: "hidden",
                     display: state === State.PLAYING ? "flex" : "none",
                     zIndex: 1000,
-                    fontSize: "2em",
                     gap: "1.5em",
                 }}
             >
                 <button
-                    onClick={() => setState(State.INTRO)}
-                    style={{ 
+                    onClick={() => {
+                        setState(State.INTRO)
+                    }}
+                    style={{
                         display: "inline-flex",
                         gap: ".5em",
-                        alignItems: "center", 
+                        fontSize: "1.25em",
+                        alignItems: "center",
+                        textAlign: "center",
                     }}
                 >
-                    <Arrow direction="left" /> Untitled furniture game
+                    <Arrow direction="left" />
+                    {stage.title}
                 </button>
             </div>
             <ul
@@ -114,7 +147,13 @@ export default function UI() {
                     display: [State.STAGE_SELECT, State.INTRO].includes(state) ? "block" : "none",
                     zIndex: 1000,
                 }}
-                onClick={() => setState(State.PLAYING)}
+                onClick={() => {
+                    setState(State.PLAYING)
+
+                    if (player.ballCount) {
+                        reset()
+                    }
+                }}
             >
                 <div
                     style={{
@@ -140,7 +179,7 @@ export default function UI() {
                         }}
                     >
 
-                        <h1 style={{ color: "white", fontSize: "12em", fontWeight: 900, lineHeight: .9, textTransform: "uppercase", fontFamily: "Roboto" }}>
+                        <h1 style={{ color: "white", fontSize: "clamp(2em, 13vw, 12em)", fontWeight: 900, lineHeight: .9, textTransform: "uppercase", fontFamily: "Roboto" }}>
                             Untitled furniture <br /> game
                         </h1>
                     </div>

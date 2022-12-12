@@ -1,16 +1,13 @@
-import { useFrame, useLoader } from "@react-three/fiber"
 import { Vec3, Box as BoxShape } from "cannon-es"
-import { useLayoutEffect, useMemo, useRef } from "react"
-import { Euler, Group, Line3, Matrix4, Mesh, Quaternion, Vector3 } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader" 
+import { useLayoutEffect, useMemo } from "react"
+import { Euler, Line3, Matrix4, Quaternion, Vector3 } from "three"
 import { Tuple3 } from "../../types"
 import { ShapeDefinition, useInstancedBody } from "../../utils/cannon"
 import { Only, setColorAt } from "../../utils/utils"
-import InstancedMesh, { useInstance } from "..//InstancedMesh"
+import { useInstance } from "..//InstancedMesh"
 import { usePopulateLocations } from "./Boxes"
 import Config from "../../Config"
-import { useOrientationObserver, useStageObjects } from "../../utils/hooks"
-import { white } from "../../utils/materials"
+import { useStageObjects } from "../../utils/hooks"
 import RidgidStageObject from "../RidgidStageObject"
 import { Cabinet, ObjectType } from "../../data/stages"
 
@@ -117,7 +114,7 @@ function Cabinet({ position = [0, 0, 0], rotation = [0, 0, 0] }: CabinetProps) {
                     return (
                         <mesh rotation-y={rotation[1]} position={position} key={index}>
                             <boxGeometry args={[path.distance(), height, depth, 1, 1, 1]} />
-                            <meshLambertMaterial opacity={1} transparent color="red" />
+                            <meshLambertMaterial opacity={.5} transparent color="red" />
                         </mesh>
                     )
                 })}
@@ -127,21 +124,11 @@ function Cabinet({ position = [0, 0, 0], rotation = [0, 0, 0] }: CabinetProps) {
     )
 }
 
-export default function Cabinets() {
-    let glb = useLoader(GLTFLoader, "/models/shelf2.glb")
-    let mesh = glb?.scene.children[0] as Mesh
+export default function Cabinets() { 
     let cabinets = useStageObjects<Cabinet>(ObjectType.CABINET)
 
     return (
-        <>
-            <InstancedMesh
-                count={10}
-                name={ObjectType.CABINET}
-            >
-                <primitive object={mesh.geometry} attach="geometry" />
-                <primitive object={white} attach="material" />
-            </InstancedMesh>
-
+        <>   
             {cabinets.map(i => {
                 return <Cabinet {...i} key={i.id} />
             })}

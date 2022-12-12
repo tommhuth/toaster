@@ -47,19 +47,23 @@ export type StageObjects = TableChair | Table | Plant | Cabinet | Chair | Shelf
 
 export interface Stage {
     objects: StageObjects[]
-    title: string  
+    title: string   
+    id: string;
     ground: any[]
     settings: {
         center: Tuple3
         boundingBox: Tuple2
         movementZone: number
         timelimit?: number
+        exitY?: number
     }
 }
+
 
 export const stages: Stage[] = [
     {
         title: "Söderhamn",
+        id: random.id(),
         settings: {
             center: [5, 0, 0],
             boundingBox: [25, 25],
@@ -75,17 +79,11 @@ export const stages: Stage[] = [
             {
 
                 id: random.id(),
-                position: [5, .5, 0],
-                size: [15, 1, 15]
+                position: [5, .5, 5],
+                size: [20, 1, 30]
             }
         ],
         objects: [
-            {
-                id: random.id(),
-                type: ObjectType.PLANT,
-                position: [11, 1, -5],
-                rotation: [0, 1, 0],
-            },
             {
                 id: random.id(),
                 type: ObjectType.CABINET,
@@ -96,17 +94,23 @@ export const stages: Stage[] = [
                 id: random.id(),
                 type: ObjectType.CHAIR,
                 position: [0, 1, -3],
-                rotation: [0, .5, 0]
+                rotation: [0, 1.5, 0]
+            },
+            {
+                id: random.id(),
+                type: ObjectType.PLANT,
+                position: [4.5, 1, 7],
+                rotation: [0, 1, 0],
             },
             {
                 id: random.id(),
                 type: ObjectType.TABLE,
-                position: [6, 1, 0],
+                position: [7, 1, -2],
                 rotation: [0, .5, 0]
             },
             {
                 id: random.id(),
-                position: [6, 1, -4],
+                position: [7, 1, -6],
                 type: ObjectType.TABLE_CHAIR,
                 rotation: [0, -Math.PI, 0]
             },
@@ -120,6 +124,7 @@ export const stages: Stage[] = [
     },
     {
         title: "Stockholm",
+        id: random.id(),
         settings: {
             center: [0, 0, 0],
             movementZone: 5,
@@ -156,7 +161,61 @@ export const stages: Stage[] = [
         ]
     },
     {
+        title: "Stockholm 2",
+        id: random.id(),
+        settings: {
+            center: [0, 0, 0],
+            movementZone: 5,
+            boundingBox: [35, 35], 
+            exitY: -2,
+        },
+        ground: [
+            { 
+                id: random.id(),
+                position: [0, -50, -10],
+                size: [10, 100, 30]
+            },
+            { 
+                id: random.id(),
+                position: [0, -50, 11],
+                size: [10, 100, 4]
+            },
+            { 
+                id: random.id(),
+                position: [0, -50, 19],
+                size: [10, 100, 4]
+            },
+        ],
+        objects: [
+            {
+                id: random.id(),
+                type: ObjectType.SHELF,
+                position: [0, 0, 3],
+                rotation: [0, 0, 0],
+            },  
+            {
+                id: random.id(),
+                type: ObjectType.SHELF,
+                position: [0, 0, 11],
+                rotation: [0, 0, 0],
+            },  
+            {
+                id: random.id(),
+                type: ObjectType.PLANT,
+                position: [-1, 0, 19],
+                rotation: [0, 0, 0],
+            },   
+            {
+                id: random.id(),
+                type: ObjectType.CHAIR,
+                position: [3, 0, 19],
+                rotation: [0, 1.85, 0],
+            },   
+        ]
+    },
+    {
         title: "Ivar",
+        id: random.id(),
         settings: {
             center: [0, 0, 0],
             boundingBox: [40, 40],
@@ -173,7 +232,7 @@ export const stages: Stage[] = [
                     position: [
                         0,
                         index * height / 2,
-                        index * stepDepth / 2 + 5 + depth / 2
+                        index * stepDepth / 2 + 8 + depth / 2
                     ],
                     size: [100, height, depth]
                 }
@@ -181,7 +240,7 @@ export const stages: Stage[] = [
             {
                 id: random.id(),
                 position: [0, -5, 0],
-                size: [100, 10, 10]
+                size: [100, 10, 16]
             },
             ...new Array(16).fill(null).map((i, index, list) => {
                 let stepDepth = 3
@@ -193,7 +252,7 @@ export const stages: Stage[] = [
                     position: [
                         0,
                         -index * height / 2 - height,
-                        -index * stepDepth / 2 - 5
+                        -index * stepDepth / 2 - 8
                     ],
                     size: [100, height, depth]
                 }

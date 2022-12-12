@@ -40,6 +40,7 @@ export interface Box {
 
 export enum State {
     INTRO = "intro",
+    LOADING = "loading",
     STAGE_SELECT = "stage select",
     PLAYING = "playing",
     GAME_OVER = "game over",
@@ -51,6 +52,7 @@ interface Store {
     state: State
     balls: Ball[]
     boxes: Box[]
+    id: string
     player: {
         ballCount: number
         score: number,
@@ -66,6 +68,7 @@ const createDefaultStore = () => {
         stage: stages[0],
         balls: [],
         boxes: [],
+        id: random.id(),
         player: {
             ballCount: 0,
             score: 0,
@@ -83,10 +86,7 @@ export function setState(state: State) {
     store.setState({
         state,
     })
-}
-export function reset() {
-    store.setState(createDefaultStore())
-}
+} 
 
 export function setPenalties(penalties: number) {
     store.setState({
@@ -115,10 +115,26 @@ export function addPenalty() {
     })
 }
 
-export function setStage(stage: Stage) {
+export function setStage(stage: Stage) { 
     store.setState({
-        ...createDefaultStore(),
+        balls: [],
+        boxes: [],
+        id: random.id(),
         stage,
+    })
+}
+
+export function reset() {
+    store.setState({
+        balls: [], 
+        boxes: [],
+        id: random.id(),
+        player: {
+            ballCount: 0,
+            score: 0,
+            penalties: 0,
+            time: 0
+        }
     })
 }
 

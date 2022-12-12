@@ -3,8 +3,7 @@ import { useRef } from "react"
 import { Group, Vector3 } from "three"
 import { Body } from "../utils/cannon"
 import { useOrientationObserver } from "../utils/hooks"
-import { Html } from "@react-three/drei"
-import { Only } from "../utils/utils"
+import { Html } from "@react-three/drei" 
 
 export default function RidgidStageObject({ body }: { body: Body }) {
     let ref = useRef<Group>(null)
@@ -19,25 +18,20 @@ export default function RidgidStageObject({ body }: { body: Body }) {
     return ( 
         <group ref={ref}>
             <Html as="div" center >
-                <h1
+                <div
                     style={{
-                        fontSize: "1.5em",
-                        fontFamily: "Arial",
-                        padding: ".75em 1.5em",
-                        opacity: dead ? 0 : 1,
-                        transform: `translateY(${dead ? -4 : 0}em)`,
-                        transition: "all .5s ease-out",
-                        transitionDelay: dead ? "0s" : "5s",
-                        visibility: !dead ? "hidden" : undefined,
-                        borderRadius: "5em",
-                        backgroundColor: "#ff008c",
-                        color: "white"
+                        fontSize: "1.85em",
+                        fontFamily: "var(--font-sans)",
+                        fontWeight: 900,
+                        padding: ".25em .5em",
+                        border: ".15em solid white", 
+                        animation: dead ? "msg 2s both" : undefined,
+                        visibility: !dead ? "hidden" : undefined, 
+                        color: "white", 
                     }}
-                >
-                    <Only if={dead}>
-                        -10
-                    </Only>
-                </h1>
+                > 
+                    &minus;500
+                </div>
             </Html>
         </group>
     )

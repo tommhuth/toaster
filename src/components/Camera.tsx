@@ -26,9 +26,9 @@ export default function Camera({
                 let dy = ((window.innerHeight / 2) - e.clientY)
 
                 scrolling.set(
-                    Math.abs(dx / (window.innerWidth / 2)) ** 14 * Math.sign(dx),
+                    Math.abs(dx / (window.innerWidth / 2)) ** 8 * Math.sign(dx),
                     0,
-                    Math.abs(dy / (window.innerHeight / 2)) ** 14 * Math.sign(dy)
+                    Math.abs(dy / (window.innerHeight / 2)) ** 8 * Math.sign(dy)
                 )
 
                 scrolling.applyQuaternion(quat.setFromAxisAngle(up, -Math.PI / 4))
@@ -100,7 +100,7 @@ export default function Camera({
     return (
         <mesh position={settings.center}>
             <boxGeometry args={[settings.boundingBox[0], 1, settings.boundingBox[1]]} />
-            <meshBasicMaterial color="red" opacity={.3} transparent />
+            <meshBasicMaterial color="yellow" wireframe opacity={1} transparent />
         </mesh>
     )
 }

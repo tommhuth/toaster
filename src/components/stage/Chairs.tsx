@@ -1,17 +1,13 @@
-import { useLoader } from "@react-three/fiber"
 import { Quaternion, Vec3, Box as BoxShape } from "cannon-es"
 import { useLayoutEffect, useMemo } from "react"
-import { Euler, Line3, Matrix4, Mesh, Vector3, Quaternion as ThreeQuaternion } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { Euler, Line3, Matrix4, Vector3, Quaternion as ThreeQuaternion } from "three"
 import Config from "../../Config" 
 import { Tuple3 } from "../../types"
 import { ShapeDefinition, useInstancedBody } from "../../utils/cannon"
-import { useOrientationObserver, useStageObjects } from "../../utils/hooks"
+import { useStageObjects } from "../../utils/hooks"
 import { Only, setColorAt } from "../../utils/utils"
 import { usePopulateLocations } from "./Boxes"
-import InstancedMesh, { useInstance } from "../InstancedMesh"
-import { white } from "../../utils/materials"
-import StageObject from "../RidgidStageObject"
+import { useInstance } from "../InstancedMesh"
 import RidgidStageObject from "../RidgidStageObject"
 import { Chair, ObjectType } from "../../data/stages"
 
@@ -113,7 +109,7 @@ function Chair({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
                     return (
                         <mesh rotation-y={rotation[1]} position={position} key={index}>
                             <boxGeometry args={[path.distance(), height, depth, 1, 1, 1]} />
-                            <meshLambertMaterial opacity={1} transparent color="red" />
+                            <meshLambertMaterial opacity={.5} transparent color="red" />
                         </mesh>
                     )
                 })}
@@ -123,17 +119,11 @@ function Chair({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
     )
 }
 
-export default function Chairs() {
-    let glb = useLoader(GLTFLoader, "/models/chair.glb")
-    let mesh = glb?.scene.children[0] as Mesh
+export default function Chairs() { 
     let chairs = useStageObjects<Chair>(ObjectType.CHAIR)
 
     return (
-        <>
-            <InstancedMesh count={10} name={ObjectType.CHAIR}>
-                <primitive attach="geometry" object={mesh?.geometry} />
-                <primitive object={white}  attach="material"  />
-            </InstancedMesh>
+        <> 
             {chairs.map(i => {
                 return (
                     <Chair {...i} key={i.id} />

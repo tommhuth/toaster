@@ -1,6 +1,5 @@
-
 import Camera from "./components/Camera"
-import { EffectComposer, Noise } from "@react-three/postprocessing"
+import { EffectComposer } from "@react-three/postprocessing"
 import { Suspense, useEffect, useRef } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { DirectionalLight } from "three"
@@ -10,6 +9,8 @@ import Controller from "./components/Controller"
 import Config from "./Config"
 import { Only } from "./utils/utils"
 import Stage from "./components/Stage"
+import { useStore } from "./data/store" 
+import World from "./components/World"
 
 export default function Wrapper() {
     return (
@@ -37,7 +38,9 @@ export default function Wrapper() {
             camera={{ zoom: 65, near: -40, far: 60 }}
             dpr={[1, window.devicePixelRatio * .75]}
         >
-            <App />
+            <Suspense fallback={null}>
+                <App />
+            </Suspense>
             <Only if={Config.DEBUG}>
                 <axesHelper scale={5} position={[0, 1, 0]} />
             </Only>
@@ -48,6 +51,7 @@ export default function Wrapper() {
 function App() {
     let { scene, viewport, gl } = useThree()
     let ref = useRef<DirectionalLight>(null)
+    let id = useStore(i => i.id)
 
     useEffect(() => {
         if (ref.current) {
@@ -80,6 +84,10 @@ function App() {
         gl.info.reset()
     })
 
+    useEffect(() => {
+        console.log("ready")
+    }, [])
+
     return (
         <>
             <directionalLight
@@ -96,22 +104,24 @@ function App() {
             />
             <directionalLight
                 color={"#97ffff"}
-                position={[-10, 1, -10]}
+                position={[-15, 1, -10]}
                 intensity={.05}
             />
             <ambientLight intensity={.2} color="#0066ff" />
 
-            <Suspense fallback={null}>
-                <Camera />
+            <Camera />
 
-                <CannonProvider debug={Config.DEBUG}>
-                    <Stage />
-                    <Controller />
-                </CannonProvider>
+            <fog color="#000097" attach="fog" near={24} far={35} />
 
-                <EffectComposer>
-                </EffectComposer>
-            </Suspense>
+            <CannonProvider debug={Config.DEBUG}>
+                <World />
+                <Stage key={id} />
+                <Controller />
+            </CannonProvider>
+
+            <EffectComposer>
+                {/* nothing */}
+            </EffectComposer>
         </>
     )
 }
