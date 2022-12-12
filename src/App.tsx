@@ -1,22 +1,21 @@
 import Camera from "./components/Camera"
-import { EffectComposer } from "@react-three/postprocessing"
 import { Suspense, useEffect, useRef } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { DirectionalLight } from "three"
-import { CannonProvider } from "./utils/cannon"
 import { VSMShadowMap } from "three"
-import Controller from "./components/Controller"
 import Config from "./Config"
 import { Only } from "./utils/utils"
-import Stage from "./components/Stage"
-import { useStore } from "./data/store" 
+import { useStore } from "./data/store"
 import World from "./components/World"
+import Controller from "./components/Controller"
+import Stage from "./components/Stage"
+import { CannonProvider } from "./utils/cannon"
 
 export default function Wrapper() {
     return (
         <Canvas
             gl={{
-                antialias: false,
+                antialias: true,
                 depth: true,
                 stencil: false,
                 alpha: true
@@ -111,17 +110,13 @@ function App() {
 
             <Camera />
 
-            <fog color="#000097" attach="fog" near={24} far={35} />
-
             <CannonProvider debug={Config.DEBUG}>
                 <World />
                 <Stage key={id} />
                 <Controller />
             </CannonProvider>
 
-            <EffectComposer>
-                {/* nothing */}
-            </EffectComposer>
+            <fog color="#000097" attach="fog" near={24} far={35} />
         </>
     )
 }
