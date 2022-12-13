@@ -22,7 +22,6 @@ export enum InstanceName {
     TABLE_CHAIRS = "table-chairs",
 }
 
-
 export interface Ball {
     velocity: Tuple3
     id: string
@@ -40,10 +39,9 @@ export interface Box {
 
 export enum State {
     INTRO = "intro",
-    LOADING = "loading",
-    STAGE_SELECT = "stage select",
+    LOADING = "loading", 
     PLAYING = "playing",
-    GAME_OVER = "game over",
+    GAME_OVER = "game-over",
 }
 
 interface Store {
@@ -64,7 +62,7 @@ interface Store {
 const createDefaultStore = () => {
     return {
         instances: {},
-        state: State.INTRO,
+        state: State.LOADING,
         stage: stages[0],
         balls: [],
         boxes: [],
@@ -121,6 +119,12 @@ export function setStage(stage: Stage) {
         boxes: [],
         id: random.id(),
         stage,
+        player: {
+            ballCount: 0,
+            score: 0,
+            penalties: 0,
+            time: 0
+        }
     })
 }
 

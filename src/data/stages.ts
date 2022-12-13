@@ -52,10 +52,10 @@ export interface Stage {
     ground: any[]
     settings: {
         center: Tuple3
-        boundingBox: Tuple2
-        movementZone: number
+        boundingBox: Tuple2 
         timelimit?: number
         exitY?: number
+        background?: string
     }
 }
 
@@ -66,8 +66,8 @@ export const stages: Stage[] = [
         id: random.id(),
         settings: {
             center: [5, 0, 0],
-            boundingBox: [25, 25],
-            movementZone: 10,
+            boundingBox: [25, 25], 
+            background:  "rgb(12,62,203)"
         },
         ground: [
             {
@@ -79,8 +79,8 @@ export const stages: Stage[] = [
             {
 
                 id: random.id(),
-                position: [5, .5, 5],
-                size: [20, 1, 30]
+                position: [5, .5, 0],
+                size: [20, 1, 21]
             }
         ],
         objects: [
@@ -126,10 +126,9 @@ export const stages: Stage[] = [
         title: "Stockholm",
         id: random.id(),
         settings: {
-            center: [0, 0, 0],
-            movementZone: 5,
+            center: [0, 0, 0], 
             boundingBox: [35, 35],
-            timelimit: 20
+            background:  "rgb(12,62,203)"
         },
         ground: [
             {
@@ -164,9 +163,8 @@ export const stages: Stage[] = [
         title: "Stockholm 2",
         id: random.id(),
         settings: {
-            center: [0, 0, 0],
-            movementZone: 5,
-            boundingBox: [35, 35], 
+            center: [0, 0, 5], 
+            boundingBox: [30, 40], 
             exitY: -2,
         },
         ground: [
@@ -218,8 +216,8 @@ export const stages: Stage[] = [
         id: random.id(),
         settings: {
             center: [0, 0, 0],
-            boundingBox: [40, 40],
-            movementZone: 10,
+            boundingBox: [40, 40], 
+            background:  "rgb(12,62,203)"
         },
         ground: [
             ...new Array(6).fill(null).map((i, index, list) => {

@@ -1,15 +1,16 @@
 import Camera from "./components/Camera"
-import { Suspense, useEffect, useRef } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { DirectionalLight } from "three"
 import { VSMShadowMap } from "three"
 import Config from "./Config"
 import { Only } from "./utils/utils"
-import { useStore } from "./data/store"
+import { setState, State, useStore } from "./data/store"
 import World from "./components/World"
 import Controller from "./components/Controller"
 import Stage from "./components/Stage"
 import { CannonProvider } from "./utils/cannon"
+import FontFaceObserver from "fontfaceobserver"
 
 export default function Wrapper() {
     return (
@@ -24,9 +25,8 @@ export default function Wrapper() {
                 width: "100%",
                 left: 0,
                 top: 0,
-                right: 0,
-                bottom: 0,
                 height: "100%",
+                zIndex: 1,
                 position: "fixed",
             }}
             orthographic
@@ -51,6 +51,7 @@ function App() {
     let { scene, viewport, gl } = useThree()
     let ref = useRef<DirectionalLight>(null)
     let id = useStore(i => i.id)
+    let [fontsReady, setFontsReady] = useState(false)
 
     useEffect(() => {
         if (ref.current) {
@@ -84,8 +85,32 @@ function App() {
     })
 
     useEffect(() => {
-        console.log("ready")
+        let serif = new FontFaceObserver("Cormorant Garamond", {
+            weight: 300,
+            style: "italic"
+        })
+        let sans = new FontFaceObserver("Roboto", {
+            weight: 900,
+            style: "normal"
+        })
+
+        Promise.all([serif.load(), sans.load()])
+            .catch(() => { })
+            .finally(() => setFontsReady(true))
     }, [])
+
+    useEffect(() => {
+        if (fontsReady) {
+            setState(State.INTRO)
+
+            setTimeout(() => {
+                document.body.style.backgroundImage = "linear-gradient(to bottom, rgb(199, 159, 0), rgb(255, 123, 0))"
+                document.body.style.backgroundColor = "rgb(255, 123, 0)"
+                document.querySelector(".loader")?.remove()
+            }, 250)
+        }
+    }, [fontsReady])
+
 
     return (
         <>
@@ -116,7 +141,10 @@ function App() {
                 <Controller />
             </CannonProvider>
 
-            <fog color="#000097" attach="fog" near={24} far={35} />
         </>
     )
+}
+
+function rgb(arg0: number, arg1: number, arg2: number) {
+    throw new Error("Function not implemented.")
 }

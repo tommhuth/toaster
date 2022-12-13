@@ -2,7 +2,18 @@
 @import "variables.scss";
 @import "typography.scss";
 
-body {
-    background-image: linear-gradient(to bottom, rgb(199, 159, 0),rgb(255, 123, 0) );
-    background-color: rgb(17,29,152);
+.loader {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgb( 27,73,203 );
+    color:  rgb( 27,73,203 );
+    letter-spacing: .1em;
+    font-size: .85em;
+    text-transform: uppercase;
+    font-weight: 300;
+    z-index: 0;
+    padding: .85em 2em;
+    font-family: var(--font-sans);
 }
