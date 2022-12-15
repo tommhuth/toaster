@@ -30,7 +30,7 @@ export default function RidgidStageObject({ body }: { body: Body }) {
                         color: "white", 
                     }}
                 > 
-                    &minus;500
+                    &minus;750
                 </div>
             </Html>
         </group>

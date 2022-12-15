@@ -10,7 +10,7 @@ export default function GameStats() {
     let stats = [
         player.ballCount,
         <>{boxes.filter(i => i.dead).length} of {boxes.length}</>,
-        (boxes.filter(i => i.dead).length * 150 - player.penalties * 500).toLocaleString("en")
+        (boxes.filter(i => i.dead).length * 150 - player.penalties * 750).toLocaleString("en")
     ]
 
     return (

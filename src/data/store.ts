@@ -1,4 +1,4 @@
-import type { InstancedMesh } from "three"
+import { InstancedMesh } from "three"
 import create from "zustand"
 import { Tuple3 } from "../types"
 import random from "@huth/random"
@@ -39,7 +39,7 @@ export interface Box {
 
 export enum State {
     INTRO = "intro",
-    LOADING = "loading", 
+    LOADING = "loading",
     PLAYING = "playing",
     GAME_OVER = "game-over",
 }
@@ -113,7 +113,7 @@ export function addPenalty() {
     })
 }
 
-export function setStage(stage: Stage) { 
+export function setStage(stage: Stage) {
     store.setState({
         balls: [],
         boxes: [],
@@ -123,21 +123,21 @@ export function setStage(stage: Stage) {
             ballCount: 0,
             score: 0,
             penalties: 0,
-            time: 0
+            time: 0,
         }
     })
 }
 
 export function reset() {
     store.setState({
-        balls: [], 
+        balls: [],
         boxes: [],
         id: random.id(),
         player: {
             ballCount: 0,
             score: 0,
             penalties: 0,
-            time: 0
+            time: 0,
         }
     })
 }

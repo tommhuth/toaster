@@ -1,7 +1,6 @@
 # Furniture based physics puzzler
-Completely unrelated to toast. 
+React + Cannonjs. Completely unrelated to toast. 
 
-## Todo
-- fix shadow cutoff 
+## Todo 
 - clean up levels    
 - fix stage change background flicker

@@ -34,7 +34,7 @@ export default function Intro() {
             >
                 <h1
                     style={{ 
-                        fontSize: "clamp(2em, 13vw, 14em)",
+                        fontSize: "clamp(2em, 13vw, 13em)",
                         fontWeight: 900,
                         lineHeight: .9,
                         marginLeft: "5%",

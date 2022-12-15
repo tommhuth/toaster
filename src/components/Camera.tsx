@@ -6,9 +6,9 @@ import { State, useStore } from "../data/store"
 import { Tuple3 } from "../types"
 import { clamp, clampDelta } from "../utils/utils"
 
-export default function Camera({
-    startPosition = [10, 10, -10]
-}: { startPosition?: Tuple3 }) {
+export const startPosition: Tuple3 = [10, 10, -10]
+
+export default function Camera() {
     const { camera } = useThree()
     const state = useStore(i => i.state)
     const stage = useStore(i => i.stage)
@@ -43,7 +43,7 @@ export default function Camera({
                 window.removeEventListener("mousemove", mousemove)
                 document.body.removeEventListener("mouseleave", mouseleave)
             }
-        }
+        } 
     }, [stage, state])
 
     useEffect(()=> {
