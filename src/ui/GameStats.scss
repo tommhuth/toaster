@@ -1,24 +1,34 @@
 .panner {
     position: fixed;
-    left: 0;
-    right: 0; 
-    bottom: 0;
-    height: 20vh;
+    left: -15vw;
+    right: -15vw;
+    bottom: -20vh;
+    height: 40vh;
     cursor: grab;
     z-index: 900;
+    transition: all .4s;
+    background-image: radial-gradient(ellipse closest-side at center, black, transparent);
+    opacity: 0;
+    mix-blend-mode:multiply;
+
+    &:hover,
+    &--active {
+        opacity: .7;
+        cursor: grabbing;
+    }
 }
 
 .game-stats {
     position: fixed;
     right: 10vw;
     left: 10vw;
-    bottom: min(4vw, 2em); 
+    bottom: min(4vw, 2em);
     z-index: 1000;
     font-size: clamp(1em, 3vw, 2em);
     gap: 1.5em;
     pointer-events: none;
 
-    @media (max-width: 700px) { 
+    @media (max-width: 700px) {
         right: 6vw;
         left: 6vw;
         bottom: 3vw;
@@ -32,9 +42,9 @@
         text-align: center;
         pointer-events: all;
         margin: -1em;
-        border: 1em solid transparent; 
-        margin-right: auto; 
-    }   
+        border: 1em solid transparent;
+        margin-right: auto;
+    }
 
     &__stat {
         display: flex;
@@ -44,7 +54,7 @@
             margin-left: auto;
             font-weight: bold;
             font-style: italic;
-            font-family: var(--font-sans); 
+            font-family: var(--font-sans);
         }
     }
-}   
+}

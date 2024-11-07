@@ -13,8 +13,13 @@ export default function Camera() {
     const { camera } = useThree()
     const state = useStore(i => i.state)
     const stage = useStore(i => i.stage)
+    const panning = useStore(i => i.panning)
     const targetPosition = useMemo(() => new Vector3(), [])
     const settings = stage.settings
+
+    useEffect(() => {
+        document.body.style.cursor = panning ? "grabbing" : "" 
+    }, [panning])
 
     useLayoutEffect(() => {
         camera.position.set(...startPosition)
@@ -83,7 +88,7 @@ export default function Camera() {
             }
         }
         let mousedown = ({ clientX, clientY, target }: MouseEvent) => { 
-            if ((target as Element).className === "panner") { 
+            if ((target as Element).classList.contains("panner")) { 
                 panPossible = true
                 setPanning(true)
             }
@@ -93,7 +98,7 @@ export default function Camera() {
             }
         }
         let touchstart = (e: TouchEvent) => {
-            let startsAtG = (e.target as Element).className === "panner"
+            let startsAtG = (e.target as Element).classList.contains("panner")
 
             if (startsAtG) { 
                 panPossible = true

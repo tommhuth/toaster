@@ -1,8 +1,12 @@
+import { State, useStore } from "../data/store"
 import GameStats from "./GameStats"
 import Intro from "./Intro"
 import SuccessMessage from "./SuccessMessage"
 
 export default function UI() {
+    let state = useStore(i => i.state)
+    let panning = useStore(i => i.panning)
+
     return (
         <> 
             <div
@@ -22,7 +26,7 @@ export default function UI() {
             <Intro />
             <GameStats />
             <SuccessMessage />
-            <div className="panner" />
+            {state === State.PLAYING && <button className={"panner " + (panning ? "panner--active" : "")} />}
         </>
     )
 }
