@@ -72,6 +72,10 @@ export default function Camera() {
             }
         }
         let pointerdown = ({ clientX, clientY, pointerId }: PointerEvent) => {
+            if (id) {
+                return 
+            }
+            
             id = pointerId
 
             if (panPossible) {
