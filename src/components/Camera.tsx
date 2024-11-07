@@ -98,7 +98,7 @@ export default function Camera() {
         }
         let touchmove = (e: TouchEvent) => {
             let { panning } = store.getState()
-            let scale = .085
+            let scale = .065
             let touches = e.touches
             let { clientX, clientY } = touches[0]
 
