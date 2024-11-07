@@ -98,7 +98,7 @@ export default function Camera() {
         }
         let touchmove = (e: TouchEvent) => {
             let { panning } = store.getState()
-            let scale = .025
+            let scale = .085
             let touches = e.touches
             let { clientX, clientY } = touches[0]
 
@@ -116,17 +116,17 @@ export default function Camera() {
             }
         }
         let touchend = (e: TouchEvent) => {
-            if (e.touches.length === 0) {
+            if (e.touches.length < 2) {
                 panPossible = false
                 setPanning(false)
             }
         }
 
+        window.addEventListener("contextmenu", contextmenu)
+        window.addEventListener("keydown", keydown)
         window.addEventListener("mousedown", mousedown)
         window.addEventListener("mousemove", mousemove)
         window.addEventListener("mouseup", mouseup)
-        window.addEventListener("contextmenu", contextmenu)
-        window.addEventListener("keydown", keydown)
         window.addEventListener("touchstart", touchstart, { passive: false })
         window.addEventListener("touchmove", touchmove, { passive: false })
         window.addEventListener("touchend", touchend)
