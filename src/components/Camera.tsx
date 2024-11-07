@@ -88,6 +88,7 @@ export default function Camera() {
         let mouseup = () => {
             setPanning(false)
             panPossible = false
+            id = -Infinity
         }
         let contextmenu = (e: Event) => {
             e.preventDefault()
@@ -114,6 +115,7 @@ export default function Camera() {
             if (e.touches.length === 0) { 
                 panPossible = false
                 setPanning(false)
+                id = -Infinity
             }
         }
 
