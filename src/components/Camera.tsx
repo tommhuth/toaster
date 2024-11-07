@@ -11,9 +11,9 @@ export const startPosition: Tuple3 = [10, 10, -10]
 export default function Camera() {
     const { camera } = useThree()
     const state = useStore(i => i.state)
-    const stage = useStore(i => i.stage) 
+    const stage = useStore(i => i.stage)
     const position = useRef([...startPosition])
-    const settings = stage.settings 
+    const settings = stage.settings
 
     useLayoutEffect(() => {
         camera.position.set(...startPosition)
@@ -52,7 +52,12 @@ export default function Camera() {
         let startPosition = new Vector3()
         let previousDirection = new Vector3()
         let direction = new Vector3()
-        let pointermove = ({ clientX, clientY }: PointerEvent) => {
+        let id: number
+        let pointermove = ({ clientX, clientY, pointerId }: PointerEvent) => {
+            if (pointerId !== id) {
+                return
+            }
+
             let { panning } = store.getState()
 
             if (clientY > window.innerHeight - 300 && !panPossible) {
@@ -66,8 +71,10 @@ export default function Camera() {
                 camera.position.add(new Vector3(direction.x * -.01, 0, direction.z * -.01))
             }
         }
-        let pointerdown = ({ clientX, clientY }: PointerEvent) => {
-            if (panPossible) { 
+        let pointerdown = ({ clientX, clientY, pointerId }: PointerEvent) => {
+            id = pointerId
+
+            if (panPossible) {
                 setPanning(true)
                 startPosition.set(clientX, 0, clientY)
                 previousDirection.copy(startPosition)
