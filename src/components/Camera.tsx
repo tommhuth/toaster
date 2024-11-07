@@ -122,8 +122,8 @@ export default function Camera() {
         window.addEventListener("mouseup", mouseup)
         window.addEventListener("contextmenu", contextmenu)
         window.addEventListener("keydown", keydown)
-        window.addEventListener("touchmove", touchmove, { passive: true })
-        window.addEventListener("touchstart", touchstart, { passive: true })
+        window.addEventListener("touchmove", touchmove, { passive: false })
+        window.addEventListener("touchstart", touchstart, { passive: false })
         window.addEventListener("touchend", touchend )
 
         return () => {
