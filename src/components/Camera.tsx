@@ -78,35 +78,42 @@ export default function Camera() {
             let { panning } = store.getState()
             let scale = .025
 
-            if (clientY > window.innerHeight - 300 && !panPossible) {
-                panPossible = true
-            } else if (panning) {
+            if (panning) {
                 updateTargetPosition(clientX, clientY, scale)
             }
         }
-        let mousedown = ({ clientX, clientY }: MouseEvent) => {
-            if (panPossible) {
-                initalize(clientX, clientY) 
+        let mousedown = ({ clientX, clientY, target }: MouseEvent) => { 
+            if ((target as Element).className === "panner") { 
+                panPossible = true
+                setPanning(true)
             }
-        } 
+
+            if (panPossible) {
+                initalize(clientX, clientY)
+            }
+        }
         let touchstart = (e: TouchEvent) => {
-            if (e.touches.length === 2) {
+            let startsAtG = (e.target as Element).className === "panner"
+
+            if (startsAtG) { 
+                panPossible = true
+                setPanning(true)
+            }
+
+            if (e.touches.length === 2 || startsAtG) {
                 e.preventDefault()
-                panPossible = true 
-                initalize(e.touches[0].clientX,   e.touches[0].clientY)  
+                panPossible = true
+                initalize(e.touches[0].clientX, e.touches[0].clientY)
             }
         }
         let touchmove = (e: TouchEvent) => {
             let { panning } = store.getState()
             let scale = .065
             let touches = e.touches
-            let { clientX, clientY } = touches[0]
-
-            if (touches.length === 2) {
-                e.preventDefault()
-            }
+            let { clientX, clientY } = touches[0] 
 
             if (panning) {
+                e.preventDefault()
                 updateTargetPosition(clientX, clientY, scale)
             }
         }
@@ -137,7 +144,7 @@ export default function Camera() {
         }
     }, [state])
 
-    useFrame((state, delta) => { 
+    useFrame((state, delta) => {
         camera.position.x = damp(camera.position.x, targetPosition.x, 5.5, delta)
         camera.position.z = damp(camera.position.z, targetPosition.z, 5.5, delta)
     })

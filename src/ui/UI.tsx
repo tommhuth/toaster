@@ -22,6 +22,7 @@ export default function UI() {
             <Intro />
             <GameStats />
             <SuccessMessage />
+            <div className="panner" />
         </>
     )
 }
