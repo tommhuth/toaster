@@ -59,6 +59,7 @@ export default function Camera() {
             }
 
             let { panning } = store.getState()
+            let scale = .025
 
             if (clientY > window.innerHeight - 300 && !panPossible) {
                 panPossible = true
@@ -68,14 +69,14 @@ export default function Camera() {
                     .applyQuaternion(camera.quaternion)
 
                 previousDirection.set(clientX, 0, clientY)
-                camera.position.add(new Vector3(direction.x * -.01, 0, direction.z * -.01))
+                camera.position.add(new Vector3(direction.x * -scale, 0, direction.z * -scale))
             }
         }
         let pointerdown = ({ clientX, clientY, pointerId }: PointerEvent) => {
             if (id) {
                 return 
             }
-            
+
             id = pointerId
 
             if (panPossible) {
@@ -84,7 +85,7 @@ export default function Camera() {
                 previousDirection.copy(startPosition)
             }
         }
-        let pointerup = () => {
+        let mouseup = () => {
             setPanning(false)
             panPossible = false
         }
@@ -97,9 +98,20 @@ export default function Camera() {
                 panPossible = true
             }
         }
-        let touchmove = (e: TouchEvent) => {
+        let touchstart = (e: TouchEvent) => {
             if (e.touches.length === 2) {
                 e.preventDefault()
+                panPossible = true
+                setPanning(true)
+            }
+        }
+        let touchmove = (e: TouchEvent) => {
+            if (e.touches.length === 2) {
+                e.preventDefault() 
+            }
+        }
+        let touchend = (e: TouchEvent) => {
+            if (e.touches.length === 0) { 
                 panPossible = true
                 setPanning(true)
             }
@@ -107,20 +119,22 @@ export default function Camera() {
 
         window.addEventListener("pointermove", pointermove)
         window.addEventListener("pointerdown", pointerdown)
-        window.addEventListener("pointerup", pointerup)
+        window.addEventListener("mouseup", mouseup)
         window.addEventListener("contextmenu", contextmenu)
         window.addEventListener("keydown", keydown)
         window.addEventListener("touchmove", touchmove, { passive: true })
-        window.addEventListener("touchstart", touchmove, { passive: true })
+        window.addEventListener("touchstart", touchstart, { passive: true })
+        window.addEventListener("touchend", touchend )
 
         return () => {
             window.removeEventListener("pointermove", pointermove)
             window.removeEventListener("pointerdown", pointerdown)
-            window.removeEventListener("pointerup", pointerup)
+            window.removeEventListener("mouseup", mouseup)
             window.removeEventListener("contextmenu", contextmenu)
             window.removeEventListener("keydown", keydown)
             window.removeEventListener("touchmove", touchmove)
-            window.removeEventListener("touchstart", touchmove)
+            window.removeEventListener("touchstart", touchstart)
+            window.removeEventListener("touchend", touchend)
         }
     }, [state])
 
