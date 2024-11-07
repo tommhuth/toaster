@@ -112,8 +112,8 @@ export default function Camera() {
         }
         let touchend = (e: TouchEvent) => {
             if (e.touches.length === 0) { 
-                panPossible = true
-                setPanning(true)
+                panPossible = false
+                setPanning(false)
             }
         }
 
