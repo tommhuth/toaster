@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber"
 import { useMemo, useRef, useState } from "react"
-import { IUniform, Quaternion, Shader, Vector3 } from "three"
+import { IUniform, Quaternion, Vector3, WebGLProgramParametersWithUniforms } from "three"
 import { ObjectType } from "../data/stages"
 import { addPenalty, useStore } from "../data/store"
 import { Body } from "./cannon"
@@ -42,7 +42,7 @@ export function useShader({
 
     return {
         uniforms,
-        onBeforeCompile(shader: Shader) {
+        onBeforeCompile(shader: WebGLProgramParametersWithUniforms) {
             shader.uniforms = {
                 ...shader.uniforms,
                 ...uniforms
@@ -80,7 +80,7 @@ export function useStageObjects<T>(type: Omit<ObjectType, ObjectType.BOX>) {
 
 
 let _directionUp = new Vector3(0, 1, 0)
-let _vec3 = new Vector3()
+let _direction = new Vector3()
 
 export function useOrientationObserver(body: Body): boolean {
     let dead = useRef(false)
@@ -89,9 +89,9 @@ export function useOrientationObserver(body: Body): boolean {
 
     useFrame(() => {
         if (body && !dead.current) {
-            _vec3.set(0, 1, 0).applyQuaternion(body.quaternion as unknown as Quaternion) 
+            _direction.set(0, 1, 0).applyQuaternion(body.quaternion as unknown as Quaternion) 
 
-            if (_directionUp.dot(_vec3) < .35 || (stage.settings.exitY && body.position.y < stage.settings.exitY)) {
+            if (_directionUp.dot(_direction) < .35 || (stage.settings.exitY && body.position.y < stage.settings.exitY)) {
                 dead.current = true
                 setrdead(true) 
                 addPenalty()

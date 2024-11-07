@@ -16,6 +16,24 @@ export default function Camera() {
     const scrolling = useMemo(() => new Vector3(), [])
     const settings = stage.settings
 
+    useLayoutEffect(() => {
+        let onResize = () => {
+            let zoom = clamp((window.innerWidth - 450) / 600, 0, 1)
+
+            camera.zoom = zoom * 25 + 32
+
+            console.log(camera.zoom)
+            camera.updateProjectionMatrix() 
+        }
+
+        window.addEventListener("resize", onResize)
+        onResize()
+
+        return () => {
+            window.removeEventListener("resize", onResize)
+        }
+    }, [camera])
+
     useEffect(() => {
         if (state === State.PLAYING) {
             let quat = new Quaternion()
@@ -33,7 +51,7 @@ export default function Camera() {
 
                 scrolling.applyQuaternion(quat.setFromAxisAngle(up, -Math.PI / 4))
 
-                invalidate()
+                //invalidate()
             }
 
             window.addEventListener("mousemove", mousemove)
@@ -43,12 +61,12 @@ export default function Camera() {
                 window.removeEventListener("mousemove", mousemove)
                 document.body.removeEventListener("mouseleave", mouseleave)
             }
-        } 
+        }
     }, [stage, state])
 
-    useEffect(()=> {
+    useEffect(() => {
         if (state !== State.PLAYING) {
-            scrolling.set(0,0,0)
+            scrolling.set(0, 0, 0)
         }
     }, [state, scrolling])
 
@@ -89,7 +107,7 @@ export default function Camera() {
         camera.position.z += (dz) * 4 * clampDelta(delta)
 
         if (Math.abs(targetZ - camera.position.z) > .01 || Math.abs(targetX - camera.position.x) > .01) {
-            invalidate()
+            //invalidate()
         }
     })
 
@@ -105,4 +123,3 @@ export default function Camera() {
     )
 }
 
- 

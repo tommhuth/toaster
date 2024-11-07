@@ -1,0 +1,40 @@
+.game-stats {
+    position: fixed;
+    right: 10vw;
+    left: 10vw;
+    bottom: min(5vw, 2em);
+    overflow: hidden;
+    z-index: 1000;
+    font-size: clamp(1em, 3vw, 2em);
+    gap: 1.5em;
+    pointer-events: none;
+
+    @media (max-width: 700px) { 
+        right: 6vw;
+        left: 6vw;
+        bottom: 5vw;
+    }
+
+    &__back {
+        display: inline-flex;
+        gap: .5em;
+        font-size: 1.25em;
+        align-items: center;
+        text-align: center;
+        pointer-events: all;
+        margin-left: 0;
+        margin-right: auto;
+    }   
+
+    &__stat {
+        display: flex;
+        gap: .35em;
+
+        em {
+            margin-left: auto;
+            font-weight: bold;
+            font-style: italic;
+            font-family: var(--font-sans); 
+        }
+    }
+}   

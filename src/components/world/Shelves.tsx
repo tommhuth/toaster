@@ -5,8 +5,12 @@ import { ObjectType } from "../../data/stages"
 import { white } from "../../utils/materials"
 import InstancedMesh from "../InstancedMesh"
 
+const model =  "/models/shelf1.glb"
+
+useLoader.preload(GLTFLoader,model)
+
 export default function Shelves() {
-    let glb = useLoader(GLTFLoader, "/models/shelf1.glb")
+    let glb = useLoader(GLTFLoader, model)
     let mesh = glb?.scene.children[0] as Mesh
 
     return (

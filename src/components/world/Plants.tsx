@@ -10,10 +10,13 @@ import InstancedMesh from "../InstancedMesh"
 import noise from "../../shaders/noise.glsl"
 
 const plantMaterial = white.clone()
+const model = "/models/plant.glb"
+
+useLoader.preload(GLTFLoader, model)
 
 export default function Plants() {
-    let count = 10
-    let glb = useLoader(GLTFLoader, "/models/plant.glb")
+    let count = 4
+    let glb = useLoader(GLTFLoader, model)
     let mesh = glb?.scene.children[0] as Mesh
     let attributes = useMemo(() => {
         return new Float32Array(new Array(count).fill(0))
@@ -29,6 +32,7 @@ export default function Plants() {
                 ${noise}
             `,
             main: glsl`
+            /*
                 vec4 globalPosition = instanceMatrix *  vec4(position, 1.);
                 float heightEffect = clamp((position.y - .9) / 4., 0., 1.); 
                 vec2 npos = globalPosition.xz * .35 + uTime;
@@ -37,6 +41,7 @@ export default function Plants() {
 
                 transformed.x += noise(npos) * aEffect * heightEffect;
                 transformed.y -= noise(npos) * aEffect * heightEffect; 
+                */
             `
         }
     })

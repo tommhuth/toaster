@@ -86,7 +86,7 @@ function useCannonBody({
             return () => {
                 world.removeBody(body)
             }
-        }  
+        }
     }, [body, world, ready])
 
     return [body, world] as const
@@ -111,7 +111,7 @@ export function CannonProvider({
     gravity: [gravityX, gravityY, gravityZ] = [0, -20, 0],
     defaultRestitution = .45,
     axisIndex,
-    iterations = 16,
+    iterations = 10,
     debug = false,
 }: CannonProviderProps) {
     const { scene } = useThree()
@@ -136,11 +136,11 @@ export function CannonProvider({
 
     // dont use useFrame here since r3f will stop firing those unless invalidate()
     // and we need to constantly watch over any hasActiveBodies
-    useAnimationFrame(({ delta }) => {
-        world.step(clamp(delta, 1 / 120, 1 / 30))
+    useAnimationFrame(({ delta }) => { 
+        world.step(Math.min(delta, 1 / 30)) 
 
         if (world.hasActiveBodies) {
-            invalidate()
+            //invalidate()
 
             if (cannonDebugger) {
                 cannonDebugger.update()

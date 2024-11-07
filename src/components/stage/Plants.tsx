@@ -78,7 +78,7 @@ function Plant({ position = [0, 0, 0], rotation = [0, 0, 0] }: ChairProps) {
 
             if (attribute.array[index] > .001) {
                 attribute.needsUpdate = true
-                invalidate()
+                //invalidate()
             }
         }
     })

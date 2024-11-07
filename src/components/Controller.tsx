@@ -1,7 +1,7 @@
 import { invalidate, useFrame, useThree } from "@react-three/fiber"
 import { Sphere as SphereShape } from "cannon-es"
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
-import { Frustum, Intersection, Matrix4, Mesh, Raycaster, Vector3, Sphere } from "three"
+import { Frustum, Intersection, Matrix4, Mesh, Raycaster, Vector3, Sphere, Vector2 } from "three"
 import { ObjectType } from "../data/stages"
 import { addBall, removeBall, useStore } from "../data/store"
 import { Tuple3 } from "../types"
@@ -79,34 +79,29 @@ export default function Controller() {
             down = false
             length = 0
             ref.current?.scale.set(0, 0, 0)
-            invalidate()
+           // invalidate()
         }
-        let mousedown = e => {
+        let p = new Vector2()
+        let mousedown = (e: MouseEvent) => {
             down = true
             raycaster.setFromCamera(
-                {
-                    x: (e.clientX / window.innerWidth) * 2 - 1,
-                    y: -(e.clientY / window.innerHeight) * 2 + 1
-                },
+                p.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1),
                 camera
             )
 
             let [intersection] = raycaster.intersectObjects(scene.children.filter(i => i.userData.type === ObjectType.GROUND), true)
 
-            if (intersection) { 
+            if (intersection) {
                 start = intersection
             }
         }
-        let mousemove = e => {
+        let mousemove =  (e: MouseEvent)  => {
             if (!down) {
                 return
             }
 
             raycaster.setFromCamera(
-                {
-                    x: (e.clientX / window.innerWidth) * 2 - 1,
-                    y: -(e.clientY / window.innerHeight) * 2 + 1
-                },
+                p.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1),
                 camera
             )
 
@@ -127,7 +122,7 @@ export default function Controller() {
                         ref.current.scale.y = 1
                     }
 
-                    invalidate()
+                   // invalidate()
                 }
             } else {
                 console.log("NO HIT")
@@ -141,9 +136,9 @@ export default function Controller() {
                 end.point.y += radius / 2
 
                 addBall(end.point.toArray(), direction.toArray())
-                invalidate()
+                //invalidate()
             }
-            
+
             reset()
         }
 
@@ -173,7 +168,7 @@ export default function Controller() {
                 name={"ball"}
                 count={50}
             >
-                <sphereGeometry args={[1, 16, 16]} />
+                <sphereGeometry args={[1, 12, 12]} />
                 <meshLambertMaterial emissive={"white"} emissiveIntensity={.3} />
             </InstancedMesh>
         </>

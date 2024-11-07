@@ -1,0 +1,61 @@
+.intro {
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    inset: 3em;
+    z-index: 2;
+    cursor: pointer;
+    border: 1.5em solid white;
+    position: fixed;
+
+    @media (max-width: 700px) {
+        border: none;
+        inset: 6vw;
+        justify-content: flex-end;
+    }
+
+    &__title {
+        font-size: clamp(2em, 13vw, 13em);
+        font-weight: 900;
+        line-height: .9;
+        margin-left: 5%;
+        text-transform: uppercase;
+        font-family: Roboto;
+
+        @media (max-width: 700px) {
+            margin-left: 0;
+            margin-bottom: 14lvh;
+            margin-top: auto; 
+            line-height: 1;
+            font-size: 18vw;
+            rotate: -90deg;
+            translate: 0 -50px;
+        }
+
+        @media (max-width: 600px) { 
+            font-size: 24vw; 
+        }
+    }
+
+    &__stage {
+        position: absolute;
+        left: 50%;
+        bottom: 1em;
+        translate: -50% 0;
+        line-height: 1;
+        font-size: clamp(1.25em, 5vw, 2.5em);
+        align-items: center;
+        gap: 2.5em;
+        display: flex;
+
+        @media (max-width: 700px) {
+            position: static;
+            translate: 0 0;
+            place-content: center; 
+        }
+
+        button {
+            border: 1rem solid transparent;
+        }
+    }
+}   

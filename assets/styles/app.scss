@@ -6,14 +6,11 @@
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    border: 2px solid rgb( 27,73,203 );
-    color:  rgb( 27,73,203 );
-    letter-spacing: .1em;
-    font-size: .85em;
+    transform: translate(-50%, -50%);  
+    letter-spacing: .21em;
+    font-size: .75em;
     text-transform: uppercase;
     font-weight: 300;
-    z-index: 0;
-    padding: .85em 2em;
+    z-index: 0; 
     font-family: var(--font-sans);
 }

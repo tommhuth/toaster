@@ -29,7 +29,7 @@ export default function World() {
         <>
             <InstancedMesh name={ObjectType.BOX} count={100}>
                 <boxGeometry args={[1, 1, 1, 1, 1, 1]} />
-                <meshLambertMaterial emissive={"red"} color="yellow" emissiveIntensity={.35} />
+                <meshLambertMaterial toneMapped={false} emissive={"red"} color="yellow" emissiveIntensity={.35} />
             </InstancedMesh>
 
             <InstancedMesh

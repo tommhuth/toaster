@@ -1,26 +1,28 @@
 import Camera from "./components/Camera"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useLayoutEffect, useState } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { VSMShadowMap } from "three"
 import Config from "./Config"
-import { Only } from "./utils/utils"
+import { clamp, Only } from "./utils/utils"
 import { setState, State, useStore } from "./data/store"
 import World from "./components/World"
 import Controller from "./components/Controller"
 import Stage from "./components/Stage"
+import { Perf } from "r3f-perf"
 import { CannonProvider } from "./utils/cannon"
 import FontFaceObserver from "fontfaceobserver"
 import Lights from "./components/Lights"
 
-export default function Wrapper() {
+export default function Wrapper() { 
     return (
         <Canvas
             gl={{
-                antialias: true,
+                antialias: false,
                 depth: true,
-                stencil: false,
-                alpha: true
-            }}
+                stencil: false, 
+                alpha: true,
+                powerPreference: "high-performance"
+            }} 
             style={{
                 width: "100%",
                 left: 0,
@@ -30,12 +32,16 @@ export default function Wrapper() {
                 position: "fixed",
             }}
             orthographic
-            frameloop="demand"
+            frameloop="always"
             shadows={{
-                type: VSMShadowMap,
+                //type: VSMShadowMap,
             }}
-            camera={{ zoom: 65, near: -40, far: 60 }}
-            dpr={[1, window.devicePixelRatio * .75]}
+            camera={{ 
+                zoom: 50,
+                near: -40,
+                far: 60
+            }}
+            dpr={.25}
         >
             <Suspense fallback={null}>
                 <App />
@@ -43,6 +49,7 @@ export default function Wrapper() {
             <Only if={Config.DEBUG}>
                 <axesHelper scale={5} position={[0, 1, 0]} />
             </Only>
+ 
         </Canvas>
     )
 }
@@ -94,7 +101,7 @@ function App() {
                 <World />
                 <Stage key={id} />
                 <Controller />
-            </CannonProvider> 
+            </CannonProvider>
         </>
     )
 } 

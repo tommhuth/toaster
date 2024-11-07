@@ -160,7 +160,7 @@ export const stages: Stage[] = [
         ]
     },
     {
-        title: "Stockholm 2",
+        title: "Kungsbacka",
         id: random.id(),
         settings: {
             center: [0, 0, 5], 
@@ -212,7 +212,7 @@ export const stages: Stage[] = [
         ]
     },
     {
-        title: "Ivar",
+        title: "Äpplarö",
         id: random.id(),
         settings: {
             center: [0, 0, 0],

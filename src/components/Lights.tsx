@@ -71,22 +71,17 @@ export default function Lights() {
                 </mesh>
             </Only>
             <directionalLight
-                color={"#c9dbff"}
+                color={"#fff"}
                 position={[0, 0, 0]}
                 target-position={sunTargetPosition}
-                intensity={.6}
-                castShadow
+                intensity={1.6}
+                //castShadow
                 ref={sun}
                 shadow-radius={2.25}
                 shadow-mapSize={[512, 512]}
                 shadow-bias={-0.003}
-            />
-            <directionalLight
-                color={"#97ffff"}
-                position={[-15, 1, -10]}
-                intensity={.05}
-            />
-            <ambientLight intensity={.2} color="#0066ff" />
+            />  
+            <ambientLight intensity={.4} color="#fff" />
         </>
     )
 }
