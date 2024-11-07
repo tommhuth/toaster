@@ -90,6 +90,7 @@ export default function Camera() {
             if (e.touches.length === 2) {
                 e.preventDefault()
                 panPossible = true
+                setPanning(true)
             }
         }
 
@@ -99,6 +100,7 @@ export default function Camera() {
         window.addEventListener("contextmenu", contextmenu)
         window.addEventListener("keydown", keydown)
         window.addEventListener("touchmove", touchmove, { passive: true })
+        window.addEventListener("touchstart", touchmove, { passive: true })
 
         return () => {
             window.removeEventListener("pointermove", pointermove)
@@ -107,6 +109,7 @@ export default function Camera() {
             window.removeEventListener("contextmenu", contextmenu)
             window.removeEventListener("keydown", keydown)
             window.removeEventListener("touchmove", touchmove)
+            window.removeEventListener("touchstart", touchmove)
         }
     }, [state])
 
