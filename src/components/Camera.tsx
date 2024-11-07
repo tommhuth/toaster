@@ -6,7 +6,7 @@ import { Tuple3 } from "../types"
 import { clamp } from "../utils/utils"
 import { Vector2, Vector3 } from "three"
 
-export const startPosition: Tuple3 = [10, 10, -10]
+export const startPosition: Tuple3 = [20, 20, -20]
 
 export default function Camera() {
     const { camera } = useThree()
