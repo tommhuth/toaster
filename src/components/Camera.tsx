@@ -1,20 +1,30 @@
-import { invalidate, useFrame, useThree } from "@react-three/fiber"
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
-import { Quaternion, Vector3 } from "three"
+import { useThree } from "@react-three/fiber"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import Config from "../Config"
-import { State, useStore } from "../data/store"
+import { setPanning, State, store, useStore } from "../data/store"
 import { Tuple3 } from "../types"
-import { clamp, clampDelta } from "../utils/utils"
+import { clamp } from "../utils/utils"
+import { Vector2, Vector3 } from "three"
 
 export const startPosition: Tuple3 = [10, 10, -10]
 
 export default function Camera() {
     const { camera } = useThree()
     const state = useStore(i => i.state)
-    const stage = useStore(i => i.stage)
+    const stage = useStore(i => i.stage) 
     const position = useRef([...startPosition])
-    const scrolling = useMemo(() => new Vector3(), [])
-    const settings = stage.settings
+    const settings = stage.settings 
+
+    useLayoutEffect(() => {
+        camera.position.set(...startPosition)
+        camera.lookAt(0, 0, 0)
+    }, [camera, startPosition])
+
+    useLayoutEffect(() => {
+        position.current = [...stage.settings.center]
+        position.current[0] += startPosition[0]
+        position.current[2] += startPosition[2]
+    }, [stage])
 
     useLayoutEffect(() => {
         let onResize = () => {
@@ -22,8 +32,7 @@ export default function Camera() {
 
             camera.zoom = zoom * 25 + 32
 
-            console.log(camera.zoom)
-            camera.updateProjectionMatrix() 
+            camera.updateProjectionMatrix()
         }
 
         window.addEventListener("resize", onResize)
@@ -35,81 +44,72 @@ export default function Camera() {
     }, [camera])
 
     useEffect(() => {
-        if (state === State.PLAYING) {
-            let quat = new Quaternion()
-            let up = new Vector3(0, 1, 0)
-            let mouseleave = () => scrolling.set(0, 0, 0)
-            let mousemove = (e: MouseEvent) => {
-                let dx = ((window.innerWidth / 2) - e.clientX)
-                let dy = ((window.innerHeight / 2) - e.clientY)
-
-                scrolling.set(
-                    Math.abs(dx / (window.innerWidth / 2)) ** 8 * Math.sign(dx),
-                    0,
-                    Math.abs(dy / (window.innerHeight / 2)) ** 8 * Math.sign(dy)
-                )
-
-                scrolling.applyQuaternion(quat.setFromAxisAngle(up, -Math.PI / 4))
-
-                //invalidate()
-            }
-
-            window.addEventListener("mousemove", mousemove)
-            document.body.addEventListener("mouseleave", mouseleave)
-
-            return () => {
-                window.removeEventListener("mousemove", mousemove)
-                document.body.removeEventListener("mouseleave", mouseleave)
-            }
-        }
-    }, [stage, state])
-
-    useEffect(() => {
         if (state !== State.PLAYING) {
-            scrolling.set(0, 0, 0)
+            return
         }
-    }, [state, scrolling])
 
-    useLayoutEffect(() => {
-        camera.position.set(...startPosition)
-        camera.lookAt(0, 0, 0)
-    }, [camera, ...startPosition])
+        let panPossible = false
+        let startPosition = new Vector3()
+        let previousDirection = new Vector3()
+        let direction = new Vector3()
+        let pointermove = ({ clientX, clientY }: PointerEvent) => {
+            let { panning } = store.getState()
 
-    useLayoutEffect(() => {
-        position.current = [...stage.settings.center]
-        position.current[0] += startPosition[0]
-        position.current[2] += startPosition[2]
+            if (clientY > window.innerHeight - 300 && !panPossible) {
+                panPossible = true
+            } else if (panning) {
+                direction.set(clientX, 0, clientY)
+                    .sub(previousDirection)
+                    .applyQuaternion(camera.quaternion)
 
-        camera.position.x = position.current[0] + 2
-        camera.position.z = position.current[2] + 2
-    }, [stage])
-
-    useFrame((_, delta) => {
-        let distancePerSecond = 8 * clampDelta(delta)
-
-        position.current[0] = clamp(
-            position.current[0] + scrolling.x * distancePerSecond,
-            startPosition[0] + settings.center[0] - settings.boundingBox[0] / 2,
-            startPosition[0] + settings.center[0] + settings.boundingBox[0] / 2
-        )
-        position.current[2] = clamp(
-            position.current[2] + scrolling.z * distancePerSecond,
-            startPosition[2] + settings.center[2] - settings.boundingBox[1] / 2,
-            startPosition[2] + settings.center[2] + settings.boundingBox[1] / 2
-        )
-
-        let targetX = position.current[0] + (state === State.PLAYING ? 0 : +4)
-        let targetZ = position.current[2] + (state === State.PLAYING ? 0 : +4)
-        let dx = targetX - camera.position.x
-        let dz = targetZ - camera.position.z
-
-        camera.position.x += (dx) * 4 * clampDelta(delta)
-        camera.position.z += (dz) * 4 * clampDelta(delta)
-
-        if (Math.abs(targetZ - camera.position.z) > .01 || Math.abs(targetX - camera.position.x) > .01) {
-            //invalidate()
+                previousDirection.set(clientX, 0, clientY)
+                camera.position.add(new Vector3(direction.x * -.01, 0, direction.z * -.01))
+            }
         }
-    })
+        let pointerdown = ({ clientX, clientY }: PointerEvent) => {
+            if (panPossible) { 
+                setPanning(true)
+                startPosition.set(clientX, 0, clientY)
+                previousDirection.copy(startPosition)
+            }
+        }
+        let pointerup = () => {
+            setPanning(false)
+            panPossible = false
+        }
+        let contextmenu = (e: Event) => {
+            e.preventDefault()
+            panPossible = true
+        }
+        let keydown = (e: KeyboardEvent) => {
+            if (e.code === "Space") {
+                panPossible = true
+            }
+        }
+        let touchmove = (e: TouchEvent) => {
+            if (e.touches.length === 2) {
+                e.preventDefault()
+                panPossible = true
+            }
+        }
+
+        window.addEventListener("pointermove", pointermove)
+        window.addEventListener("pointerdown", pointerdown)
+        window.addEventListener("pointerup", pointerup)
+        window.addEventListener("contextmenu", contextmenu)
+        window.addEventListener("keydown", keydown)
+        window.addEventListener("touchmove", touchmove, { passive: true })
+
+        return () => {
+            window.removeEventListener("pointermove", pointermove)
+            window.removeEventListener("pointerdown", pointerdown)
+            window.removeEventListener("pointerup", pointerup)
+            window.removeEventListener("contextmenu", contextmenu)
+            window.removeEventListener("keydown", keydown)
+            window.removeEventListener("touchmove", touchmove)
+        }
+    }, [state])
+
 
     if (!Config.DEBUG) {
         return null
@@ -122,4 +122,3 @@ export default function Camera() {
         </mesh>
     )
 }
-

@@ -83,12 +83,29 @@ export function setMatrixAt({
     rotation = [0, 0, 0],
     scale = [1, 1, 1],
 }: SetMatrixAtParams) {
-    instance.setMatrixAt(index, _matrix.compose(
-        _position.set(...position),
-        rotation.length === 3 ? _quaternion.setFromEuler(_euler.set(...rotation, "XYZ")) : _quaternion.set(...rotation),
-        _scale.set(...scale)
-    ))
+    instance.setMatrixAt(
+        index,
+        _matrix.compose(
+            _position.set(...position),
+            rotation.length === 3 ? _quaternion.setFromEuler(_euler.set(...rotation)) : _quaternion.set(...rotation),
+            _scale.set(...scale)
+        )
+    )
     instance.instanceMatrix.needsUpdate = true
+    instance.computeBoundingBox()
+    instance.computeBoundingSphere()
+    instance.geometry.computeBoundingBox()
+    instance.geometry.computeBoundingSphere()
+}
+
+export function setMatrixNullAt(instance: InstancedMesh, index: number) {
+    setMatrixAt({
+        instance,
+        index,
+        position: [0, 0, -1_000],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0]
+    })
 }
 
 const _color = new Color()

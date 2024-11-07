@@ -9,27 +9,29 @@
     position: fixed;
 
     @media (max-width: 700px) {
-        border: none;
-        inset: 6vw;
+        border-width: 1.5em;
+        inset: 0;
         justify-content: flex-end;
     }
 
     &__title {
         font-size: clamp(2em, 13vw, 13em);
         font-weight: 900;
-        line-height: .9;
-        margin-left: 5%;
+        line-height: .9; 
         text-transform: uppercase;
         font-family: Roboto;
+        margin-bottom: .75em;
+        text-align: center;
 
         @media (max-width: 700px) {
             margin-left: 0;
-            margin-bottom: 14lvh;
+            margin-bottom: 4lvh;
             margin-top: auto; 
             line-height: 1;
             font-size: 18vw;
             rotate: -90deg;
             translate: 0 -50px;
+            text-align: left;
         }
 
         @media (max-width: 600px) { 
@@ -52,6 +54,7 @@
             position: static;
             translate: 0 0;
             place-content: center; 
+            margin-bottom: 1em;
         }
 
         button {

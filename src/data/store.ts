@@ -51,6 +51,7 @@ interface Store {
     balls: Ball[]
     boxes: Box[]
     id: string
+    panning: boolean
     player: {
         ballCount: number
         score: number,
@@ -67,6 +68,7 @@ const createDefaultStore = () => {
         balls: [],
         boxes: [],
         id: random.id(),
+        panning: false,
         player: {
             ballCount: 0,
             score: 0,
@@ -83,6 +85,11 @@ const useStore = store
 export function setState(state: State) {
     store.setState({
         state,
+    })
+} 
+export function setPanning(panning: boolean) {
+    store.setState({
+        panning,
     })
 } 
 

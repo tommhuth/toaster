@@ -144,14 +144,25 @@ function Box({
             const rot = new Quaternion().setFromEuler(0, 0, 0)
 
             return animate({
-                from: { y: 0, scale: 1, rx: body.quaternion.x, ry: body.quaternion.y, rz: body.quaternion.z, rw: body.quaternion.w },
+                from: {
+                    y: 0,
+                    scale: 1,
+                    rx: body.quaternion.x,
+                    ry: body.quaternion.y,
+                    rz: body.quaternion.z,
+                    rw: body.quaternion.w
+                },
                 to: { y: targetY, scale: 0, rx: rot.x, ry: rot.y, rz: rot.z, rw: rot.w },
                 duration: 900,
                 render({ y, scale, rx, ry, rz, rw }) {
                     setMatrixAt({
                         instance,
                         index: index as number,
-                        position: [body.position.x, body.position.y + easeOutQuart(y / targetY) * targetY, body.position.z],
+                        position: [
+                            body.position.x,
+                            body.position.y + easeOutQuart(y / targetY) * targetY,
+                            body.position.z
+                        ],
                         scale: size.map(i => i * easeOutElastic(scale / 1)) as Tuple3,
                         rotation: [rx, ry, rz, rw]
                     })

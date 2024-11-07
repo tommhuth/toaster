@@ -1,86 +1,68 @@
 import { useFrame, useThree } from "@react-three/fiber"
-import { useEffect, useRef } from "react"
-import { DirectionalLight, Mesh } from "three"
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react"
+import { CameraHelper, DirectionalLight, Mesh, Vector3 } from "three"
 import Config from "../Config"
 import { Only } from "../utils/utils"
 import { startPosition } from "./Camera"
+import { Tuple3 } from "../types"
+
+let position = new Vector3(10, 10, 8).normalize()
 
 export default function Lights() {
-    let { scene, viewport, camera } = useThree()
-    let sun = useRef<DirectionalLight>(null)
-    let debug = useRef<Mesh>(null)
-    let previousUpdateShadowPosition = useRef([0, 0])
-    let sunTargetPosition = [-25, -18, -24]
+    let { viewport, camera } = useThree()
+    let lightRef = useRef<DirectionalLight>(null)
+    let updateShadowFrustum = useCallback((light: DirectionalLight) => {
+        let buffer = 4
 
-    useEffect(() => {
-        if (sun.current) {
-            scene.add(sun.current.target)
-        }
-    }, [])
+        // left - right
+        light.shadow.camera.near = -viewport.width * .5 - buffer
+        light.shadow.camera.far = viewport.width * .5 + buffer
 
-    useEffect(() => {
-        if (sun.current) {
-            let light = sun.current
-            let buffer = 4
+        // top - bottom
+        light.shadow.camera.left = -viewport.height * .5 - buffer
+        light.shadow.camera.right = viewport.height * 1 + buffer
 
-            // left - right
-            light.shadow.camera.near = -viewport.width - buffer
-            light.shadow.camera.far = viewport.width + buffer
+        // bottom left - top right diag
+        light.shadow.camera.top = 25 + buffer
+        light.shadow.camera.bottom = -25 - buffer
 
-            // top - bottom
-            light.shadow.camera.left = -viewport.height - buffer
-            light.shadow.camera.right = viewport.height + buffer
-
-            // bottom left - top right diag
-            light.shadow.camera.top = 25 + buffer
-            light.shadow.camera.bottom = -25 - buffer
-
-            light.shadow.camera.updateProjectionMatrix()
-        }
+        light.shadow.camera.updateProjectionMatrix()
     }, [viewport])
 
-    useFrame(() => {
-        let [x, , z] = camera.position.toArray().map(Math.floor)
-        let previous = previousUpdateShadowPosition.current
-        let interval = 3
-        let needsUpdate = (x % interval === 0 && x !== previous[0]) || (z % interval === 0 && z !== previous[1])
+    useLayoutEffect(() => {
+        let resize = () => lightRef.current && updateShadowFrustum(lightRef.current)
 
-        if (needsUpdate && sun.current) {
-            previous[0] = x
-            previous[1] = z
+        lightRef.current?.position.copy(position)
 
-            sun.current.position.x = camera.position.x - startPosition[0]
-            sun.current.position.z = camera.position.z - startPosition[2]
-
-            sun.current.target.position.x = camera.position.x - startPosition[0] - -sunTargetPosition[0]
-            sun.current.target.position.z = camera.position.z - startPosition[2] - -sunTargetPosition[2]
-
-            if (debug.current) {
-                debug.current.position.x = camera.position.x - startPosition[0]
-                debug.current.position.z = camera.position.z - startPosition[2]
-            } 
-        }
-    })
+        window.addEventListener("resize", resize)
+        window.removeEventListener("resize", resize)
+    }, [])
 
     return (
         <>
             <Only if={Config.DEBUG}>
-                <mesh ref={debug}>
-                    <sphereGeometry args={[1.5, 16, 16]} />
-                    <meshBasicMaterial color="yellow" wireframe />
-                </mesh>
+                {lightRef.current?.shadow.camera && <cameraHelper camera={lightRef.current?.shadow.camera} />}
             </Only>
+
+            <axesHelper position={[0, 3, 0]} scale={5} />
+
+            <directionalLight
+                position={[-position.x, position.y * .25, -position.z]}
+                intensity={.95}
+                color={"white"}
+            />
+
             <directionalLight
                 color={"#fff"}
-                position={[0, 0, 0]}
-                target-position={sunTargetPosition}
-                intensity={1.6}
-                //castShadow
-                ref={sun}
+                intensity={1.5}
+                castShadow
+                onUpdate={updateShadowFrustum}
+                ref={lightRef}
                 shadow-radius={2.25}
                 shadow-mapSize={[512, 512]}
                 shadow-bias={-0.003}
-            />  
+            />
+
             <ambientLight intensity={.4} color="#fff" />
         </>
     )

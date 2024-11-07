@@ -30,8 +30,7 @@ export default function GameStats() {
                 style={{
                 }}
             >
-                <Arrow direction="left" />
-                {stage.title}
+                <Arrow direction="left" /> 
             </button>
 
             {stats.map((i, index) => {

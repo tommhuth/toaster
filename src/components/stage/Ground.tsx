@@ -20,7 +20,7 @@ function GroundElement({ size = [1, 1, 1], position = [0, 0, 0] }: GroundProps) 
     useInstancedBody({
         definition,
         mass: 0,
-        position: [position[0], position[1], position[2]],
+        position,
         scale: size,
         index,
         instance,

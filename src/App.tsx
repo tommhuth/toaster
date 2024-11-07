@@ -13,16 +13,20 @@ import { CannonProvider } from "./utils/cannon"
 import FontFaceObserver from "fontfaceobserver"
 import Lights from "./components/Lights"
 
-export default function Wrapper() { 
+document.addEventListener("contextmenu", event => {
+    event.preventDefault()
+})
+
+export default function Wrapper() {
     return (
         <Canvas
             gl={{
-                antialias: false,
+                antialias: true,
                 depth: true,
-                stencil: false, 
+                stencil: false,
                 alpha: true,
                 powerPreference: "high-performance"
-            }} 
+            }}
             style={{
                 width: "100%",
                 left: 0,
@@ -30,40 +34,33 @@ export default function Wrapper() {
                 height: "100%",
                 zIndex: 1,
                 position: "fixed",
-            }}
+            }} 
             orthographic
             frameloop="always"
             shadows={{
-                //type: VSMShadowMap,
-            }}
-            camera={{ 
-                zoom: 50,
-                near: -40,
-                far: 60
-            }}
-            dpr={.25}
+                type: VSMShadowMap,
+            }} 
+            camera={{
+                zoom: 30,
+                near: 0.01,
+                far: 75
+            }} 
+            dpr={[1, window.devicePixelRatio * .75]} 
         >
             <Suspense fallback={null}>
                 <App />
             </Suspense>
             <Only if={Config.DEBUG}>
                 <axesHelper scale={5} position={[0, 1, 0]} />
-            </Only>
- 
+            </Only> 
         </Canvas>
     )
 }
 
-function App() {
-    let { gl } = useThree()
+function App() { 
     let id = useStore(i => i.id)
     let [fontsReady, setFontsReady] = useState(false)
-
-    useFrame(() => {
-        gl.info.autoReset = false
-        gl.info.reset()
-    })
-
+ 
     useEffect(() => {
         let serif = new FontFaceObserver("Cormorant Garamond", {
             weight: 300,
@@ -98,9 +95,10 @@ function App() {
             <Camera />
 
             <CannonProvider debug={Config.DEBUG}>
+                <Controller>
+                </Controller>
                 <World />
                 <Stage key={id} />
-                <Controller />
             </CannonProvider>
         </>
     )

@@ -29,14 +29,19 @@ export default function World() {
         <>
             <InstancedMesh name={ObjectType.BOX} count={100}>
                 <boxGeometry args={[1, 1, 1, 1, 1, 1]} />
-                <meshLambertMaterial toneMapped={false} emissive={"red"} color="yellow" emissiveIntensity={.35} />
+                <meshLambertMaterial
+                    toneMapped={false}
+                    emissive={"red"}
+                    color="yellow"
+                    emissiveIntensity={.35}
+                />
             </InstancedMesh>
 
             <InstancedMesh
                 name={ObjectType.GROUND}
-                count={100}
+                count={25} 
             >
-                <boxGeometry args={[1, 1, 1, 1, 1, 1]} />
+                <boxGeometry args={[1, 1, 1, 1, 1, 1]} attach={"geometry"} />
                 <primitive object={groundMaterial} attach="material" />
             </InstancedMesh>
 

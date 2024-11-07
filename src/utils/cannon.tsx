@@ -236,7 +236,7 @@ export function useInstancedBody({
     }, [instance, keepAround, index])
 
     useLayoutEffect(() => {
-        if (instance && typeof index === "number" && ready) {
+        if (instance && typeof index === "number" && ready) { 
             setMatrixAt({
                 index,
                 instance,

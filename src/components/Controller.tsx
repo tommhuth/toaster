@@ -1,10 +1,10 @@
 import { invalidate, useFrame, useThree } from "@react-three/fiber"
 import { Sphere as SphereShape } from "cannon-es"
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Frustum, Intersection, Matrix4, Mesh, Raycaster, Vector3, Sphere, Vector2 } from "three"
 import { ObjectType } from "../data/stages"
-import { addBall, removeBall, useStore } from "../data/store"
-import { Tuple3 } from "../types"
+import { addBall, removeBall, store, useStore } from "../data/store"
+import { Tuple2, Tuple3 } from "../types"
 import { useInstancedBody } from "../utils/cannon"
 import { setColorAt } from "../utils/utils"
 import InstancedMesh, { useInstance } from "./InstancedMesh"
@@ -20,7 +20,12 @@ const _frustum = new Frustum()
 const _matrix = new Matrix4()
 const _sphere = new Sphere()
 
-function Ball({ radius = .25, velocity = [0, 0, 0], id, position = [0, 0, 0] }: BallProps) {
+function Ball({
+    radius = .25,
+    velocity = [0, 0, 0],
+    id,
+    position = [0, 0, 0]
+}: BallProps) {
     let { camera } = useThree()
     let definition = useMemo(() => {
         return new SphereShape(radius)
@@ -63,106 +68,115 @@ function Ball({ radius = .25, velocity = [0, 0, 0], id, position = [0, 0, 0] }: 
     return null
 }
 
+
 export default function Controller() {
-    let { camera, scene } = useThree()
-    let ref = useRef<Mesh>(null)
+    let { camera } = useThree()
+    let targetReticleRef = useRef<Mesh>(null)
     let balls = useStore(i => i.balls)
-    let radius = .25
+    let startPosition = useMemo(() => new Vector3(), [])
+    let endPosition = useMemo(() => new Vector3(), [])
 
     useEffect(() => {
-        let start: Intersection
-        let end: Intersection
-        let length = 0
-        let down = false
+        let point = new Vector2()
+        let up = new Vector3(0, 1, 0)
         let raycaster = new Raycaster()
-        let reset = () => {
-            down = false
-            length = 0
-            ref.current?.scale.set(0, 0, 0)
-           // invalidate()
-        }
-        let p = new Vector2()
-        let mousedown = (e: MouseEvent) => {
-            down = true
+        let isTargeting = false
+        let distance = 0
+        let findIntersection = (e: PointerEvent) => {
+            let { ground } = store.getState().instances
+
             raycaster.setFromCamera(
-                p.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1),
+                point.set(
+                    (e.clientX / window.innerWidth) * 2 - 1,
+                    -(e.clientY / window.innerHeight) * 2 + 1
+                ),
                 camera
             )
 
-            let [intersection] = raycaster.intersectObjects(scene.children.filter(i => i.userData.type === ObjectType.GROUND), true)
+            let [intersection] = raycaster.intersectObject(ground.mesh, false)
 
-            if (intersection) {
-                start = intersection
+            if (intersection && intersection.normal?.dot(up) === 1) {
+                return intersection
             }
+
+            return null
         }
-        let mousemove =  (e: MouseEvent)  => {
-            if (!down) {
+
+        let pointerdown = (e: PointerEvent) => { 
+            if (store.getState().panning) {
                 return
             }
 
-            raycaster.setFromCamera(
-                p.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1),
-                camera
-            )
+            let intersection = findIntersection(e)
 
-            let objects = scene.children.filter(i => i.userData.type === ObjectType.GROUND)
-            let [intersection] = raycaster.intersectObjects(objects, true)
+            isTargeting = true
+            distance = 0
 
             if (intersection) {
-                end = intersection
+                startPosition.copy(intersection.point)
+                targetReticleRef.current?.position.copy(startPosition)
+                targetReticleRef.current?.scale.set(0, 1, 0)
+            }
+        }
+        let pointermove = (e: PointerEvent) => {
+            if (store.getState().panning || !isTargeting) {
+                return
+            } 
 
-                if (start.object === end.object) {
-                    length = end.point.clone().sub(start.point).length()
+            let intersection = findIntersection(e)
 
-                    if (ref.current) {
-                        ref.current.position.copy(start.point)
-                        ref.current.position.y += -.99
-                        ref.current.scale.x = length
-                        ref.current.scale.z = length
-                        ref.current.scale.y = 1
-                    }
+            if (intersection) {
+                distance = startPosition.distanceTo(intersection.point)
 
-                   // invalidate()
+                endPosition.copy(intersection.point)
+
+                if (distance > .1) {
+                    targetReticleRef.current?.scale.set(distance, 1, distance)
                 }
-            } else {
-                console.log("NO HIT")
             }
         }
-        let mouseup = () => {
-            if (length > 0) {
-                let direction = start.point.clone().sub(end.point).normalize().multiplyScalar(length * 8)
+        let pointerup = () => {
+            isTargeting = false
+            targetReticleRef.current?.scale.set(0, 1, 0)
 
-                direction.y = length * 4
-                end.point.y += radius / 2
+            if (distance > 0) {
+                let direction = startPosition.clone()
+                    .sub(endPosition)
+                    .normalize()
+                    .multiplyScalar(distance * 6)
 
-                addBall(end.point.toArray(), direction.toArray())
-                //invalidate()
+                direction.y = Math.pow(distance, 1.75)
+
+                addBall(startPosition.toArray(), direction.toArray())
             }
-
-            reset()
+        }
+        let touchmove = (e: TouchEvent) => {
+            if (isTargeting) {
+                e.preventDefault()
+            }
         }
 
-        window.addEventListener("mousedown", mousedown)
-        window.addEventListener("mousemove", mousemove)
-        window.addEventListener("mouseup", mouseup)
-        document.addEventListener("mouseleave", reset)
+        window.addEventListener("pointerdown", pointerdown)
+        window.addEventListener("pointermove", pointermove)
+        window.addEventListener("pointerup", pointerup)
+        window.addEventListener("pointercancel", pointerup)
+        window.addEventListener("touchmove", touchmove, { passive: false })
 
         return () => {
-            window.removeEventListener("mousedown", mousedown)
-            window.removeEventListener("mousemove", mousemove)
-            window.removeEventListener("mouseup", mouseup)
-            document.removeEventListener("mouseleave", reset)
+            window.removeEventListener("pointerdown", pointerdown)
+            window.removeEventListener("pointermove", pointermove)
+            window.removeEventListener("pointerup", pointerup)
+            window.removeEventListener("pointercancel", pointerup)
+            window.removeEventListener("touchmove", touchmove)
         }
-    }, [])
+    }, [camera])
 
     return (
         <>
-            <mesh ref={ref} position={[0, -2, 0]}>
-                <cylinderGeometry args={[1, 1, 2, 64, 1]} />
-                <meshBasicMaterial color={"white"} transparent opacity={.05} />
+            <mesh ref={targetReticleRef} position={[0, -2, 0]}>
+                <cylinderGeometry args={[1, 1, .1, 32, 1]} />
+                <meshBasicMaterial color={"yellow"} transparent opacity={1.5} />
             </mesh>
-
-            {balls.map(i => <Ball {...i} radius={radius} key={i.id} />)}
 
             <InstancedMesh
                 name={"ball"}
@@ -171,6 +185,8 @@ export default function Controller() {
                 <sphereGeometry args={[1, 12, 12]} />
                 <meshLambertMaterial emissive={"white"} emissiveIntensity={.3} />
             </InstancedMesh>
+
+            {balls.map(i => <Ball {...i} key={i.id} />)}
         </>
     )
 }
