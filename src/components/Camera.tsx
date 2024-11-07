@@ -52,12 +52,16 @@ export default function Camera() {
         let startPosition = new Vector3()
         let previousDirection = new Vector3()
         let direction = new Vector3()
-        let id: number
-        let pointermove = ({ clientX, clientY, pointerId }: PointerEvent) => {
-            if (pointerId !== id) {
-                return
+        let contextmenu = (e: Event) => {
+            e.preventDefault()
+            panPossible = true
+        }
+        let keydown = (e: KeyboardEvent) => {
+            if (e.code === "Space") {
+                panPossible = true
             }
-
+        }
+        let mousemove = ({ clientX, clientY }: MouseEvent) => {
             let { panning } = store.getState()
             let scale = .025
 
@@ -72,13 +76,7 @@ export default function Camera() {
                 camera.position.add(new Vector3(direction.x * -scale, 0, direction.z * -scale))
             }
         }
-        let pointerdown = ({ clientX, clientY, pointerId }: PointerEvent) => {
-            if (id) {
-                return 
-            }
-
-            id = pointerId
-
+        let mousedown = ({ clientX, clientY }: MouseEvent) => {
             if (panPossible) {
                 setPanning(true)
                 startPosition.set(clientX, 0, clientY)
@@ -88,54 +86,59 @@ export default function Camera() {
         let mouseup = () => {
             setPanning(false)
             panPossible = false
-            id = -Infinity
-        }
-        let contextmenu = (e: Event) => {
-            e.preventDefault()
-            panPossible = true
-        }
-        let keydown = (e: KeyboardEvent) => {
-            if (e.code === "Space") {
-                panPossible = true
-            }
         }
         let touchstart = (e: TouchEvent) => {
             if (e.touches.length === 2) {
                 e.preventDefault()
                 panPossible = true
                 setPanning(true)
+                startPosition.set(e.touches[0].clientX, 0, e.touches[0].clientY)
+                previousDirection.copy(startPosition)
             }
         }
         let touchmove = (e: TouchEvent) => {
-            if (e.touches.length === 2) {
-                e.preventDefault() 
+            let { panning } = store.getState()
+            let scale = .025
+            let touches = e.touches
+            let { clientX, clientY } = touches[0]
+
+            if (touches.length === 2) {
+                e.preventDefault()
+            }
+
+            if (panning) {
+                direction.set(clientX, 0, clientY)
+                    .sub(previousDirection)
+                    .applyQuaternion(camera.quaternion)
+
+                previousDirection.set(clientX, 0, clientY)
+                camera.position.add(new Vector3(direction.x * -scale, 0, direction.z * -scale))
             }
         }
         let touchend = (e: TouchEvent) => {
-            if (e.touches.length === 0) { 
+            if (e.touches.length === 0) {
                 panPossible = false
                 setPanning(false)
-                id = -Infinity
             }
         }
 
-        window.addEventListener("pointermove", pointermove)
-        window.addEventListener("pointerdown", pointerdown)
+        window.addEventListener("mousedown", mousedown)
+        window.addEventListener("mousemove", mousemove)
         window.addEventListener("mouseup", mouseup)
         window.addEventListener("contextmenu", contextmenu)
         window.addEventListener("keydown", keydown)
-        window.addEventListener("touchmove", touchmove, { passive: false })
         window.addEventListener("touchstart", touchstart, { passive: false })
-        window.addEventListener("touchend", touchend )
+        window.addEventListener("touchmove", touchmove, { passive: false })
+        window.addEventListener("touchend", touchend)
 
         return () => {
-            window.removeEventListener("pointermove", pointermove)
-            window.removeEventListener("pointerdown", pointerdown)
+            window.removeEventListener("mousedown", mousedown)
+            window.removeEventListener("mousemove", mousemove)
             window.removeEventListener("mouseup", mouseup)
             window.removeEventListener("contextmenu", contextmenu)
             window.removeEventListener("keydown", keydown)
-            window.removeEventListener("touchmove", touchmove)
             window.removeEventListener("touchstart", touchstart)
+            window.removeEventListener("touchmove", touchmove)
             window.removeEventListener("touchend", touchend)
         }
     }, [state])
