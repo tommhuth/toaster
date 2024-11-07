@@ -1,10 +1,11 @@
-import { useThree } from "@react-three/fiber"
-import { useEffect, useLayoutEffect, useRef } from "react"
+import { useFrame, useThree } from "@react-three/fiber"
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import Config from "../Config"
 import { setPanning, State, store, useStore } from "../data/store"
 import { Tuple3 } from "../types"
 import { clamp } from "../utils/utils"
 import { Vector2, Vector3 } from "three"
+import { damp } from "three/src/math/MathUtils"
 
 export const startPosition: Tuple3 = [20, 20, -20]
 
@@ -12,19 +13,14 @@ export default function Camera() {
     const { camera } = useThree()
     const state = useStore(i => i.state)
     const stage = useStore(i => i.stage)
-    const position = useRef([...startPosition])
+    const targetPosition = useMemo(() => new Vector3(), [])
     const settings = stage.settings
 
     useLayoutEffect(() => {
         camera.position.set(...startPosition)
+        targetPosition.set(...startPosition)
         camera.lookAt(0, 0, 0)
     }, [camera, startPosition])
-
-    useLayoutEffect(() => {
-        position.current = [...stage.settings.center]
-        position.current[0] += startPosition[0]
-        position.current[2] += startPosition[2]
-    }, [stage])
 
     useLayoutEffect(() => {
         let onResize = () => {
@@ -52,6 +48,23 @@ export default function Camera() {
         let startPosition = new Vector3()
         let previousDirection = new Vector3()
         let direction = new Vector3()
+        let destroy = () => {
+            panPossible = false
+            setPanning(false)
+        }
+        let initalize = (clientX: number, clientY: number) => {
+            setPanning(true)
+            startPosition.set(clientX, 0, clientY)
+            previousDirection.copy(startPosition)
+        }
+        let updateTargetPosition = (clientX: number, clientY: number, scale: number) => {
+            direction.set(clientX, 0, clientY)
+                .sub(previousDirection)
+                .applyQuaternion(camera.quaternion)
+
+            previousDirection.set(clientX, 0, clientY)
+            targetPosition.add(new Vector3(direction.x * -scale, 0, direction.z * -scale))
+        }
         let contextmenu = (e: Event) => {
             e.preventDefault()
             panPossible = true
@@ -68,32 +81,19 @@ export default function Camera() {
             if (clientY > window.innerHeight - 300 && !panPossible) {
                 panPossible = true
             } else if (panning) {
-                direction.set(clientX, 0, clientY)
-                    .sub(previousDirection)
-                    .applyQuaternion(camera.quaternion)
-
-                previousDirection.set(clientX, 0, clientY)
-                camera.position.add(new Vector3(direction.x * -scale, 0, direction.z * -scale))
+                updateTargetPosition(clientX, clientY, scale)
             }
         }
         let mousedown = ({ clientX, clientY }: MouseEvent) => {
             if (panPossible) {
-                setPanning(true)
-                startPosition.set(clientX, 0, clientY)
-                previousDirection.copy(startPosition)
+                initalize(clientX, clientY) 
             }
-        }
-        let mouseup = () => {
-            setPanning(false)
-            panPossible = false
-        }
+        } 
         let touchstart = (e: TouchEvent) => {
             if (e.touches.length === 2) {
                 e.preventDefault()
-                panPossible = true
-                setPanning(true)
-                startPosition.set(e.touches[0].clientX, 0, e.touches[0].clientY)
-                previousDirection.copy(startPosition)
+                panPossible = true 
+                initalize(e.touches[0].clientX,   e.touches[0].clientY)  
             }
         }
         let touchmove = (e: TouchEvent) => {
@@ -107,18 +107,12 @@ export default function Camera() {
             }
 
             if (panning) {
-                direction.set(clientX, 0, clientY)
-                    .sub(previousDirection)
-                    .applyQuaternion(camera.quaternion)
-
-                previousDirection.set(clientX, 0, clientY)
-                camera.position.add(new Vector3(direction.x * -scale, 0, direction.z * -scale))
+                updateTargetPosition(clientX, clientY, scale)
             }
         }
         let touchend = (e: TouchEvent) => {
             if (e.touches.length < 2) {
-                panPossible = false
-                setPanning(false)
+                destroy()
             }
         }
 
@@ -126,7 +120,7 @@ export default function Camera() {
         window.addEventListener("keydown", keydown)
         window.addEventListener("mousedown", mousedown)
         window.addEventListener("mousemove", mousemove)
-        window.addEventListener("mouseup", mouseup)
+        window.addEventListener("mouseup", destroy)
         window.addEventListener("touchstart", touchstart, { passive: false })
         window.addEventListener("touchmove", touchmove, { passive: false })
         window.addEventListener("touchend", touchend)
@@ -134,7 +128,7 @@ export default function Camera() {
         return () => {
             window.removeEventListener("mousedown", mousedown)
             window.removeEventListener("mousemove", mousemove)
-            window.removeEventListener("mouseup", mouseup)
+            window.removeEventListener("mouseup", destroy)
             window.removeEventListener("contextmenu", contextmenu)
             window.removeEventListener("keydown", keydown)
             window.removeEventListener("touchstart", touchstart)
@@ -143,6 +137,10 @@ export default function Camera() {
         }
     }, [state])
 
+    useFrame((state, delta) => { 
+        camera.position.x = damp(camera.position.x, targetPosition.x, 5.5, delta)
+        camera.position.z = damp(camera.position.z, targetPosition.z, 5.5, delta)
+    })
 
     if (!Config.DEBUG) {
         return null
