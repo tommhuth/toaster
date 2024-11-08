@@ -1,17 +1,24 @@
-import { MeshPhongMaterial } from "three"
+import { MeshLambertMaterial } from "three"
 
-const white = new MeshPhongMaterial({
+const white = new MeshLambertMaterial({
     color: "#fff",
-    emissive: "#99f",
-    emissiveIntensity: .3,
+    emissive: "rgb(159, 193, 255)",
+    emissiveIntensity: .4,
     toneMapped: false
 })
-const blue = new MeshPhongMaterial({
-    color: "#003cff",
-    shininess: 10,
+
+const blue = new MeshLambertMaterial({
+    color: "#003cff", 
     emissive: "#00f",
     emissiveIntensity: .2,
     toneMapped: false
 })
 
-export { white, blue as groundMaterial }
+const yellow = new MeshLambertMaterial({
+    color: "#ffff00", 
+    emissive: "#f00",
+    emissiveIntensity: .35,
+    toneMapped: false
+})
+
+export { white, blue, yellow } 

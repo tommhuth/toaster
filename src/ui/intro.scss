@@ -10,7 +10,7 @@
 
     @media (max-width: 700px) {
         border-width: 1.5em;
-        inset: 0;
+        inset: -1px;
         justify-content: flex-end;
     }
 
@@ -20,22 +20,25 @@
         line-height: .9; 
         text-transform: uppercase;
         font-family: Roboto;
-        margin-bottom: .75em;
+        margin-bottom: .6em;
         text-align: center;
 
-        @media (max-width: 700px) {
+        @media (max-width: 800px) {
             margin-left: 0;
-            margin-bottom: 4lvh;
+            margin-bottom: 22vh;
             margin-top: auto; 
             line-height: 1;
-            font-size: 18vw;
-            rotate: -90deg;
+            font-size: 14vmin;
+            rotate: -90deg;    
+            border-left: .35em solid white;
+            padding-left: .4em;
             translate: 0 -50px;
             text-align: left;
         }
 
         @media (max-width: 600px) { 
-            font-size: 24vw; 
+            font-size: 20vmin; 
+            margin-bottom: 5vh;
         }
     }
 

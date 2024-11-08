@@ -1,18 +1,20 @@
 import { useFrame, useThree } from "@react-three/fiber"
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react"
-import { CameraHelper, DirectionalLight, Mesh, Vector3 } from "three"
+import { useCallback, useLayoutEffect, useRef } from "react"
+import { DirectionalLight, Vector3 } from "three"
 import Config from "../Config"
-import { Only } from "../utils/utils"
-import { startPosition } from "./Camera"
-import { Tuple3 } from "../types"
+import { Only, roundTo } from "../utils/utils"
+import { cameraDirection } from "./Camera"
 
-let position = new Vector3(10, 10, 8).normalize()
+let lightDirection = new Vector3(1, .5, .4).normalize()
 
 export default function Lights() {
-    let { viewport, camera } = useThree()
+    let { viewport, camera, scene } = useThree()
     let lightRef = useRef<DirectionalLight>(null)
+    let time = useRef(Infinity)
     let updateShadowFrustum = useCallback((light: DirectionalLight) => {
         let buffer = 4
+
+        light.target.position.copy(lightDirection)
 
         // left - right
         light.shadow.camera.near = -viewport.width * .5 - buffer
@@ -32,23 +34,49 @@ export default function Lights() {
     useLayoutEffect(() => {
         let resize = () => lightRef.current && updateShadowFrustum(lightRef.current)
 
-        lightRef.current?.position.copy(position)
-
         window.addEventListener("resize", resize)
         window.removeEventListener("resize", resize)
+
+        if (lightRef.current) {
+            scene.add(lightRef.current.target)
+        }
     }, [])
+
+    useFrame((state, delta) => {
+        let light = lightRef.current
+        let x = camera.position.x - cameraDirection.x
+        let z = camera.position.z - cameraDirection.z
+        let updateAt = 2000 // every 2s
+
+        time.current += delta * 1000
+
+        if (!light || time.current < updateAt) {
+            return
+        } else { 
+            time.current = 0
+        }
+
+        light.position.x = roundTo(x, 1)
+        light.position.z = roundTo(z, 1)
+
+        light.target.position.x = light.position.x - lightDirection.x
+        light.target.position.z = light.position.z - lightDirection.z
+    })
 
     return (
         <>
             <Only if={Config.DEBUG}>
+                <axesHelper position={[0, 3, 0]} scale={5} />
                 {lightRef.current?.shadow.camera && <cameraHelper camera={lightRef.current?.shadow.camera} />}
             </Only>
 
-            <axesHelper position={[0, 3, 0]} scale={5} />
-
             <directionalLight
-                position={[-position.x, position.y * .25, -position.z]}
-                intensity={.95}
+                position={[
+                    -lightDirection.x,
+                    lightDirection.y * .25,
+                    -lightDirection.z
+                ]}
+                intensity={.7}
                 color={"white"}
             />
 

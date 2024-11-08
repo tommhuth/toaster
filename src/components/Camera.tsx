@@ -3,11 +3,11 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import Config from "../Config"
 import { setPanning, State, store, useStore } from "../data/store"
 import { Tuple3 } from "../types"
-import { clamp } from "../utils/utils"
-import { Vector2, Vector3 } from "three"
+import { clamp, spring } from "../utils/utils"
+import { Vector3 } from "three"
 import { damp } from "three/src/math/MathUtils"
 
-export const startPosition: Tuple3 = [20, 20, -20]
+export const cameraDirection = new Vector3(20, 20, -20)
 
 export default function Camera() {
     const { camera } = useThree()
@@ -22,10 +22,10 @@ export default function Camera() {
     }, [panning])
 
     useLayoutEffect(() => {
-        camera.position.set(...startPosition)
-        targetPosition.set(...startPosition)
+        camera.position.copy(cameraDirection)
+        targetPosition.copy(cameraDirection)
         camera.lookAt(0, 0, 0)
-    }, [camera, startPosition])
+    }, [camera, cameraDirection])
 
     useLayoutEffect(() => {
         let onResize = () => {

@@ -6,14 +6,17 @@
     height: 40vh;
     cursor: grab;
     z-index: 900;
-    transition: all .4s;
+    transition: all .5s;
     background-image: radial-gradient(closest-side, black, transparent);
     opacity: 0;
-    mix-blend-mode:multiply;
+    mix-blend-mode: multiply;
 
     &:hover,
     &--active {
-        opacity: .7;
+        opacity: .6; 
+    }
+ 
+    &--active {
         cursor: grabbing;
     }
 }
@@ -41,9 +44,14 @@
         align-items: center;
         text-align: center;
         pointer-events: all;
-        margin: -1em;
-        border: 1em solid transparent;
+        margin: -.75em;
+        border: .75em solid transparent;
         margin-right: auto;
+        transition: all .25s; 
+
+        &:hover { 
+            translate: -.15em 0;
+        }
     }
 
     &__stat {

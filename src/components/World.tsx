@@ -3,7 +3,7 @@ import { useLayoutEffect, useMemo } from "react"
 import { Color } from "three"
 import { ObjectType } from "../data/stages"
 import { useStore } from "../data/store"
-import { groundMaterial } from "../utils/materials"
+import { blue, yellow } from "../utils/materials"
 import InstancedMesh from "./InstancedMesh"
 import Cabinets from "./world/Cabinets"
 import Chairs from "./world/Chairs"
@@ -29,12 +29,7 @@ export default function World() {
         <>
             <InstancedMesh name={ObjectType.BOX} count={100}>
                 <boxGeometry args={[1, 1, 1, 1, 1, 1]} />
-                <meshLambertMaterial
-                    toneMapped={false}
-                    emissive={"red"}
-                    color="yellow"
-                    emissiveIntensity={.35}
-                />
+                <primitive object={yellow} attach="material" />
             </InstancedMesh>
 
             <InstancedMesh
@@ -42,7 +37,7 @@ export default function World() {
                 count={25} 
             >
                 <boxGeometry args={[1, 1, 1, 1, 1, 1]} attach={"geometry"} />
-                <primitive object={groundMaterial} attach="material" />
+                <primitive object={blue} attach="material" />
             </InstancedMesh>
 
             <Cabinets />

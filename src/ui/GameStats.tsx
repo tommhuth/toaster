@@ -5,18 +5,17 @@ import "./GameStats.scss"
 
 export default function GameStats() {
     let state = useStore(i => i.state)
-    let player = useStore(i => i.player)
-    let stage = useStore(i => i.stage)
+    let player = useStore(i => i.player) 
     let boxes = useStore(i => i.boxes)
     let statNames = ["Attempts", "Boxes", "Score"]
     let stats = [
         player.ballCount,
         <>{boxes.filter(i => i.dead).length} / {boxes.length}</>,
-        (boxes.filter(i => i.dead).length * 150 - player.penalties * 750).toLocaleString("en")
+        (boxes.filter(i => i.dead).length * 100 - player.penalties * 1000).toLocaleString("en")
     ]
 
     return (
-        <div
+        <section
             style={{
                 display: state === State.PLAYING ? "flex" : "none",
             }}
@@ -31,6 +30,7 @@ export default function GameStats() {
                 }}
             >
                 <Arrow direction="left" /> 
+                <span className="visually-hidden">Back to menu</span>
             </button>
 
             {stats.map((i, index) => {
@@ -47,6 +47,6 @@ export default function GameStats() {
                     </p>
                 )
             })}
-        </div>
+        </section>
     )
 }
