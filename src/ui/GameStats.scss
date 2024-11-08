@@ -7,7 +7,7 @@
     cursor: grab;
     z-index: 900;
     transition: all .4s;
-    background-image: radial-gradient(ellipse closest-side at center, black, transparent);
+    background-image: radial-gradient(closest-side, black, transparent);
     opacity: 0;
     mix-blend-mode:multiply;
 
